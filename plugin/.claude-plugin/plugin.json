@@ -1,0 +1,14 @@
+{
+  "name": "architect-planner",
+  "version": "0.1.0",
+  "description": "Generate comprehensive, implementation-ready end-to-end application plans for software projects",
+  "author": {
+    "name": "Budi Santoso"
+  },
+  "homepage": "https://github.com/bdxygy/CC-Planner-Plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bdxygy/CC-Planner-Plugin.git"
+  },
+  "keywords": ["planning", "architecture", "documentation", "testing", "mobile", "desktop", "android", "ios", "flutter", "react-native", "tauri", "electron"]
+}

@@ -1,0 +1,16 @@
+# Claude Code local settings
+.claude/*.local.md
+
+# Generated plans
+.pland/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

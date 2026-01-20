@@ -1,0 +1,41 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "architect-planner-marketplace",
+  "description": "Multi-platform project planning plugin with Test-Driven Development support and UI validation",
+  "owner": {
+    "name": "Budi Santoso"
+  },
+  "plugins": [
+    {
+      "name": "architect-planner",
+      "description": "Generate comprehensive, implementation-ready end-to-end application plans for software projects across all major platforms. Supports Android, iOS, Flutter, React Native, Tauri, and Electron with automatic platform detection. Features TDD-based frontend and backend execution, modern UI validation, and platform-specific architecture patterns.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Budi Santoso"
+      },
+      "source": "./plugin",
+      "category": "development",
+      "homepage": "https://github.com/bdxygy/CC-Planner-Plugin",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/bdxygy/CC-Planner-Plugin.git"
+      },
+      "keywords": [
+        "planning",
+        "architecture",
+        "mobile",
+        "desktop",
+        "android",
+        "ios",
+        "flutter",
+        "react-native",
+        "tauri",
+        "electron",
+        "tdd",
+        "test-driven-development",
+        "ui-validation",
+        "multi-platform"
+      ]
+    }
+  ]
+}
