@@ -214,6 +214,8 @@ After revision, provide a summary:
 
 - `/planning` - Create a new plan
 - `/validate-plan` - Check plan quality
+- `/revise-task-fe` - Regenerate frontend task lists after plan revision
+- `/revise-task-be` - Regenerate backend task lists after plan revision
 - `/execute` - Implement from a plan
 
 ## Notes

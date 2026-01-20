@@ -103,6 +103,24 @@ Create organized **backend** task lists from existing plans.
 - Seamless integration with `/execute-be`
 - Outputs both `.mdx` (human) and `.yaml` (token-efficient) formats
 
+### `/revise-task-fe`
+Regenerate **frontend** task lists after revising a plan with `/revise-plan`.
+
+**Features:**
+- Removes existing task files and regenerates from revised plan
+- Auto-recalculates all task IDs, priorities, and dependencies
+- Use when plan has changed and tasks need to be updated
+- Outputs both `.mdx` (human) and `.yaml` (token-efficient) formats
+
+### `/revise-task-be`
+Regenerate **backend** task lists after revising a plan with `/revise-plan`.
+
+**Features:**
+- Removes existing task files and regenerates from revised plan
+- Auto-recalculates all task IDs, priorities, and dependencies
+- Use when plan has changed and tasks need to be updated
+- Outputs both `.mdx` (human) and `.yaml` (token-efficient) formats
+
 ## Skills
 
 ### Core Planning Skills
@@ -212,6 +230,9 @@ Plans are organized as:
 10. Run `/execute-fe` to implement frontend using TDD
 11. Run `/execute-be` to implement backend using TDD
 12. Run `/validate-ui` to validate UI implementation quality
+
+**After plan revisions:**
+- After running `/revise-planning`, use `/revise-task-fe` and `/revise-task-be` to regenerate task lists
 
 ## Platform Detection
 
