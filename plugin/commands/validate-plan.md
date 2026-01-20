@@ -183,11 +183,19 @@ Verify that the plan is technically sound:
 
 ### 7. Generate Validation Report
 
-After all checks, generate a structured report:
+After all checks, generate a structured report and save it to a file:
+
+**Write validation report to:**
+```bash
+Write .pland/[plan-name]/validation-report.mdx
+```
 
 **Report structure:**
 ```markdown
 # Plan Validation Report: [plan-name]
+
+**Generated:** [date]
+**Plan Version:** [if tracked]
 
 ## Summary
 [Overall assessment: PASS/FAIL/PASS WITH WARNINGS]
@@ -264,12 +272,14 @@ Any of the following:
 1. Ask which plan if not specified
 2. Read all plan files
 3. Run all validation checks
-4. Generate and present report
-5. Offer to fix any issues found
+4. Generate and write report to `.pland/[plan-name]/validation-report.mdx`
+5. Present report summary to user
+6. Offer to fix any issues found
 
 **After validation:**
+- Report saved to `.pland/[plan-name]/validation-report.mdx`
 - If PASS: Congratulate user, plan is ready for execution
-- If FAIL: List critical issues, offer to help fix
+- If FAIL: List critical issues, offer to help fix with `/revise-planning`
 - If WARNING: List warnings, ask if user wants to address them
 
 ## Example Output

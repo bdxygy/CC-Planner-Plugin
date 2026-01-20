@@ -49,6 +49,9 @@ Read .pland/[plan-name]/backend-testing-cases.mdx
 
 **Use AskUserQuestion to ask:**
 - Which plan-name plan to execute?
+- Has the plan been validated with `/validate-plan`?
+  - If not, recommend running `/validate-plan` first
+  - Ask if they want to proceed anyway or validate first
 - Use existing task list from `/task-be` or load plan directly?
 - Implement entire backend or specific features?
 - Select specific tasks for implementation
@@ -58,6 +61,25 @@ Read .pland/[plan-name]/backend-testing-cases.mdx
 - Respect task priorities (High → Medium → Low)
 - Check `dependencySummary` for foundation vs blocked tasks
 - Use `blockedBy` to determine execution order
+
+### 1.5. Validate Plan Quality (Recommended)
+
+Before starting implementation, recommend validating the plan:
+
+```bash
+# Check if validation has been done recently
+Glob ".pland/[plan-name]/validation-report.mdx"
+```
+
+**If validation report doesn't exist or is old:**
+- Recommend running `/validate-plan [plan-name]` first
+- Explain benefits: catches issues early, ensures plan quality
+- Ask if they want to validate before proceeding
+- If they proceed without validation, note that issues may be found during implementation
+
+**If validation passed:**
+- Continue with implementation
+- Note any warnings from validation that should be addressed
 
 ### 2. Detect Backend Platform
 
@@ -543,10 +565,10 @@ Next Steps:
 
 ## Related Commands
 
+- `/validate-plan` - Validate plan quality BEFORE execution (recommended first step)
 - `/task-be` - Create backend task lists from plans (run before /execute-be)
 - `/execute-fe` - Implement frontend features using TDD
 - `/planning` - Create a plan
-- `/validate-plan` - Check plan quality
 
 ## Notes
 
