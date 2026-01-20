@@ -1,6 +1,6 @@
 ---
 description: Define project-specific rules that guide /planning and /revise-planning decisions
-allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob"]
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa", "mcp__exa__deep_researcher_start", "mcp__exa__deep_researcher_check"]
 ---
 
 # /rules-plan
@@ -142,6 +142,41 @@ Use AskUserQuestion to collect rules in each category:
 - "All code must be reviewed before merging"
 - "Use GitFlow branching strategy"
 - "Main branch must always be deployable"
+
+### 2.5. Use Context7 and Exa for Research
+
+When defining rules, use documentation and research tools to ensure best practices:
+
+**Use Context7 for official documentation:**
+- `resolve-library-id` + `query-docs` for framework-specific patterns
+- Query coding standards for chosen technologies
+- Research official security guidelines for frameworks
+- Find official testing best practices
+
+**Use Exa for code examples and latest practices:**
+- `get_code_context_exa` to find real-world coding standards examples
+- `web_search_exa` to find industry best practices for:
+  - Architecture patterns and conventions
+  - Security standards and requirements
+  - Performance benchmarks and targets
+  - Testing coverage standards
+- `deep_researcher_start` for complex topics like:
+  - Industry-specific compliance requirements (HIPAA, PCI-DSS, GDPR)
+  - Enterprise architecture standards
+  - Team scaling and process best practices
+
+**Examples:**
+```
+Query Context7 for React testing best practices:
+  resolve-library-id: "react"
+  query: "testing best practices, recommended test coverage, testing libraries"
+
+Use Exa to find coding standards examples:
+  get_code_context_exa: "TypeScript naming conventions examples"
+
+Research security requirements:
+  web_search_exa: "OWASP security requirements for web applications 2025"
+```
 
 ### 3. Generate Rules File
 
