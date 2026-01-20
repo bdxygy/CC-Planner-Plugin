@@ -46,6 +46,30 @@ Follow this workflow to generate a complete plan:
   - Electron → `electron-patterns` skill
   - Web → `architecture-patterns` skill
 
+### 0.5. Load Project Rules (if exists)
+
+Check for project-specific rules that will guide planning:
+
+```bash
+# Check if rules file exists
+Glob ".pland/rules.mdx"
+# If exists: Read .pland/rules.mdx
+```
+
+**If rules exist, apply them throughout planning:**
+- **Technology constraints**: Apply required/forbidden technologies when selecting tech stack
+- **Architecture rules**: Use specified patterns when designing structure
+- **Coding standards**: Follow naming conventions and style guidelines
+- **Security requirements**: Include security considerations in architecture
+- **Performance requirements**: Design for specified performance targets
+- **Testing standards**: Include required test types and coverage in testing scenarios
+- **Documentation rules**: Follow documentation standards in generated plans
+
+**If rules conflict with user preferences:**
+- Use AskUserQuestion to resolve the conflict
+- Show the rule and ask if user wants to follow it or make an exception
+- Document any exceptions in the plan
+
 ### 1. Establish Project Context
 
 Ask the user to provide context:
@@ -271,6 +295,7 @@ This would create a plan at `.pland/user-authentication/` with all required file
 
 ## Related Commands
 
+- `/rules-plan` - Define project rules before planning
 - `/revise-planning` - Edit specific sections of existing plans
 - `/validate-plan` - Check plan quality and completeness
 - `/execute-fe` - Implement frontend features from a plan

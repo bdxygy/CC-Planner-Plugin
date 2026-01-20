@@ -60,6 +60,35 @@ Implement **backend** features from a plan using **Test-Driven Development**.
 ### `/revise-planning`
 Edit specific sections of existing plans. Supports section-level modifications.
 
+### `/rules-plan`
+Define project-specific rules that guide `/planning` and `/revise-planning` decisions.
+
+**Features:**
+- Architecture rules and patterns
+- Technology constraints (required/forbidden)
+- Coding standards and conventions
+- Security and performance requirements
+- Testing and documentation standards
+- Stored in `.pland/rules.mdx`
+
+### `/list-plans`
+List all available project plans in the `.pland` directory.
+
+**Features:**
+- Shows plan names and overview
+- Displays plan completeness (required files)
+- Shows tech stack and last modified date
+- Identifies incomplete plans
+
+### `/delete-plan`
+Delete a project plan directory with confirmation.
+
+**Features:**
+- Shows what will be deleted before removal
+- Confirmation prompt prevents accidents
+- Removes entire plan directory
+- Verification after deletion
+
 ### `/validate-plan`
 Validate a plan's quality. Checks:
 - Structure validation
@@ -203,6 +232,7 @@ Autonomously scans existing codebases with **multi-platform detection**:
 Plans are organized as:
 ```
 .pland/
+├── rules.mdx (created by /rules-plan - applies to all plans)
 └── [plan-name]/
     ├── project-context.mdx
     ├── features.mdx
@@ -218,18 +248,20 @@ Plans are organized as:
 
 ## Usage
 
-1. Run `/planning` to start a new plan
-2. The plugin auto-detects your platform from existing files
-3. Answer interactive questions about your project
-4. The appropriate platform-specific skill is automatically loaded
-5. Review generated `.mdx` files in `.pland/`
-6. Run `/validate-plan` to check quality
-7. Use `/revise-planning` to make changes
-8. Run `/task-fe` to create frontend task lists
-9. Run `/task-be` to create backend task lists
-10. Run `/execute-fe` to implement frontend using TDD
-11. Run `/execute-be` to implement backend using TDD
-12. Run `/validate-ui` to validate UI implementation quality
+1. (Optional) Run `/rules-plan` to define project-specific rules
+2. Run `/planning` to start a new plan
+3. The plugin auto-detects your platform from existing files
+4. Answer interactive questions about your project
+5. The appropriate platform-specific skill is automatically loaded
+6. Rules are loaded and applied (if `.pland/rules.mdx` exists)
+7. Review generated `.mdx` files in `.pland/`
+8. Run `/validate-plan` to check quality
+9. Use `/revise-planning` to make changes (rules are checked during revisions)
+10. Run `/task-fe` to create frontend task lists
+11. Run `/task-be` to create backend task lists
+12. Run `/execute-fe` to implement frontend using TDD
+13. Run `/execute-be` to implement backend using TDD
+14. Run `/validate-ui` to validate UI implementation quality
 
 **After plan revisions:**
 - After running `/revise-planning`, use `/revise-task-fe` and `/revise-task-be` to regenerate task lists

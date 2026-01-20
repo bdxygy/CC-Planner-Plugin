@@ -91,6 +91,33 @@ Read .pland/[plan-name]/project-context.mdx
 # If file doesn't exist, ask user if they want to create it
 ```
 
+### 2.5. Load Project Rules (if exists)
+
+Check for project-specific rules that will guide revisions:
+
+```bash
+# Check if rules file exists
+Glob ".pland/rules.mdx"
+# If exists: Read .pland/rules.mdx
+```
+
+**If rules exist, apply them during revision:**
+- **Technology constraints**: Check that revisions don't introduce forbidden technologies
+- **Architecture rules**: Verify changes align with specified patterns
+- **Coding standards**: Ensure revisions follow naming conventions and style
+- **Security requirements**: Confirm security considerations are maintained
+- **Performance requirements**: Check that performance targets are still met
+- **Testing standards**: Verify testing requirements are satisfied
+- **Documentation rules**: Ensure documentation standards are followed
+
+**If revisions violate rules:**
+- Warn user about the violation
+- Show the specific rule being violated
+- Ask user if they want to:
+  - Modify the revision to comply with rules
+  - Update the rules to allow the revision
+  - Document an exception
+
 ### 3. Understand Revision Request
 
 Ask the user what specifically needs to change:
@@ -300,6 +327,7 @@ After revision, provide a summary:
 
 ## Related Commands
 
+- `/rules-plan` - Define project rules that guide revisions
 - `/planning` - Create a new plan
 - `/validate-plan` - Check plan quality across all files
 - `/revise-task-fe` - Regenerate frontend task lists after plan revision
@@ -312,6 +340,7 @@ After revision, provide a summary:
 - **Cross-file propagation is automatic** - related files are updated together
 - **Frontend/backend scope is detected** - only relevant files are affected
 - **project-context.mdx is included** when it exists and tech stack changes
+- **Rules are checked during revision** - if `.pland/rules.mdx` exists, revisions are validated against rules
 - **Original plan content is preserved** in git history
 - **Use git diff** to see what changed if using version control
 - **Always regenerate task lists** after plan revisions using /revise-task-fe or /revise-task-be
