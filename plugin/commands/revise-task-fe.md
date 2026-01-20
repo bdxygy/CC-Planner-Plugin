@@ -1,7 +1,7 @@
 ---
 description: Regenerate frontend task lists after revising a plan with /revise-planning
 argument-hint: [feature-topic]
-allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep"]
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "TodoWrite", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
 # /revise-task-fe
@@ -23,11 +23,16 @@ Use this command when:
 **Ask the user:**
 - Which feature-topic plan to regenerate tasks for?
 
-**Identify files:**
+**Identify and read all relevant plan files:**
 ```bash
-# Read revised plan files
+# Read all frontend plan files (same files affected by /revise-planning)
 Read .pland/[feature-topic]/features.mdx
 Read .pland/[feature-topic]/frontend-architecture.mdx
+Read .pland/[feature-topic]/frontend-testing-scenarios.mdx
+
+# Check if project-context exists and read it
+Glob ".pland/[feature-topic]/project-context.mdx"
+# If exists: Read .pland/[feature-topic]/project-context.mdx
 
 # Check if task files exist
 Glob ".pland/[feature-topic]/frontend-tasks.*"
@@ -53,7 +58,7 @@ Bash: rm -f .pland/[feature-topic]/frontend-tasks.yaml
 
 ### 4. Generate New Task Lists
 
-Follow the same workflow as `/task-fe`:
+Follow the same workflow as `/task-fe`, reading from all plan files:
 
 **Parse features from features.mdx:**
 - Extract all feature definitions
@@ -64,6 +69,16 @@ Follow the same workflow as `/task-fe`:
 - Extract component/view/widget structure
 - Identify reusable components vs feature-specific components
 - Note component relationships and hierarchy
+
+**Parse test scenarios from frontend-testing-scenarios.mdx:**
+- Extract testing requirements for each feature
+- Identify UI components that need testing
+- Note test-specific dependencies (e.g., components needed for test scenarios)
+
+**Parse tech stack from project-context.mdx (if exists):**
+- Extract frontend framework and libraries
+- Note platform-specific requirements
+- Consider tech stack when estimating task complexity
 
 **Auto-detect dependencies:**
 - Scan feature descriptions for dependency keywords (requires, depends on, after, needs)
@@ -222,5 +237,6 @@ This regenerates frontend task lists for the `user-authentication` plan.
 - This command removes existing task files and regenerates from scratch
 - All task IDs, priorities, and dependencies are recalculated
 - Use this after `/revise-planning` to keep tasks in sync with the plan
-- Dependencies are auto-detected from plan file content
+- Reads from: features.mdx, frontend-architecture.mdx, frontend-testing-scenarios.mdx, project-context.mdx (if exists)
+- Dependencies are auto-detected from all plan file content
 - Circular dependencies are rejected and must be resolved manually

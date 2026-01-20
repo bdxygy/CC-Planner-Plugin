@@ -69,6 +69,8 @@ Auto-detect the backend platform from existing codebase:
 - **Python + FastAPI**: `**/*.py`, `requirements.txt` or `pyproject.toml`
 - **Go**: `**/*.go`, `go.mod`
 - **Rust**: `src/**/*.rs`, `Cargo.toml`
+- **Tauri (Rust)**: `src-tauri/src/**/*.rs`, `src-tauri/Cargo.toml`, `tauri.conf.json`
+- **Electron (Node.js)**: `package.json` with "electron", `main.js` or `main/**/*.ts`
 - **Android (Room)**: `db/**/*.kt`, `@Dao`, `@Entity`
 - **iOS (Core Data)**: `**/*.xcdatamodeld`, `*.xcdatamodel`
 - **Flutter (sqflite)**: `database/**/*.dart`
@@ -77,6 +79,8 @@ Auto-detect the backend platform from existing codebase:
 - Web APIs → Use `architecture-patterns` skill
 - Android Room → Use `android-patterns` skill
 - iOS Core Data → Use `ios-swift-patterns` skill
+- Tauri → Use `tauri-patterns` skill
+- Electron → Use `electron-patterns` skill
 - Other → Use Context7 for framework patterns
 
 ### 3. Select Testing Framework
@@ -98,6 +102,15 @@ Auto-detect the backend platform from existing codebase:
 
 **Rust:**
 - built-in test module
+
+**Tauri (Rust backend):**
+- built-in test module
+- cargo test
+
+**Electron (Node.js backend):**
+- Jest (recommended)
+- Vitest (faster alternative)
+- Mocha + Chai
 
 **Android (Room):**
 - JUnit (Robolectric for in-memory database)

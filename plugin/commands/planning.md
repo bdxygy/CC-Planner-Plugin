@@ -23,14 +23,14 @@ Follow this workflow to generate a complete plan:
 ### 0. Platform Detection (CRITICAL FIRST STEP)
 
 **For existing projects:**
-- Run codebase-scanner agent to detect platform automatically
-- Detect platform-specific files and directories:
-  - Android: `build.gradle`, `AndroidManifest.xml`, `app/`
-  - iOS: `*.swift`, `*.xcodeproj`, `Info.plist`
-  - Flutter: `pubspec.yaml`, `lib/main.dart`
-  - React Native: `package.json` with "react-native", `android/`, `ios/`
-  - Tauri: `src-tauri/`, `tauri.conf.json`
-  - Electron: `package.json` with "electron", `main.js`
+- Use Glob to detect platform-specific files and directories:
+  - Android: `Glob "build.gradle"`, `Glob "app/src/main/**/*.kt"`
+  - iOS: `Glob "**/*.swift"`, `Glob "*.xcodeproj"`
+  - Flutter: `Glob "pubspec.yaml"`, `Glob "lib/main.dart"`
+  - React Native: `Glob "package.json"` and check for "react-native", `Glob "android/"`, `Glob "ios/"`
+  - Tauri: `Glob "src-tauri/"`, `Glob "tauri.conf.json"`
+  - Electron: `Glob "package.json"` and check for "electron", `Glob "main.js"`
+- Use Grep to detect framework-specific patterns in code
 
 **For new projects:**
 - Ask user which platform they're targeting
@@ -273,7 +273,8 @@ This would create a plan at `.pland/user-authentication/` with all required file
 
 - `/revise-planning` - Edit specific sections of existing plans
 - `/validate-plan` - Check plan quality and completeness
-- `/execute` - Implement from a plan
+- `/execute-fe` - Implement frontend features from a plan
+- `/execute-be` - Implement backend features from a plan
 
 ## Notes
 

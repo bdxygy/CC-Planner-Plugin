@@ -1,7 +1,7 @@
 ---
 description: Regenerate backend task lists after revising a plan with /revise-planning
 argument-hint: [feature-topic]
-allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep"]
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "TodoWrite", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
 # /revise-task-be
@@ -23,11 +23,16 @@ Use this command when:
 **Ask the user:**
 - Which feature-topic plan to regenerate tasks for?
 
-**Identify files:**
+**Identify and read all relevant plan files:**
 ```bash
-# Read revised plan files
+# Read all backend plan files (same files affected by /revise-planning)
 Read .pland/[feature-topic]/features.mdx
 Read .pland/[feature-topic]/backend-architecture.mdx
+Read .pland/[feature-topic]/backend-testing-cases.mdx
+
+# Check if project-context exists and read it
+Glob ".pland/[feature-topic]/project-context.mdx"
+# If exists: Read .pland/[feature-topic]/project-context.mdx
 
 # Check if task files exist
 Glob ".pland/[feature-topic]/backend-tasks.*"
@@ -53,7 +58,7 @@ Bash: rm -f .pland/[feature-topic]/backend-tasks.yaml
 
 ### 4. Generate New Task Lists
 
-Follow the same workflow as `/task-be`:
+Follow the same workflow as `/task-be`, reading from all plan files:
 
 **Parse features from features.mdx:**
 - Extract all feature definitions
@@ -64,6 +69,16 @@ Follow the same workflow as `/task-be`:
 - Extract service/repository layer structure
 - Identify endpoint definitions and contracts
 - Note module relationships and data flow
+
+**Parse test cases from backend-testing-cases.mdx:**
+- Extract testing requirements for each feature
+- Identify business logic that needs unit tests
+- Note test-specific dependencies (e.g., services needed for test cases)
+
+**Parse tech stack from project-context.mdx (if exists):**
+- Extract backend framework, runtime, and libraries
+- Note platform-specific requirements
+- Consider tech stack when estimating task complexity
 
 **Auto-detect dependencies:**
 - Scan feature descriptions for dependency keywords (requires, depends on, after, needs)
@@ -225,5 +240,6 @@ This regenerates backend task lists for the `user-authentication` plan.
 - This command removes existing task files and regenerates from scratch
 - All task IDs, priorities, and dependencies are recalculated
 - Use this after `/revise-planning` to keep tasks in sync with the plan
-- Dependencies are auto-detected from plan file content
+- Reads from: features.mdx, backend-architecture.mdx, backend-testing-cases.mdx, project-context.mdx (if exists)
+- Dependencies are auto-detected from all plan file content
 - Circular dependencies are rejected and must be resolved manually

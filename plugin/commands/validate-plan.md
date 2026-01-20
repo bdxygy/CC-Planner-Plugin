@@ -320,7 +320,8 @@ PASS WITH WARNINGS
 - `/task-fe` - Create frontend task lists from plans
 - `/task-be` - Create backend task lists from plans
 - `/revise-planning` - Fix issues found during validation
-- `/execute` - Implement after validation passes
+- `/execute-fe` - Implement frontend after validation passes
+- `/execute-be` - Implement backend after validation passes
 
 ## Notes
 
