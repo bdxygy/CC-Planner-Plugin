@@ -32,12 +32,16 @@ This command follows the classic TDD cycle for backend code:
 
 ## Execution Workflow
 
-### 1. Load Plan and Select Feature
+### 1. Load Task List or Plan
 
-First, identify the plan and feature to implement:
+First, check if a task list exists from `/task-be`, or load the plan directly:
 
 ```bash
-# Read plan files
+# Option 1: Load existing task list from /task-be
+Read .pland/[feature-topic]/backend-tasks.yaml
+Read .pland/[feature-topic]/backend-tasks.mdx
+
+# Option 2: If no task list exists, load plan files directly
 Read .pland/[feature-topic]/features.mdx
 Read .pland/[feature-topic]/backend-architecture.mdx
 Read .pland/[feature-topic]/backend-testing-cases.mdx
@@ -45,8 +49,15 @@ Read .pland/[feature-topic]/backend-testing-cases.mdx
 
 **Use AskUserQuestion to ask:**
 - Which feature-topic plan to execute?
+- Use existing task list from `/task-be` or load plan directly?
 - Implement entire backend or specific features?
-- Select specific services/repositories/endpoints
+- Select specific tasks for implementation
+
+**If using task list from `/task-be`:**
+- Load tasks from YAML for token efficiency
+- Respect task priorities (High → Medium → Low)
+- Check `dependencySummary` for foundation vs blocked tasks
+- Use `blockedBy` to determine execution order
 
 ### 2. Detect Backend Platform
 
@@ -100,15 +111,26 @@ Auto-detect the backend platform from existing codebase:
 
 ### 4. Create TODO List
 
-Use TodoWrite to create a backend TODO list:
+**If using task list from `/task-be`:**
+```javascript
+// Load tasks from backend-tasks.yaml
+// Create TODO items for each task with TDD phases
+[
+  { "content": "be-001: Define Product Data Model (RED)", "status": "pending", "phase": "red", "taskId": "be-001" },
+  { "content": "be-001: Define Product Data Model (GREEN)", "status": "pending", "phase": "green", "taskId": "be-001" },
+  { "content": "be-001: Define Product Data Model (REFACTOR)", "status": "pending", "phase": "refactor", "taskId": "be-001" },
+  { "content": "be-002: Implement ProductRepository Interface (RED)", "status": "pending", "phase": "red", "taskId": "be-002" },
+  // ...
+]
+```
 
+**If loading plan directly:**
 ```javascript
 // Example TODO structure
 [
   { "content": "Write test for ProductService.getAll()", "status": "pending", "phase": "red" },
   { "content": "Implement ProductService.getAll()", "status": "pending", "phase": "green" },
   { "content": "Refactor ProductService for error handling", "status": "pending", "phase": "refactor" },
-  { "content": "Write test for ProductRepository", "status": "pending", "phase": "red" },
   // ...
 ]
 ```
@@ -117,6 +139,12 @@ Use TodoWrite to create a backend TODO list:
 - `red`: Write failing unit test
 - `green`: Implement to pass test
 - `refactor`: Improve implementation
+
+**Task execution order (from task list):**
+1. Start with foundation tasks (empty `blockedBy`)
+2. Follow priority: High → Medium → Low
+3. Check `dependencyChain` for transitive dependencies
+4. Mark tasks complete as dependencies are satisfied
 
 ### 5. TDD Implementation Cycle
 
@@ -502,6 +530,7 @@ Next Steps:
 
 ## Related Commands
 
+- `/task-be` - Create backend task lists from plans (run before /execute-be)
 - `/execute-fe` - Implement frontend features using TDD
 - `/planning` - Create a plan
 - `/validate-plan` - Check plan quality
