@@ -12,6 +12,8 @@ allowed-tools:
   - Bash
   - mcp__plugin_context7_context7__resolve-library-id
   - mcp__plugin_context7_context7__query-docs
+  - mcp__exa__get_code_context_exa
+  - mcp__exa__web_search_exa
 ---
 
 # /validate-ui
@@ -500,6 +502,10 @@ Next Steps:
 - **Use AskUserQuestion** for interactive fixing
 - **Be specific** with file locations and line numbers
 - **Explain why** something violates a principle
+- **Use Context7** for official framework documentation
+- **Use Exa** for modern UI code examples and best practices:
+  - `get_code_context_exa` - Modern component examples
+  - `web_search_exa` - Latest UI/UX articles and patterns
 
 ## Output Format
 
@@ -526,4 +532,7 @@ Found 5 violations. Detailed report generated.
 - Focuses on code patterns that violate the four principles
 - Interactive fixing with user confirmation
 - Platform-specific validation rules
-- Uses Context7 for current best practices
+- **Context7** for official framework documentation and APIs
+- **Exa** for modern UI code examples and best practices:
+  - `get_code_context_exa` - Modern component patterns
+  - `web_search_exa` - Latest UI/UX articles and design trends
