@@ -102,7 +102,7 @@ Unit tests must be isolated from HTTP, databases, and external services. Mock or
 
 ### 5. Documentation Output
 
-Generate structured `.mdx` files under `.pland/[feature-topic]/`:
+Generate structured `.mdx` files under `.pland/[plan-name]/`:
 
 **Standard file set:**
 - `project-context.mdx` - Project overview, tech stack, constraints
@@ -114,7 +114,7 @@ Generate structured `.mdx` files under `.pland/[feature-topic]/`:
 - `e2e-overview.mdx` - High-level feature flow overview
 
 **File organization:**
-- Use feature-topic directories (e.g., `.pland/user-authentication/`)
+- Use plan-name directories (e.g., `.pland/user-authentication/`)
 - Never overwrite existing plans - subdirectories prevent conflicts
 - Each `.mdx` file is self-contained and independently readable
 

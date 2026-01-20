@@ -1,6 +1,6 @@
 ---
 description: Edit specific sections of an existing project plan with intelligent cross-file propagation
-argument-hint: [feature-topic] [section]
+argument-hint: [plan-name] [section]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa", "mcp__exa__deep_researcher_start", "mcp__exa__deep_researcher_check"]
 ---
 
@@ -48,7 +48,7 @@ Glob ".pland/**/project-context.mdx"
 ```
 
 **Ask the user:**
-- Which feature-topic needs revision?
+- Which plan-name needs revision?
 - Which section needs to be updated initially?
 
 **Use AskUserQuestion to determine revision scope:**
@@ -62,32 +62,32 @@ Based on the revision scope, load all affected files:
 
 **For frontend revisions:**
 ```bash
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/frontend-architecture.mdx
-Read .pland/[feature-topic]/frontend-testing-scenarios.mdx
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/frontend-architecture.mdx
+Read .pland/[plan-name]/frontend-testing-scenarios.mdx
 
 # Check if project-context exists
-Glob ".pland/[feature-topic]/project-context.mdx"
-# If exists: Read .pland/[feature-topic]/project-context.mdx
+Glob ".pland/[plan-name]/project-context.mdx"
+# If exists: Read .pland/[plan-name]/project-context.mdx
 # If not exists: Proceed without project-context (it's optional)
 ```
 
 **For backend revisions:**
 ```bash
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/backend-architecture.mdx
-Read .pland/[feature-topic]/backend-testing-cases.mdx
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/backend-architecture.mdx
+Read .pland/[plan-name]/backend-testing-cases.mdx
 
 # Check if project-context exists
-Glob ".pland/[feature-topic]/project-context.mdx"
-# If exists: Read .pland/[feature-topic]/project-context.mdx
+Glob ".pland/[plan-name]/project-context.mdx"
+# If exists: Read .pland/[plan-name]/project-context.mdx
 # If not exists: Proceed without project-context (it's optional)
 ```
 
 **For project-context revisions:**
 ```bash
 # project-context must exist to revise it
-Read .pland/[feature-topic]/project-context.mdx
+Read .pland/[plan-name]/project-context.mdx
 # If file doesn't exist, ask user if they want to create it
 ```
 
@@ -282,7 +282,7 @@ This would:
 /revise-planning
 ```
 
-This would prompt for both feature-topic and section, then determine scope automatically.
+This would prompt for both plan-name and section, then determine scope automatically.
 
 ## Output
 

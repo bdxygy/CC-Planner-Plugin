@@ -1,6 +1,6 @@
 ---
 description: Create organized backend task lists from existing plans. Extracts tasks with full context, organizes by priority, and outputs task lists ready for seamless execution with /execute-be.
-argument-hint: [feature-topic]
+argument-hint: [plan-name]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "Bash", "TodoWrite"]
 ---
 
@@ -11,7 +11,7 @@ Create organized backend task lists from existing project plans. Extracts implem
 ## When to Use
 
 Use this command when:
-- You have an existing plan in `.pland/[feature-topic]/`
+- You have an existing plan in `.pland/[plan-name]/`
 - You need to break down backend features into actionable tasks
 - You want prioritized task lists before implementation
 - You're preparing for a backend TDD implementation sprint
@@ -28,7 +28,7 @@ Glob ".pland/*/backend-architecture.mdx"
 ```
 
 **Use AskUserQuestion to ask:**
-- Which feature-topic plan to extract tasks from?
+- Which plan-name plan to extract tasks from?
 - Extract tasks for entire backend or specific services?
 - Include dependencies between tasks?
 
@@ -38,10 +38,10 @@ Read the relevant plan files for task extraction:
 
 ```bash
 # Read core plan files
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/backend-architecture.mdx
-Read .pland/[feature-topic]/backend-testing-cases.mdx
-Read .pland/[feature-topic]/project-context.mdx (optional)
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/backend-architecture.mdx
+Read .pland/[plan-name]/backend-testing-cases.mdx
+Read .pland/[plan-name]/project-context.mdx (optional)
 ```
 
 ### 3. Detect Backend Platform
@@ -154,7 +154,7 @@ Create a structured task list in both formats:
 
 **Format 1: MDX Task List (for human review)**
 ```mdx
-# Backend Tasks: [feature-topic]
+# Backend Tasks: [plan-name]
 
 ## High Priority
 - [ ] **Define Product Data Model**
@@ -345,15 +345,15 @@ dependencySummary:
 Save the task list to the plan directory:
 
 ```bash
-# Save MDX task list to .pland/[feature-topic]/backend-tasks.mdx
-Write .pland/[feature-topic]/backend-tasks.mdx
+# Save MDX task list to .pland/[plan-name]/backend-tasks.mdx
+Write .pland/[plan-name]/backend-tasks.mdx
 ```
 
 And save as YAML for programmatic access:
 
 ```bash
-# Save YAML task list to .pland/[feature-topic]/backend-tasks.yaml
-Write .pland/[feature-topic]/backend-tasks.yaml
+# Save YAML task list to .pland/[plan-name]/backend-tasks.yaml
+Write .pland/[plan-name]/backend-tasks.yaml
 ```
 
 ### 9. Display Task Summary
@@ -559,7 +559,7 @@ After task extraction, provide:
 ```
 Backend Task List Created
 
-Feature Topic: [feature-topic]
+Feature Topic: [plan-name]
 Platform: [detected platform]
 
 Tasks Generated: [total]

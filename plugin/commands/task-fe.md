@@ -1,6 +1,6 @@
 ---
 description: Create organized frontend task lists from existing plans. Extracts tasks with full context, organizes by priority, and outputs task lists ready for seamless execution with /execute-fe.
-argument-hint: [feature-topic]
+argument-hint: [plan-name]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "Bash", "TodoWrite"]
 ---
 
@@ -11,7 +11,7 @@ Create organized frontend task lists from existing project plans. Extracts imple
 ## When to Use
 
 Use this command when:
-- You have an existing plan in `.pland/[feature-topic]/`
+- You have an existing plan in `.pland/[plan-name]/`
 - You need to break down frontend features into actionable tasks
 - You want prioritized task lists before implementation
 - You're preparing for a frontend TDD implementation sprint
@@ -28,7 +28,7 @@ Glob ".pland/*/features.mdx"
 ```
 
 **Use AskUserQuestion to ask:**
-- Which feature-topic plan to extract tasks from?
+- Which plan-name plan to extract tasks from?
 - Extract tasks for entire frontend or specific features?
 - Include dependencies between tasks?
 
@@ -38,10 +38,10 @@ Read the relevant plan files for task extraction:
 
 ```bash
 # Read core plan files
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/frontend-architecture.mdx
-Read .pland/[feature-topic]/frontend-testing-scenarios.mdx
-Read .pland/[feature-topic]/project-context.mdx (optional)
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/frontend-architecture.mdx
+Read .pland/[plan-name]/frontend-testing-scenarios.mdx
+Read .pland/[plan-name]/project-context.mdx (optional)
 ```
 
 ### 3. Detect Frontend Platform
@@ -146,7 +146,7 @@ Create a structured task list in both formats:
 
 **Format 1: MDX Task List (for human review)**
 ```mdx
-# Frontend Tasks: [feature-topic]
+# Frontend Tasks: [plan-name]
 
 ## High Priority
 - [ ] **Setup Navigation & Routing**
@@ -300,15 +300,15 @@ dependencySummary:
 Save the task list to the plan directory:
 
 ```bash
-# Save MDX task list to .pland/[feature-topic]/frontend-tasks.mdx
-Write .pland/[feature-topic]/frontend-tasks.mdx
+# Save MDX task list to .pland/[plan-name]/frontend-tasks.mdx
+Write .pland/[plan-name]/frontend-tasks.mdx
 ```
 
 And save as YAML for programmatic access:
 
 ```bash
-# Save YAML task list to .pland/[feature-topic]/frontend-tasks.yaml
-Write .pland/[feature-topic]/frontend-tasks.yaml
+# Save YAML task list to .pland/[plan-name]/frontend-tasks.yaml
+Write .pland/[plan-name]/frontend-tasks.yaml
 ```
 
 ### 9. Display Task Summary
@@ -478,7 +478,7 @@ After task extraction, provide:
 ```
 Frontend Task List Created
 
-Feature Topic: [feature-topic]
+Feature Topic: [plan-name]
 Platform: [detected platform]
 
 Tasks Generated: [total]

@@ -117,7 +117,7 @@ Last Modified: 2025-01-15
 
 ## Notes
 
-- Plans are stored in `.pland/[feature-topic]/` directories
+- Plans are stored in `.pland/[plan-name]/` directories
 - project-context.mdx is required for a plan to be listed
 - Incomplete plans show which required files are missing
 - Task files are optional but recommended for implementation

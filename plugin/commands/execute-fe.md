@@ -1,6 +1,6 @@
 ---
 description: Implement frontend features from a plan using Test-Driven Development (TDD). Generates tests first, then implementation, following Red-Green-Refactor cycle.
-argument-hint: [feature-topic] [feature-name]
+argument-hint: [plan-name] [feature-name]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Edit", "Glob", "Grep", "Bash", "TodoWrite", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
@@ -32,17 +32,17 @@ First, check if a task list exists from `/task-fe`, or load the plan directly:
 
 ```bash
 # Option 1: Load existing task list from /task-fe
-Read .pland/[feature-topic]/frontend-tasks.yaml
-Read .pland/[feature-topic]/frontend-tasks.mdx
+Read .pland/[plan-name]/frontend-tasks.yaml
+Read .pland/[plan-name]/frontend-tasks.mdx
 
 # Option 2: If no task list exists, load plan files directly
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/frontend-architecture.mdx
-Read .pland/[feature-topic]/frontend-testing-scenarios.mdx
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/frontend-architecture.mdx
+Read .pland/[plan-name]/frontend-testing-scenarios.mdx
 ```
 
 **Use AskUserQuestion to ask:**
-- Which feature-topic plan to execute?
+- Which plan-name plan to execute?
 - Use existing task list from `/task-fe` or load plan directly?
 - Implement entire frontend or specific features?
 - Select specific tasks for implementation

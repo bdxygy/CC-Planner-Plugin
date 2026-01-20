@@ -1,6 +1,6 @@
 ---
 description: Validate implemented UI against modern design standards: Modern, Aesthetic, Borderless, Responsive (mobile-first). Scans code files, reports violations with detailed fix suggestions.
-argument-hint: [feature-topic] [platform]
+argument-hint: [plan-name] [platform]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
@@ -279,7 +279,7 @@ Card(
 
 **Detailed report format:**
 ```markdown
-# UI Validation Report: [feature-topic] - [platform]
+# UI Validation Report: [plan-name] - [platform]
 
 ## Summary
 - Total files scanned: [number]
@@ -498,7 +498,7 @@ Next Steps:
 ## Output Format
 
 ```
-Validating UI: [feature-topic] - [platform]
+Validating UI: [plan-name] - [platform]
 Scanning UI files... ✅
 Analyzing modern patterns... ✅
 Checking aesthetic consistency... ✅

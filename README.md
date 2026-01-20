@@ -4,7 +4,7 @@ Generate comprehensive, implementation-ready end-to-end application plans for so
 
 ## Overview
 
-`architect-planner` helps you create detailed project plans covering features, frontend/backend architecture, and testing strategies. Plans are output as structured `.mdx` files organized under `.pland/[feature-topic]/`.
+`architect-planner` helps you create detailed project plans covering features, frontend/backend architecture, and testing strategies. Plans are output as structured `.mdx` files organized under `.pland/[plan-name]/`.
 
 **Multi-Platform Support:**
 - **Mobile**: Android (Kotlin/Java), iOS (Swift/SwiftUI/UIKit), Flutter, React Native
@@ -87,7 +87,7 @@ Validate **implemented UI** against modern design standards:
 Create organized **frontend** task lists from existing plans.
 
 **Features:**
-- Extracts tasks from `.pland/[feature-topic]/` plans
+- Extracts tasks from `.pland/[plan-name]/` plans
 - Full context: file locations, components, tests, dependencies
 - Organized by priority (High/Medium/Low)
 - Seamless integration with `/execute-fe`
@@ -97,7 +97,7 @@ Create organized **frontend** task lists from existing plans.
 Create organized **backend** task lists from existing plans.
 
 **Features:**
-- Extracts tasks from `.pland/[feature-topic]/` plans
+- Extracts tasks from `.pland/[plan-name]/` plans
 - Full context: file locations, services, tests, dependencies
 - Organized by priority (High/Medium/Low)
 - Seamless integration with `/execute-be`
@@ -203,7 +203,7 @@ Autonomously scans existing codebases with **multi-platform detection**:
 Plans are organized as:
 ```
 .pland/
-└── [feature-topic]/
+└── [plan-name]/
     ├── project-context.mdx
     ├── features.mdx
     ├── frontend-architecture.mdx

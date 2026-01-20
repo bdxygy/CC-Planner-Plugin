@@ -1,6 +1,6 @@
 ---
 description: Regenerate backend task lists after revising a plan with /revise-planning
-argument-hint: [feature-topic]
+argument-hint: [plan-name]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "TodoWrite", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
@@ -21,21 +21,21 @@ Use this command when:
 ### 1. Locate Plan and Task Files
 
 **Ask the user:**
-- Which feature-topic plan to regenerate tasks for?
+- Which plan-name plan to regenerate tasks for?
 
 **Identify and read all relevant plan files:**
 ```bash
 # Read all backend plan files (same files affected by /revise-planning)
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/backend-architecture.mdx
-Read .pland/[feature-topic]/backend-testing-cases.mdx
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/backend-architecture.mdx
+Read .pland/[plan-name]/backend-testing-cases.mdx
 
 # Check if project-context exists and read it
-Glob ".pland/[feature-topic]/project-context.mdx"
-# If exists: Read .pland/[feature-topic]/project-context.mdx
+Glob ".pland/[plan-name]/project-context.mdx"
+# If exists: Read .pland/[plan-name]/project-context.mdx
 
 # Check if task files exist
-Glob ".pland/[feature-topic]/backend-tasks.*"
+Glob ".pland/[plan-name]/backend-tasks.*"
 ```
 
 ### 2. Confirm Regeneration
@@ -52,8 +52,8 @@ Glob ".pland/[feature-topic]/backend-tasks.*"
 Remove the old task files:
 ```bash
 # Delete existing backend task files
-Bash: rm -f .pland/[feature-topic]/backend-tasks.mdx
-Bash: rm -f .pland/[feature-topic]/backend-tasks.yaml
+Bash: rm -f .pland/[plan-name]/backend-tasks.mdx
+Bash: rm -f .pland/[plan-name]/backend-tasks.yaml
 ```
 
 ### 4. Generate New Task Lists

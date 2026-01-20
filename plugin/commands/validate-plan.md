@@ -1,6 +1,6 @@
 ---
 description: Validate a project plan for structure, consistency, testing completeness, and technical feasibility
-argument-hint: [feature-topic]
+argument-hint: [plan-name]
 allowed-tools: ["Read", "Glob", "Grep", "Bash", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
@@ -23,23 +23,23 @@ Use this command when:
 First, identify the plan to validate:
 
 **Ask the user:**
-- Which feature-topic plan to validate?
+- Which plan-name plan to validate?
 - Or scan for all available plans: `Glob ".pland/**/project-context.mdx"`
 
 **Read all plan files:**
 ```bash
-Read .pland/[feature-topic]/project-context.mdx
-Read .pland/[feature-topic]/features.mdx
-Read .pland/[feature-topic]/frontend-architecture.mdx
-Read .pland/[feature-topic]/backend-architecture.mdx
-Read .pland/[feature-topic]/frontend-testing-scenarios.mdx
-Read .pland/[feature-topic]/backend-testing-cases.mdx
+Read .pland/[plan-name]/project-context.mdx
+Read .pland/[plan-name]/features.mdx
+Read .pland/[plan-name]/frontend-architecture.mdx
+Read .pland/[plan-name]/backend-architecture.mdx
+Read .pland/[plan-name]/frontend-testing-scenarios.mdx
+Read .pland/[plan-name]/backend-testing-cases.mdx
 
 # Optional: Read task list files if they exist
-Read .pland/[feature-topic]/frontend-tasks.yaml
-Read .pland/[feature-topic]/frontend-tasks.mdx
-Read .pland/[feature-topic]/backend-tasks.yaml
-Read .pland/[feature-topic]/backend-tasks.mdx
+Read .pland/[plan-name]/frontend-tasks.yaml
+Read .pland/[plan-name]/frontend-tasks.mdx
+Read .pland/[plan-name]/backend-tasks.yaml
+Read .pland/[plan-name]/backend-tasks.mdx
 ```
 
 ### 2. Structure Validation
@@ -187,7 +187,7 @@ After all checks, generate a structured report:
 
 **Report structure:**
 ```markdown
-# Plan Validation Report: [feature-topic]
+# Plan Validation Report: [plan-name]
 
 ## Summary
 [Overall assessment: PASS/FAIL/PASS WITH WARNINGS]

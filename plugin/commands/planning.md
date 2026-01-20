@@ -1,6 +1,6 @@
 ---
 description: Create a comprehensive project plan with features, architecture, and testing scenarios
-argument-hint: [feature-topic]
+argument-hint: [plan-name]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa", "mcp__exa__deep_researcher_start", "mcp__exa__deep_researcher_check"]
 ---
 
@@ -184,7 +184,7 @@ Define explicit testing for every feature based on platform:
 
 ### 6. Generate Documentation Files
 
-Create `.mdx` files under `.pland/[feature-topic]/`:
+Create `.mdx` files under `.pland/[plan-name]/`:
 
 **Required files:**
 - `project-context.mdx` - Overview, tech stack, constraints
@@ -206,7 +206,7 @@ Create `.mdx` files under `.pland/[feature-topic]/`:
 
 ```
 .pland/
-└── [feature-topic]/
+└── [plan-name]/
     ├── project-context.mdx
     ├── features.mdx
     ├── frontend-architecture.mdx
@@ -278,7 +278,7 @@ This would create a plan at `.pland/user-authentication/` with all required file
 
 ## Notes
 
-- Plans are never overwritten - each feature-topic gets its own directory
+- Plans are never overwritten - each plan-name gets its own directory
 - Use the planning-methodology skill for general planning guidance
 - Use platform-specific skills for targeted architecture patterns:
   - `android-patterns` - Android development (Jetpack Compose + XML)

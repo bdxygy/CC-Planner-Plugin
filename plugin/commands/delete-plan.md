@@ -1,6 +1,6 @@
 ---
 description: Delete a project plan directory and all its files
-argument-hint: [feature-topic]
+argument-hint: [plan-name]
 allowed-tools: ["AskUserQuestion", "Glob", "Bash"]
 ---
 
@@ -40,19 +40,19 @@ Display the list with plan names and brief descriptions.
 
 Show what will be deleted:
 ```
-You are about to delete: [feature-topic]
+You are about to delete: [plan-name]
 
 This will remove:
-- .pland/[feature-topic]/project-context.mdx
-- .pland/[feature-topic]/features.mdx
-- .pland/[feature-topic]/frontend-architecture.mdx
-- .pland/[feature-topic]/backend-architecture.mdx
-- .pland/[feature-topic]/frontend-testing-scenarios.mdx
-- .pland/[feature-topic]/backend-testing-cases.mdx
-- .pland/[feature-topic]/frontend-tasks.mdx (if exists)
-- .pland/[feature-topic]/frontend-tasks.yaml (if exists)
-- .pland/[feature-topic]/backend-tasks.mdx (if exists)
-- .pland/[feature-topic]/backend-tasks.yaml (if exists)
+- .pland/[plan-name]/project-context.mdx
+- .pland/[plan-name]/features.mdx
+- .pland/[plan-name]/frontend-architecture.mdx
+- .pland/[plan-name]/backend-architecture.mdx
+- .pland/[plan-name]/frontend-testing-scenarios.mdx
+- .pland/[plan-name]/backend-testing-cases.mdx
+- .pland/[plan-name]/frontend-tasks.mdx (if exists)
+- .pland/[plan-name]/frontend-tasks.yaml (if exists)
+- .pland/[plan-name]/backend-tasks.mdx (if exists)
+- .pland/[plan-name]/backend-tasks.yaml (if exists)
 
 This action CANNOT be undone unless you have git history.
 ```
@@ -67,7 +67,7 @@ If user confirms, remove the entire directory:
 
 ```bash
 # Remove the entire plan directory
-Bash: rm -rf .pland/[feature-topic]
+Bash: rm -rf .pland/[plan-name]
 ```
 
 ### 5. Verify Deletion
@@ -76,12 +76,12 @@ Confirm the directory was removed:
 
 ```bash
 # Verify directory no longer exists
-Glob ".pland/[feature-topic]/*"
+Glob ".pland/[plan-name]/*"
 ```
 
 Report success to user:
 ```
-✅ Successfully deleted plan: [feature-topic]
+✅ Successfully deleted plan: [plan-name]
 
 Remaining plans: [count] plans
 - [plan-1]
