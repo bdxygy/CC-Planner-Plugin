@@ -13,6 +13,8 @@ allowed-tools:
   - TodoWrite
   - mcp__plugin_context7_context7__resolve-library-id
   - mcp__plugin_context7_context7__query-docs
+  - mcp__exa__get_code_context_exa
+  - mcp__exa__web_search_exa
 ---
 
 # /execute-fe
@@ -144,8 +146,10 @@ For each feature component, follow Red-Green-Refactor:
 - Failure state tests
 - Platform-specific scenarios (rotation, permissions, etc.)
 
-**Write test using Context7 for framework-specific patterns:**
-- Query Context7 for testing framework documentation
+**Write test using Context7 and Exa for framework-specific patterns:**
+- Query Context7 for testing framework documentation (official APIs)
+- Use Exa `get_code_context_exa` for real-world test examples
+- Use Exa `web_search_exa` for latest testing patterns and tutorials
 - Use platform-specific testing patterns
 
 **Run test - must FAIL:**
@@ -172,7 +176,9 @@ For each feature component, follow Red-Green-Refactor:
 - Write MINIMAL code to pass the test
 - Focus on happy path first
 - Use platform-specific patterns from loaded skill
-- Use Context7 for framework implementation patterns
+- Use Context7 for framework implementation patterns (official APIs)
+- Use Exa `get_code_context_exa` for real-world component examples
+- Use Exa `web_search_exa` for latest implementation tutorials
 
 **Run test - must PASS:**
 ```bash
@@ -580,3 +586,7 @@ Next Steps:
 - Platform-specific test frameworks supported
 - Interactive test verification at each phase
 - Split from original /execute for focused frontend work
+- **Context7** for official API documentation and testing frameworks
+- **Exa** for code examples and implementation patterns:
+  - `get_code_context_exa` - Real-world component examples
+  - `web_search_exa` - Latest tutorials and best practices

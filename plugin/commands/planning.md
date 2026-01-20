@@ -11,6 +11,10 @@ allowed-tools:
   - Bash
   - mcp__plugin_context7_context7__resolve-library-id
   - mcp__plugin_context7_context7__query-docs
+  - mcp__exa__get_code_context_exa
+  - mcp__exa__web_search_exa
+  - mcp__exa__deep_researcher_start
+  - mcp__exa__deep_researcher_check
 ---
 
 # /planning
@@ -125,6 +129,10 @@ Define the frontend structure based on detected platform:
 **For technology-specific patterns:**
 - Use loaded platform-specific skill as primary reference
 - Use Context7 for current documentation on specific libraries
+- Use Exa for code examples, tutorials, and latest best practices:
+  - `get_code_context_exa` for framework code examples
+  - `web_search_exa` for recent articles and patterns
+  - `deep_researcher_start` for complex architecture research
 
 ### 4. Backend Architecture
 
@@ -153,6 +161,8 @@ Define the backend structure (if applicable):
 
 **For Bun + Hono specifically:**
 - Use Context7 to query Hono routing patterns
+- Use Exa `get_code_context_exa` for Hono code examples
+- Use Exa `web_search_exa` for recent Hono best practices
 - Query middleware patterns for validation/auth
 - Query error handling best practices
 
@@ -256,6 +266,10 @@ Create `.mdx` files under `.pland/[feature-topic]/`:
 
 - **Use AskUserQuestion extensively** for multi-option decisions
 - **Offer Context7 lookups** when technology-specific questions arise
+- **Use Exa for code examples and recent patterns:**
+  - `get_code_context_exa` for real-world code samples
+  - `web_search_exa` for latest blog posts and tutorials
+  - `deep_researcher_start` for complex multi-source research
 - **Confirm with user** before writing large sections
 - **Show progress** by updating user on which section you're working on
 - **Be concise but complete** - avoid filler, be concrete
@@ -286,5 +300,9 @@ This would create a plan at `.pland/user-authentication/` with all required file
   - `tauri-patterns` - Tauri desktop applications
   - `electron-patterns` - Electron desktop applications
   - `architecture-patterns` - Web applications
-- Context7 is available for technology-specific documentation
+- **Context7** for official package documentation (APIs, types, methods)
+- **Exa** for code examples, tutorials, and latest best practices:
+  - `get_code_context_exa` - Search for real-world code examples
+  - `web_search_exa` - Find recent articles and blog posts
+  - `deep_researcher_start` - Deep research for complex topics
 - Platform auto-detection runs automatically for existing projects

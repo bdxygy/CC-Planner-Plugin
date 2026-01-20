@@ -13,6 +13,8 @@ allowed-tools:
   - TodoWrite
   - mcp__plugin_context7_context7__resolve-library-id
   - mcp__plugin_context7_context7__query-docs
+  - mcp__exa__get_code_context_exa
+  - mcp__exa__web_search_exa
 ---
 
 # /execute-be
@@ -152,8 +154,10 @@ For each backend component, follow Red-Green-Refactor:
 - Test boundary conditions
 - Test failure modes
 
-**Write test using Context7 for framework-specific patterns:**
-- Query Context7 for testing framework documentation
+**Write test using Context7 and Exa for framework-specific patterns:**
+- Query Context7 for testing framework documentation (official APIs)
+- Use Exa `get_code_context_exa` for real-world test examples
+- Use Exa `web_search_exa` for latest testing patterns and tutorials
 - Use mocking patterns appropriate for framework
 
 **Run test - must FAIL:**
@@ -183,6 +187,9 @@ For each backend component, follow Red-Green-Refactor:
 - Focus on business logic first
 - Use dependency injection for testability
 - Use platform-specific patterns
+- Use Context7 for framework implementation patterns (official APIs)
+- Use Exa `get_code_context_exa` for real-world service examples
+- Use Exa `web_search_exa` for latest implementation tutorials
 
 **Run test - must PASS:**
 ```bash
@@ -520,3 +527,7 @@ Next Steps:
 - Platform-specific test frameworks supported
 - Interactive test verification at each phase
 - Split from original /execute for focused backend work
+- **Context7** for official API documentation and testing frameworks
+- **Exa** for code examples and implementation patterns:
+  - `get_code_context_exa` - Real-world service examples
+  - `web_search_exa` - Latest tutorials and best practices

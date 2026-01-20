@@ -10,6 +10,10 @@ allowed-tools:
   - Grep
   - mcp__plugin_context7_context7__resolve-library-id
   - mcp__plugin_context7_context7__query-docs
+  - mcp__exa__get_code_context_exa
+  - mcp__exa__web_search_exa
+  - mcp__exa__deep_researcher_start
+  - mcp__exa__deep_researcher_check
 ---
 
 # /revise-planning
@@ -190,7 +194,11 @@ After making changes, verify plan consistency:
 - **Confirm scope** - verify user's intent before making changes
 - **Show diff summary** - summarize what changed after revision
 - **Suggest validation** - recommend running /validate-plan after major changes
-- **Use Context7** - for technology-specific architecture changes
+- **Use Context7** for official API documentation
+- **Use Exa** for code examples and latest patterns:
+  - `get_code_context_exa` - Real-world implementation examples
+  - `web_search_exa` - Recent articles and best practices
+  - `deep_researcher_start` - Complex research topics
 
 ## Example Usage
 
