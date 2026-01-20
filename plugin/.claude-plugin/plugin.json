@@ -6,9 +6,7 @@
     "name": "Budi Santoso"
   },
   "homepage": "https://github.com/bdxygy/CC-Planner-Plugin",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bdxygy/CC-Planner-Plugin.git"
-  },
+  "repository": "https://github.com/bdxygy/CC-Planner-Plugin",
+  "license": "MIT",
   "keywords": ["planning", "architecture", "documentation", "testing", "mobile", "desktop", "android", "ios", "flutter", "react-native", "tauri", "electron"]
 }
