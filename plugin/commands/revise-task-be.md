@@ -1,17 +1,17 @@
 ---
-description: Regenerate backend task lists after revising a plan with /revise-plan
+description: Regenerate backend task lists after revising a plan with /revise-planning
 argument-hint: [feature-topic]
 allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep"]
 ---
 
 # /revise-task-be
 
-Regenerate backend task lists after revising a plan with `/revise-plan`. This command removes existing task files and generates fresh task lists from the revised plan files.
+Regenerate backend task lists after revising a plan with `/revise-planning`. This command removes existing task files and generates fresh task lists from the revised plan files.
 
 ## When to Use
 
 Use this command when:
-- You have run `/revise-plan` to update an existing plan
+- You have run `/revise-planning` to update an existing plan
 - You previously generated backend task lists with `/task-be`
 - You need to update task lists to reflect the revised plan
 - Features, architecture, or testing cases have changed
@@ -224,6 +224,6 @@ This regenerates backend task lists for the `user-authentication` plan.
 
 - This command removes existing task files and regenerates from scratch
 - All task IDs, priorities, and dependencies are recalculated
-- Use this after `/revise-plan` to keep tasks in sync with the plan
+- Use this after `/revise-planning` to keep tasks in sync with the plan
 - Dependencies are auto-detected from plan file content
 - Circular dependencies are rejected and must be resolved manually

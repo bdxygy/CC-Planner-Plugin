@@ -9,7 +9,7 @@
     {
       "name": "architect-planner",
       "description": "Generate comprehensive, implementation-ready end-to-end application plans for software projects across all major platforms. Supports Android, iOS, Flutter, React Native, Tauri, and Electron with automatic platform detection. Features TDD-based frontend and backend execution, modern UI validation, and platform-specific architecture patterns.",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "author": {
         "name": "Budi Santoso"
       },
