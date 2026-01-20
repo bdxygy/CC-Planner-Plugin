@@ -483,6 +483,7 @@ Frontend and backend have separate TODO lists:
 
 - Claude Code with plugin support
 - Context7 MCP server for technology documentation
+- Exa MCP server for code examples, web search, and deep research
 
 ## License
 
