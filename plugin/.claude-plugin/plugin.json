@@ -1,6 +1,6 @@
 {
   "name": "architect-planner",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Generate comprehensive, implementation-ready end-to-end application plans for software projects",
   "author": {
     "name": "Budi Santoso"
