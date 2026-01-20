@@ -75,7 +75,55 @@ Analyze plan files to extract backend tasks. For each task identified:
 - **Acceptance Criteria**: Definition of done
 - **Estimated Effort**: Relative complexity (S/M/L)
 
-### 5. Organize Tasks by Priority
+**Auto-detect Dependencies:**
+- Scan `features.mdx` for service relationships (e.g., "ProductService uses ProductRepository")
+- Scan `backend-architecture.mdx` for layer architecture (controllers → services → repositories)
+- Extract API endpoint to service mappings
+- Build dependency graph: Service A → depends on → Service B
+
+**Dependency Detection Patterns:**
+```
+From features.mdx:
+- "ProductService manages products via ProductRepository" → ProductService depends on ProductRepository
+- "AuthController validates tokens via AuthService" → AuthController depends on AuthService
+- "OrderService creates orders via ProductRepository" → OrderService depends on ProductRepository
+
+From backend-architecture.mdx:
+- Layer hierarchy (controller → service → repository → model)
+- Service composition patterns
+- External service dependencies
+```
+
+### 5. Validate Dependencies
+
+**Circular Dependency Detection:**
+- Build directed graph from task dependencies
+- Run cycle detection algorithm (DFS-based)
+- **Reject any circular dependencies** - not allowed
+
+**Example of REJECTED circular dependency:**
+```
+Task A: ProductService → depends on → OrderService
+Task B: OrderService → depends on → ProductService
+❌ REJECTED: Circular dependency detected!
+
+Resolution: Remove or restructure dependency
+- Extract shared logic to a third service
+- Or invert dependency (both depend on a common abstraction)
+```
+
+**Valid Dependency Chain Example:**
+```
+ProductModel (no deps)
+    ↓
+ProductRepository (depends on ProductModel)
+    ↓
+ProductService (depends on ProductRepository)
+    ↓
+ProductsController (depends on ProductService)
+```
+
+### 6. Organize Tasks by Priority
 
 Structure tasks into three priority levels:
 
@@ -100,12 +148,12 @@ Structure tasks into three priority levels:
 - Admin endpoints
 - Data export/import features
 
-### 6. Generate Task List Output
+### 7. Generate Task List Output
 
-Create a structured task list in one of these formats:
+Create a structured task list in both formats:
 
-**Format 1: Markdown Task List (for human review)**
-```markdown
+**Format 1: MDX Task List (for human review)**
+```mdx
 # Backend Tasks: [feature-topic]
 
 ## High Priority
@@ -113,21 +161,30 @@ Create a structured task list in one of these formats:
   - Service: Product entity/model
   - File: `src/models/Product.{ext}`
   - Tests: Validation tests, serialization tests
-  - Dependencies: None
+  - Dependencies: None (foundation model)
+  - Dependency Chain: None
+  - Blocked By: None
+  - Blocks: ProductRepository, OrderRepository
   - Acceptance: Fields validated, JSON serializable
 
-- [ ] **Implement ProductRepository**
+- [ ] **Implement ProductRepository Interface**
   - Service: ProductRepository
   - File: `src/repositories/ProductRepository.{ext}`
   - Tests: CRUD operations with mocked database
   - Dependencies: Product model
+  - Dependency Chain: ProductRepository → ProductModel
+  - Blocked By: ProductModel
+  - Blocks: ProductService, OrderService
   - Notes: Interface for data access, isolate DB calls
 
-- [ ] **Create ProductService**
+- [ ] **Create ProductService with Business Logic**
   - Service: ProductService
   - File: `src/services/ProductService.{ext}`
   - Tests: Business logic with mocked repository
   - Dependencies: ProductRepository
+  - Dependency Chain: ProductService → ProductRepository → ProductModel
+  - Blocked By: ProductRepository (transitive: also needs ProductModel)
+  - Blocks: ProductsController
   - Acceptance: getAll, getById, create, update, delete
 
 ## Medium Priority
@@ -136,6 +193,9 @@ Create a structured task list in one of these formats:
   - File: `src/controllers/products.controller.{ext}`
   - Tests: Request/response with mocked service
   - Dependencies: ProductService
+  - Dependency Chain: ProductsController → ProductService → ProductRepository → ProductModel
+  - Blocked By: ProductService (transitive: ProductRepository, ProductModel)
+  - Blocks: None
   - Notes: Pagination, filtering, sorting
 
 ## Low Priority
@@ -143,98 +203,160 @@ Create a structured task list in one of these formats:
   - Service: LoggingMiddleware
   - File: `src/middleware/logging.{ext}`
   - Tests: Logs requests correctly
-  - Dependencies: None
+  - Dependencies: None (cross-cutting concern)
+  - Dependency Chain: None
+  - Blocked By: None
+  - Blocks: None
   - Notes: Log level, request ID tracking
 ```
 
-**Format 2: JSON Task List (for /execute-be integration)**
-```json
-{
-  "featureTopic": "e-commerce",
-  "platform": "bun+hono",
-  "tasks": {
-    "high": [
-      {
-        "id": "be-001",
-        "name": "Define Product Data Model",
-        "service": "Product model",
-        "file": "src/models/product.ts",
-        "tests": ["Validation tests", "Serialization tests", "Type safety"],
-        "dependencies": [],
-        "acceptanceCriteria": ["Zod schema validated", "TypeScript types defined", "JSON schema documented"],
-        "estimatedEffort": "S",
-        "implementationNotes": "Use Zod for runtime validation"
-      },
-      {
-        "id": "be-002",
-        "name": "Implement ProductRepository Interface",
-        "service": "ProductRepository",
-        "file": "src/repositories/product.repository.ts",
-        "tests": ["CRUD interface", "Error handling"],
-        "dependencies": ["Product model"],
-        "acceptanceCriteria": ["findAll, findById, save, delete methods", "Returns typed data"],
-        "estimatedEffort": "M",
-        "implementationNotes": "Define interface first, implementation later"
-      },
-      {
-        "id": "be-003",
-        "name": "Create ProductService with Business Logic",
-        "service": "ProductService",
-        "file": "src/services/product.service.ts",
-        "tests": ["getAll with filtering", "getById with 404", "create with validation", "update with optimistic locking"],
-        "dependencies": ["ProductRepository"],
-        "acceptanceCriteria": ["All CRUD operations", "Business rules enforced", "Error handling"],
-        "estimatedEffort": "L",
-        "implementationNotes": "Mock repository in tests, no real DB"
-      }
-    ],
-    "medium": [
-      {
-        "id": "be-004",
-        "name": "Implement GET /api/products Endpoint",
-        "service": "ProductsController",
-        "file": "src/controllers/products.controller.ts",
-        "tests": ["200 response", "400 validation error", "500 server error"],
-        "dependencies": ["ProductService"],
-        "acceptanceCriteria": ["Returns paginated products", "Query params: page, limit"],
-        "estimatedEffort": "M",
-        "implementationNotes": "Use Hono route, mock service in tests"
-      }
-    ],
-    "low": [
-      {
-        "id": "be-005",
-        "name": "Add Request Logging Middleware",
-        "service": "LoggingMiddleware",
-        "file": "src/middleware/logging.ts",
-        "tests": ["Logs request method", "Logs request path", "Adds request ID"],
-        "dependencies": [],
-        "acceptanceCriteria": ["Logs to console", "Request ID header added"],
-        "estimatedEffort": "S",
-        "implementationNotes": "Use Hono middleware"
-      }
-    ]
-  }
-}
+**Format 2: YAML Task List (for /execute-be integration)**
+```yaml
+featureTopic: e-commerce
+platform: bun+hono
+tasks:
+  high:
+    - id: be-001
+      name: Define Product Data Model
+      service: Product model
+      file: src/models/product.ts
+      tests:
+        - Validation tests
+        - Serialization tests
+        - Type safety
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks:
+        - be-002
+        - be-005
+      acceptanceCriteria:
+        - Zod schema validated
+        - TypeScript types defined
+        - JSON schema documented
+      estimatedEffort: S
+      implementationNotes: Use Zod for runtime validation
+    - id: be-002
+      name: Implement ProductRepository Interface
+      service: ProductRepository
+      file: src/repositories/product.repository.ts
+      tests:
+        - CRUD interface
+        - Error handling
+      dependencies:
+        - Product model
+      dependencyChain:
+        - ProductRepository → ProductModel
+      blockedBy:
+        - ProductModel
+      blocks:
+        - be-003
+        - be-006
+      acceptanceCriteria:
+        - findAll, findById, save, delete methods
+        - Returns typed data
+      estimatedEffort: M
+      implementationNotes: Define interface first, implementation later
+    - id: be-003
+      name: Create ProductService with Business Logic
+      service: ProductService
+      file: src/services/product.service.ts
+      tests:
+        - getAll with filtering
+        - getById with 404
+        - create with validation
+        - update with optimistic locking
+      dependencies:
+        - ProductRepository
+      dependencyChain:
+        - ProductService → ProductRepository
+        - ProductService → ProductRepository → ProductModel
+      blockedBy:
+        - ProductRepository
+      blockedByTransitive:
+        - ProductModel
+      blocks:
+        - be-004
+      acceptanceCriteria:
+        - All CRUD operations
+        - Business rules enforced
+        - Error handling
+      estimatedEffort: L
+      implementationNotes: Mock repository in tests, no real DB
+  medium:
+    - id: be-004
+      name: Implement GET /api/products Endpoint
+      service: ProductsController
+      file: src/controllers/products.controller.ts
+      tests:
+        - 200 response
+        - 400 validation error
+        - 500 server error
+      dependencies:
+        - ProductService
+      dependencyChain:
+        - ProductsController → ProductService
+        - ProductsController → ProductService → ProductRepository
+        - ProductsController → ProductService → ProductRepository → ProductModel
+      blockedBy:
+        - ProductService
+      blockedByTransitive:
+        - ProductRepository
+        - ProductModel
+      blocks: []
+      acceptanceCriteria:
+        - Returns paginated products
+        - Query params: page, limit
+      estimatedEffort: M
+      implementationNotes: Use Hono route, mock service in tests
+  low:
+    - id: be-005
+      name: Add Request Logging Middleware
+      service: LoggingMiddleware
+      file: src/middleware/logging.ts
+      tests:
+        - Logs request method
+        - Logs request path
+        - Adds request ID
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks: []
+      acceptanceCriteria:
+        - Logs to console
+        - Request ID header added
+      estimatedEffort: S
+      implementationNotes: Use Hono middleware
+
+# Dependency Summary (for quick reference)
+dependencySummary:
+  foundation: # No dependencies, can start immediately
+    - be-001  # Product model
+    - be-005  # LoggingMiddleware
+  blocked:
+    - be-002  # ProductRepository (blocked by: Product model)
+    - be-003  # ProductService (blocked by: ProductRepository → Product model)
+    - be-004  # ProductsController (blocked by: ProductService → ProductRepository → Product model)
+    - be-006  # OrderService (blocked by: ProductRepository → Product model)
 ```
 
-### 7. Write Task List File
+### 8. Write Task List File
 
 Save the task list to the plan directory:
 
 ```bash
-# Save task list to .pland/[feature-topic]/backend-tasks.md
-Write .pland/[feature-topic]/backend-tasks.md
+# Save MDX task list to .pland/[feature-topic]/backend-tasks.mdx
+Write .pland/[feature-topic]/backend-tasks.mdx
 ```
 
-Or save as JSON for programmatic access:
+And save as YAML for programmatic access:
 
 ```bash
-# Save JSON task list to .pland/[feature-topic]/backend-tasks.json
-Write .pland/[feature-topic]/backend-tasks.json
+# Save YAML task list to .pland/[feature-topic]/backend-tasks.yaml
+Write .pland/[feature-topic]/backend-tasks.yaml
 ```
 
-### 8. Display Task Summary
+### 9. Display Task Summary
 
 Present a summary to the user:
 
@@ -249,12 +371,19 @@ Priority Breakdown:
   🟡 Medium: 8 tasks (API endpoints, validation)
   🟢 Low:    4 tasks  (Logging, docs, optimization)
 
-Task List Saved: .pland/e-commerce/backend-tasks.md
+Dependency Analysis:
+  ✅ No circular dependencies detected
+  📊 Foundation tasks (can start immediately): 4
+  ⏳ Blocked tasks (waiting for dependencies): 14
+  🔗 Total dependency relationships: 18
+
+Task List Saved: .pland/e-commerce/backend-tasks.mdx
 
 Next Steps:
-- Review task list: cat .pland/e-commerce/backend-tasks.md
+- Review task list: cat .pland/e-commerce/backend-tasks.mdx
+- Check dependency summary: cat .pland/e-commerce/backend-tasks.yaml
 - Execute with TDD: /execute-be e-commerce
-- Start with high priority tasks
+- Start with foundation tasks (no dependencies)
 ```
 
 ## Task Extraction Patterns
@@ -396,7 +525,7 @@ The generated task list integrates seamlessly with `/execute-be`:
 ```bash
 # /execute-be reads the task list automatically
 /execute-be e-commerce
-# Loads: .pland/e-commerce/backend-tasks.json
+# Loads: .pland/e-commerce/backend-tasks.yaml
 # Executes tasks by priority (high → medium → low)
 ```
 
@@ -438,20 +567,28 @@ Tasks Generated: [total]
   Medium Priority: [count] 🟡
   Low Priority:    [count] 🟢
 
+Dependency Analysis:
+  ✅ No circular dependencies detected
+  📊 Foundation tasks (can start immediately): [count]
+  ⏳ Blocked tasks (waiting for dependencies): [count]
+  🔗 Total dependency relationships: [count]
+
 Output Files:
-- .pland/[topic]/backend-tasks.md (human-readable)
-- .pland/[topic]/backend-tasks.json (machine-readable)
+- .pland/[topic]/backend-tasks.mdx (human-readable)
+- .pland/[topic]/backend-tasks.yaml (machine-readable, token-efficient)
 
 Integration:
 - Run /execute-be [topic] to execute tasks with TDD
 - Tasks organized by priority for optimal implementation
 - Full context included for each task
 - All tests isolated (no HTTP, no database)
+- Auto-detected dependencies with full chain tracking
 
 Next Steps:
-1. Review task list: cat .pland/[topic]/backend-tasks.md
-2. Adjust priorities if needed
-3. Execute: /execute-be [topic]
+1. Review task list: cat .pland/[topic]/backend-tasks.mdx
+2. Check dependency summary in YAML
+3. Adjust priorities if needed
+4. Execute: /execute-be [topic]
 ```
 
 ## Related Commands
@@ -469,3 +606,6 @@ Next Steps:
 - Seamless integration with /execute-be
 - Platform-specific task patterns applied automatically
 - All tasks require isolated unit tests
+- **Auto-detected dependencies** from plan files
+- **Full dependency chain tracking** (transitive dependencies)
+- **Circular dependency detection** (rejected with resolution guidance)

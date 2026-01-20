@@ -71,7 +71,54 @@ Analyze plan files to extract frontend tasks. For each task identified:
 - **Acceptance Criteria**: Definition of done
 - **Estimated Effort**: Relative complexity (S/M/L)
 
-### 5. Organize Tasks by Priority
+**Auto-detect Dependencies:**
+- Scan `features.mdx` for component relationships (e.g., "ProductList uses ProductCard")
+- Scan `frontend-architecture.mdx` for component hierarchy
+- Extract component imports and usage patterns
+- Build dependency graph: Component A → depends on → Component B
+
+**Dependency Detection Patterns:**
+```
+From features.mdx:
+- "ProductList displays multiple ProductCards" → ProductList depends on ProductCard
+- "CartButton shows badge with count" → CartButton depends on CartState
+- "UserScreen requires authentication" → UserScreen depends on AuthProvider
+
+From frontend-architecture.mdx:
+- Component hierarchy (parent → child relationships)
+- State provider dependencies
+- Navigation routing dependencies
+```
+
+### 5. Validate Dependencies
+
+**Circular Dependency Detection:**
+- Build directed graph from task dependencies
+- Run cycle detection algorithm (DFS-based)
+- **Reject any circular dependencies** - not allowed
+
+**Example of REJECTED circular dependency:**
+```
+Task A: ProductList → depends on → ProductCard
+Task B: ProductCard → depends on → ProductList
+❌ REJECTED: Circular dependency detected!
+
+Resolution: Remove or restructure dependency
+- Make ProductCard independent (remove ProductList dependency)
+- Or extract shared state to a third component
+```
+
+**Valid Dependency Chain Example:**
+```
+AppNavigation (no deps)
+    ↓
+ProductList (depends on AppNavigation, ProductCard)
+    ↓
+ProductCard (no deps)
+SkeletonLoader (depends on ProductList)
+```
+
+### 6. Organize Tasks by Priority
 
 Structure tasks into three priority levels:
 
@@ -93,12 +140,12 @@ Structure tasks into three priority levels:
 - Error handling improvements
 - Accessibility enhancements
 
-### 6. Generate Task List Output
+### 7. Generate Task List Output
 
-Create a structured task list in one of these formats:
+Create a structured task list in both formats:
 
-**Format 1: Markdown Task List (for human review)**
-```markdown
+**Format 1: MDX Task List (for human review)**
+```mdx
 # Frontend Tasks: [feature-topic]
 
 ## High Priority
@@ -106,14 +153,20 @@ Create a structured task list in one of these formats:
   - Component: AppNavigation
   - File: `src/navigation/AppNavigation.{ext}`
   - Tests: Navigation flow tests
-  - Dependencies: None
+  - Dependencies: None (foundation component)
+  - Dependency Chain: None
+  - Blocked By: None
+  - Blocks: ProductList
   - Notes: Use platform-specific navigation (React Navigation, Jetpack Navigation, etc.)
 
 - [ ] **Implement ProductList Screen**
   - Component: ProductList
   - File: `src/screens/ProductList.{ext}`
   - Tests: Loading state, empty state, error state, item rendering
-  - Dependencies: ProductCard component
+  - Dependencies: ProductCard, AppNavigation
+  - Dependency Chain: ProductList → ProductCard, ProductList → AppNavigation
+  - Blocked By: ProductCard (must complete first)
+  - Blocks: SkeletonLoader
   - Acceptance: Displays 20 items, handles scroll, shows loading spinner
 
 ## Medium Priority
@@ -121,7 +174,10 @@ Create a structured task list in one of these formats:
   - Component: ProductCard
   - File: `src/components/ProductCard.{ext}`
   - Tests: Render product info, handle tap, display image
-  - Dependencies: None
+  - Dependencies: None (reusable component)
+  - Dependency Chain: None
+  - Blocked By: None
+  - Blocks: ProductList
   - Notes: Reusable card component
 
 ## Low Priority
@@ -130,74 +186,132 @@ Create a structured task list in one of these formats:
   - File: `src/components/SkeletonLoader.{ext}`
   - Tests: Matches layout dimensions
   - Dependencies: ProductList
+  - Dependency Chain: SkeletonLoader → ProductList → ProductCard, SkeletonLoader → ProductList → AppNavigation
+  - Blocked By: ProductList (transitive: also needs ProductCard, AppNavigation)
+  - Blocks: None
 ```
 
-**Format 2: JSON Task List (for /execute-fe integration)**
-```json
-{
-  "featureTopic": "e-commerce",
-  "platform": "flutter",
-  "tasks": {
-    "high": [
-      {
-        "id": "fe-001",
-        "name": "Setup Navigation & Routing",
-        "component": "AppNavigation",
-        "file": "lib/navigation/app_navigation.dart",
-        "tests": ["Navigation flow tests", "Deep linking tests"],
-        "dependencies": [],
-        "acceptanceCriteria": ["Can navigate between screens", "Deep links work"],
-        "estimatedEffort": "M",
-        "implementationNotes": "Use GoRouter for routing"
-      }
-    ],
-    "medium": [
-      {
-        "id": "fe-002",
-        "name": "Create ProductCard Component",
-        "component": "ProductCard",
-        "file": "lib/components/product_card.dart",
-        "tests": ["Render product info", "Handle tap", "Display image"],
-        "dependencies": [],
-        "acceptanceCriteria": ["Shows name, price, image", "Clickable", "Loading placeholder"],
-        "estimatedEffort": "S",
-        "implementationNotes": "Use Hero animation for image"
-      }
-    ],
-    "low": [
-      {
-        "id": "fe-003",
-        "name": "Add Skeleton Loading",
-        "component": "SkeletonLoader",
-        "file": "lib/components/skeleton_loader.dart",
-        "tests": ["Matches layout dimensions"],
-        "dependencies": ["ProductList"],
-        "acceptanceCriteria": ["Animates shimmer effect", "Matches content layout"],
-        "estimatedEffort": "S",
-        "implementationNotes": "Use Shimmer package"
-      }
-    ]
-  }
-}
+**Format 2: YAML Task List (for /execute-fe integration)**
+```yaml
+featureTopic: e-commerce
+platform: flutter
+tasks:
+  high:
+    - id: fe-001
+      name: Setup Navigation & Routing
+      component: AppNavigation
+      file: lib/navigation/app_navigation.dart
+      tests:
+        - Navigation flow tests
+        - Deep linking tests
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks:
+        - fe-003
+      acceptanceCriteria:
+        - Can navigate between screens
+        - Deep links work
+      estimatedEffort: M
+      implementationNotes: Use GoRouter for routing
+  medium:
+    - id: fe-002
+      name: Create ProductCard Component
+      component: ProductCard
+      file: lib/components/product_card.dart
+      tests:
+        - Render product info
+        - Handle tap
+        - Display image
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks:
+        - fe-003
+      acceptanceCriteria:
+        - Shows name, price, image
+        - Clickable
+        - Loading placeholder
+      estimatedEffort: S
+      implementationNotes: Use Hero animation for image
+    - id: fe-003
+      name: Implement ProductList Screen
+      component: ProductList
+      file: lib/screens/product_list.dart
+      tests:
+        - Loading state
+        - Empty state
+        - Error state
+        - Item rendering
+      dependencies:
+        - ProductCard
+        - AppNavigation
+      dependencyChain:
+        - ProductList → ProductCard
+        - ProductList → AppNavigation
+      blockedBy:
+        - ProductCard
+        - AppNavigation
+      blocks:
+        - fe-005
+      acceptanceCriteria:
+        - Displays 20 items
+        - Handles scroll
+        - Shows loading spinner
+      estimatedEffort: M
+      implementationNotes: Use ListView.builder for performance
+  low:
+    - id: fe-005
+      name: Add Skeleton Loading
+      component: SkeletonLoader
+      file: lib/components/skeleton_loader.dart
+      tests:
+        - Matches layout dimensions
+      dependencies:
+        - ProductList
+      dependencyChain:
+        - SkeletonLoader → ProductList
+        - SkeletonLoader → ProductList → ProductCard
+        - SkeletonLoader → ProductList → AppNavigation
+      blockedBy:
+        - ProductList
+      blockedByTransitive:
+        - ProductCard
+        - AppNavigation
+      blocks: []
+      acceptanceCriteria:
+        - Animates shimmer effect
+        - Matches content layout
+      estimatedEffort: S
+      implementationNotes: Use Shimmer package
+
+# Dependency Summary (for quick reference)
+dependencySummary:
+  foundation: # No dependencies, can start immediately
+    - fe-001  # AppNavigation
+    - fe-002  # ProductCard
+  blocked:
+    - fe-003  # ProductList (blocked by: ProductCard, AppNavigation)
+    - fe-005  # SkeletonLoader (blocked by: ProductList → ProductCard, AppNavigation)
 ```
 
-### 7. Write Task List File
+### 8. Write Task List File
 
 Save the task list to the plan directory:
 
 ```bash
-# Save task list to .pland/[feature-topic]/frontend-tasks.md
-Write .pland/[feature-topic]/frontend-tasks.md
+# Save MDX task list to .pland/[feature-topic]/frontend-tasks.mdx
+Write .pland/[feature-topic]/frontend-tasks.mdx
 ```
 
-Or save as JSON for programmatic access:
+And save as YAML for programmatic access:
 
 ```bash
-# Save JSON task list to .pland/[feature-topic]/frontend-tasks.json
-Write .pland/[feature-topic]/frontend-tasks.json
+# Save YAML task list to .pland/[feature-topic]/frontend-tasks.yaml
+Write .pland/[feature-topic]/frontend-tasks.yaml
 ```
 
-### 8. Display Task Summary
+### 9. Display Task Summary
 
 Present a summary to the user:
 
@@ -212,12 +326,19 @@ Priority Breakdown:
   🟡 Medium: 12 tasks (Components, state, data)
   🟢 Low:    4 tasks  (Polish, optimization)
 
-Task List Saved: .pland/e-commerce/frontend-tasks.md
+Dependency Analysis:
+  ✅ No circular dependencies detected
+  📊 Foundation tasks (can start immediately): 5
+  ⏳ Blocked tasks (waiting for dependencies): 19
+  🔗 Total dependency relationships: 23
+
+Task List Saved: .pland/e-commerce/frontend-tasks.mdx
 
 Next Steps:
-- Review task list: cat .pland/e-commerce/frontend-tasks.md
+- Review task list: cat .pland/e-commerce/frontend-tasks.mdx
+- Check dependency summary: cat .pland/e-commerce/frontend-tasks.yaml
 - Execute with TDD: /execute-fe e-commerce
-- Start with high priority tasks
+- Start with foundation tasks (no dependencies)
 ```
 
 ## Task Extraction Patterns
@@ -331,7 +452,7 @@ The generated task list integrates seamlessly with `/execute-fe`:
 ```bash
 # /execute-fe reads the task list automatically
 /execute-fe e-commerce
-# Loads: .pland/e-commerce/frontend-tasks.json
+# Loads: .pland/e-commerce/frontend-tasks.yaml
 # Executes tasks by priority (high → medium → low)
 ```
 
@@ -365,19 +486,27 @@ Tasks Generated: [total]
   Medium Priority: [count] 🟡
   Low Priority:    [count] 🟢
 
+Dependency Analysis:
+  ✅ No circular dependencies detected
+  📊 Foundation tasks (can start immediately): [count]
+  ⏳ Blocked tasks (waiting for dependencies): [count]
+  🔗 Total dependency relationships: [count]
+
 Output Files:
-- .pland/[topic]/frontend-tasks.md (human-readable)
-- .pland/[topic]/frontend-tasks.json (machine-readable)
+- .pland/[topic]/frontend-tasks.mdx (human-readable)
+- .pland/[topic]/frontend-tasks.yaml (machine-readable, token-efficient)
 
 Integration:
 - Run /execute-fe [topic] to execute tasks with TDD
 - Tasks organized by priority for optimal implementation
 - Full context included for each task
+- Auto-detected dependencies with full chain tracking
 
 Next Steps:
-1. Review task list: cat .pland/[topic]/frontend-tasks.md
-2. Adjust priorities if needed
-3. Execute: /execute-fe [topic]
+1. Review task list: cat .pland/[topic]/frontend-tasks.mdx
+2. Check dependency summary in YAML
+3. Adjust priorities if needed
+4. Execute: /execute-fe [topic]
 ```
 
 ## Related Commands
@@ -394,3 +523,6 @@ Next Steps:
 - Organized by priority for focused implementation
 - Seamless integration with /execute-fe
 - Platform-specific task patterns applied automatically
+- **Auto-detected dependencies** from plan files
+- **Full dependency chain tracking** (transitive dependencies)
+- **Circular dependency detection** (rejected with resolution guidance)
