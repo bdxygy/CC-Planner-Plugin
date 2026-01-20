@@ -1,20 +1,7 @@
 ---
-name: planning
 description: Create a comprehensive project plan with features, architecture, and testing scenarios
 argument-hint: [feature-topic]
-allowed-tools:
-  - AskUserQuestion
-  - Read
-  - Write
-  - Glob
-  - Grep
-  - Bash
-  - mcp__plugin_context7_context7__resolve-library-id
-  - mcp__plugin_context7_context7__query-docs
-  - mcp__exa__get_code_context_exa
-  - mcp__exa__web_search_exa
-  - mcp__exa__deep_researcher_start
-  - mcp__exa__deep_researcher_check
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa", "mcp__exa__deep_researcher_start", "mcp__exa__deep_researcher_check"]
 ---
 
 # /planning

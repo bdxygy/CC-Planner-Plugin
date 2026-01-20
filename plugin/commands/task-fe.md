@@ -1,15 +1,7 @@
 ---
-name: task-fe
 description: Create organized frontend task lists from existing plans. Extracts tasks with full context, organizes by priority, and outputs task lists ready for seamless execution with /execute-fe.
 argument-hint: [feature-topic]
-allowed-tools:
-  - AskUserQuestion
-  - Read
-  - Write
-  - Glob
-  - Grep
-  - Bash
-  - TodoWrite
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "Bash", "TodoWrite"]
 ---
 
 # /task-fe

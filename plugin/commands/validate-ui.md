@@ -1,19 +1,7 @@
 ---
-name: validate-ui
 description: Validate implemented UI against modern design standards: Modern, Aesthetic, Borderless, Responsive (mobile-first). Scans code files, reports violations with detailed fix suggestions.
 argument-hint: [feature-topic] [platform]
-allowed-tools:
-  - AskUserQuestion
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - Grep
-  - Bash
-  - mcp__plugin_context7_context7__resolve-library-id
-  - mcp__plugin_context7_context7__query-docs
-  - mcp__exa__get_code_context_exa
-  - mcp__exa__web_search_exa
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Edit", "Glob", "Grep", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
 # /validate-ui

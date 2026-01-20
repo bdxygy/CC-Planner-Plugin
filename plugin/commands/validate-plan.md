@@ -1,12 +1,7 @@
 ---
-name: validate-plan
 description: Validate a project plan for structure, consistency, testing completeness, and technical feasibility
 argument-hint: [feature-topic]
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - Bash
+allowed-tools: ["Read", "Glob", "Grep", "Bash"]
 ---
 
 # /validate-plan

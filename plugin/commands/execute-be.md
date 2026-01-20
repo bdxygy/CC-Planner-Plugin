@@ -1,20 +1,7 @@
 ---
-name: execute-be
 description: Implement backend features from a plan using Test-Driven Development (TDD). Generates tests first, then implementation, following Red-Green-Refactor cycle with isolated unit tests.
 argument-hint: [feature-topic] [feature-name]
-allowed-tools:
-  - AskUserQuestion
-  - Read
-  - Write
-  - Edit
-  - Glob
-  - Grep
-  - Bash
-  - TodoWrite
-  - mcp__plugin_context7_context7__resolve-library-id
-  - mcp__plugin_context7_context7__query-docs
-  - mcp__exa__get_code_context_exa
-  - mcp__exa__web_search_exa
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Edit", "Glob", "Grep", "Bash", "TodoWrite", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
 ---
 
 # /execute-be

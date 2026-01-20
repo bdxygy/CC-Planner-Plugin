@@ -1,15 +1,7 @@
 ---
-name: task-be
 description: Create organized backend task lists from existing plans. Extracts tasks with full context, organizes by priority, and outputs task lists ready for seamless execution with /execute-be.
 argument-hint: [feature-topic]
-allowed-tools:
-  - AskUserQuestion
-  - Read
-  - Write
-  - Glob
-  - Grep
-  - Bash
-  - TodoWrite
+allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "Bash", "TodoWrite"]
 ---
 
 # /task-be
