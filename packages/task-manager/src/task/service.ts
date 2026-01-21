@@ -7,14 +7,16 @@ import type { Platform, Priority } from '../shared/index.js';
 import type { DependencyChain, ProgressStats } from './models.js';
 import { TaskRepository } from './repository.js';
 import { NotFoundError, ConflictError } from '../errors/index.js';
-import { getNextTaskId } from '../shared/index.js';
+import { getNextTaskId, colors } from '../shared/index.js';
 
 export class TaskService {
   private repository: TaskRepository;
   private tasks: Task[] = [];
   public metadata: TaskMetadata | null = null;
+  private platform: Platform;
 
   constructor(planName: string, platform: Platform) {
+    this.platform = platform;
     this.repository = new TaskRepository(planName, platform);
     this.load();
   }
@@ -47,8 +49,12 @@ export class TaskService {
    * Initialize task file with metadata
    */
   init(options: { framework?: string; deps?: string[] } = {}): void {
-    if (this.repository.exists() && this.tasks.length > 0) {
-      console.log('Task file already exists');
+    const fileExists = this.repository.exists();
+    const tasksExist = this.tasks.length > 0;
+
+    if (fileExists && tasksExist) {
+      console.warn(`${colors.yellow}Warning: Project already initialized${colors.reset}`);
+      console.log(`  Plan: ${this.metadata?.planName ?? 'unknown'} | Platform: ${this.platform}`);
       return;
     }
 
@@ -70,6 +76,10 @@ export class TaskService {
    * Get plan name
    */
   private getPlanName(): string {
+    // Try to use stored metadata first, otherwise derive from file path
+    if (this.metadata?.planName) {
+      return this.metadata.planName;
+    }
     const match = this.repository.getFilePath().match(/\.pland\/([^/]+)\//);
     return match?.[1] ?? 'unknown';
   }
@@ -78,8 +88,8 @@ export class TaskService {
    * Get platform
    */
   private getPlatform(): 'frontend' | 'backend' {
-    const match = this.repository.getFilePath().match(/(frontend|backend)-tasks\.jsonl$/);
-    return (match?.[1] ?? 'frontend') as 'frontend' | 'backend';
+    // Always use the platform passed to constructor
+    return this.platform;
   }
 
   /**
@@ -346,9 +356,8 @@ export class TaskService {
    * Get next available task ID
    */
   getNextId(): string {
-    const platform = this.metadata?.platform ?? 'frontend';
     const existingIds = this.tasks.map((t) => t.id);
-    return getNextTaskId(platform, existingIds);
+    return getNextTaskId(this.platform, existingIds);
   }
 
   /**

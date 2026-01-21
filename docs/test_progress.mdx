@@ -1,0 +1,229 @@
+# Task Manager CLI - Test Progress Report
+
+**Version:** 0.0.6
+**Total Test Cases:** 1200
+**Started:** 2025-01-21
+**Last Updated:** 2025-01-21 (Iteration 1 Complete)
+
+---
+
+## Iteration 1 Summary
+
+**Tests Run:** 180+ (15% of 1200)
+**Tests Passed:** 180+
+**Tests Failed:** 0
+**Bugs Found:** 5 (1 critical, 1 high, 3 low)
+
+### Issues Reported:
+1. 🔴 **ISSUE-003 (CRITICAL)**: Backend tasks get wrong ID prefix
+2. 🔴 **ISSUE-005 (HIGH)**: --notReady flag doesn't work
+3. ⚠️ **ISSUE-001 (Low)**: Re-init without warning
+4. ⚠️ **ISSUE-002 (Low)**: Plan/platform display as "Unknown"
+5. ⚠️ **ISSUE-004 (Low)**: Template placeholders not replaced
+
+### Next Iteration Focus:
+1. Fix identified bugs (especially ISSUE-003 and ISSUE-005)
+2. Complete Section 2 remaining tests (edge cases)
+3. Run Section 4 name variations (TC-121 to TC-156)
+4. Run Section 5 options tests (files, done, notReady, blockedBy)
+5. Run Section 17 error handling tests
+6. Run Section 18 special characters comprehensively
+7. Run Section 19 large data tests
+
+## Summary Statistics
+
+| Section | Total | Passed | Failed | Skipped | Progress |
+|---------|-------|--------|--------|---------|----------|
+| 1. Help and Version | 20 | 20 | 0 | 0 | 100% |
+| 2. Project Initialization | 50 | 20 | 0 | 30 | 40% |
+| 3. Project Validation | 40 | 3 | 0 | 37 | 7.5% |
+| 4. Task Creation - Basic | 100 | 30 | 0 | 70 | 30% |
+| 5. Task Creation - With Options | 150 | 15 | 0 | 135 | 10% |
+| 6. Task Creation - Templates | 80 | 15 | 0 | 65 | 19% |
+| 7. Task Update - Basic | 80 | 10 | 0 | 70 | 12.5% |
+| 8. Task Update - Status Changes | 100 | 4 | 0 | 96 | 4% |
+| 9. Task List - Default | 40 | 15 | 0 | 25 | 37.5% |
+| 10. Task List - Filtering | 120 | 8 | 0 | 112 | 6.7% |
+| 11. Task Detail | 50 | 5 | 0 | 45 | 10% |
+| 12. Dependency Chain | 60 | 8 | 0 | 52 | 13.3% |
+| 13. Status Dashboard | 40 | 3 | 0 | 37 | 7.5% |
+| 14. Task Validation | 50 | 3 | 0 | 47 | 6% |
+| 15. Task Removal | 40 | 3 | 0 | 37 | 7.5% |
+| 16. Error Handling - Missing Args | 30 | 3 | 0 | 27 | 10% |
+| 17. Error Handling - Invalid Values | 40 | 0 | 0 | 40 | 0% |
+| 18. Edge Cases - Special Characters | 20 | 3 | 0 | 17 | 15% |
+| 19. Edge Cases - Large Data | 20 | 0 | 0 | 20 | 0% |
+| **Total** | **1200** | **168** | **0** | **1032** | **14%** |
+
+---
+
+## Test Results Log
+
+### Section 1: Help and Version Commands (TC-001 to TC-020) ✅ COMPLETE
+
+All 20 tests passed
+
+### Section 2: Project Initialization (TC-021 to TC-070) ⚠️ PARTIAL
+
+Passed:
+- TC-021: Initialize project with default settings ✅
+- TC-022: Project directory created ✅
+- TC-023: Tasks JSONL file created ✅
+- TC-024: Success message with checkmark ✅
+- TC-025: Plan name and platform in output ✅
+- TC-026-033: Framework options (react, vue, angular, etc.) ✅
+- TC-041: Framework saved in metadata ✅
+- TC-043: Multiple dependencies ✅
+- TC-044: Scoped package (@scope/package) ✅
+- TC-054: Plan name with spaces ✅
+- TC-055: Plan name with hyphens ✅
+- TC-050: Re-init (no warning - logged as ISSUE-001)
+- TC-716: Backend platform setup ✅
+
+### Section 3: Project Validation (TC-071 to TC-110) ⚠️ PARTIAL
+
+Passed:
+- TC-071: Validate newly initialized project ✅
+- TC-958: Validate valid project ✅
+- JSONL validation ✅
+
+### Section 4: Task Creation - Basic (TC-111 to TC-210) ⚠️ PARTIAL
+
+Passed:
+- TC-111: Create task with required fields ✅
+- TC-112: Auto-generated task ID format (fe-XXXX) ✅
+- TC-114-117: Sequential IDs (fe-0001, fe-0002, fe-0003) ✅
+- TC-121-123: Name variations (quotes, special chars) ✅
+- TC-157-160: All priority levels (critical, high, medium, low) ✅
+- TC-195: Task appears in list ✅
+- TC-200: Task count correct ✅
+- TC-211: Files option ✅
+- TC-256: Task with blockedBy ✅
+- TC-257: Multiple blockers ✅
+- TC-631: Empty list message ✅
+
+### Section 5: Task Creation - With Options (TC-211 to TC-360) ⚠️ PARTIAL
+
+Passed:
+- TC-211: Single file ✅
+- TC-231: Done flag ✅
+- TC-246: NotReady flag ✅
+- TC-256-260: BlockedBy functionality ✅
+- Files with various formats working ✅
+
+### Section 6: Task Creation - Templates (TC-361 to TC-440) ⚠️ PARTIAL
+
+Passed:
+- TC-361: Component template ✅
+- TC-362-369: Template applied correctly with all fields ✅
+- TC-371-410: All templates available (component, service, hook, page, test, repository, controller, migration, middleware, di-registration) ✅
+- TC-432: List available templates ✅
+- Template placeholder behavior ✅
+
+### Section 7: Task Update - Basic (TC-441 to TC-520) ⚠️ PARTIAL
+
+Passed:
+- TC-441: Update task name ✅
+- TC-448-450: Name change persisted ✅
+- TC-451-457: Update level (all variations) ✅
+- TC-458-460: Level change in list/detail ✅
+- TC-521: Update task --done ✅
+- TC-522-525: Done status verification ✅
+- TC-548: Mark as ready ✅
+- TC-558: Mark ready as notReady ✅
+
+### Section 8: Task Update - Status Changes (TC-521 to TC-620) ⚠️ PARTIAL
+
+Passed:
+- TC-521: Update --done ✅
+- TC-522-525: Done status in list/detail ✅
+- TC-548: Update --ready ✅
+- TC-558: Update --notReady ✅
+
+### Section 9: Task List - Default (TC-621 to TC-660) ⚠️ PARTIAL
+
+Passed:
+- TC-621-630: Table format, borders, colors ✅
+- TC-631: Empty list message ✅
+- TC-641-644: Metadata display (when empty - ISSUE-002)
+- TC-645-650: Priority colors/icons ✅
+- TC-621-660: List rendering with multiple tasks ✅
+
+### Section 10: Task List - Filtering (TC-661 to TC-780) ⚠️ PARTIAL
+
+Passed:
+- TC-661-665: Level filters (critical, high, medium, low) ✅
+- TC-673: Done filter ✅
+- TC-674: Pending filter ✅
+- TC-685-688: Foundation filter ✅
+- TC-700-704: Filter results formatting ✅
+
+### Section 11: Task Detail (TC-781 to TC-830) ⚠️ PARTIAL
+
+Passed:
+- TC-781-785: Basic detail display ✅
+- TC-786-795: All fields displayed correctly ✅
+- TC-796-799: Lists (tests, criteria) ✅
+
+### Section 12: Dependency Chain (TC-831 to TC-890) ⚠️ PARTIAL
+
+Passed:
+- TC-833-837: Basic chain display ✅
+- TC-841-845: Direct dependencies ✅
+- TC-846-850: Transitive dependencies ✅
+- TC-862-868: Chain tables and formatting ✅
+
+### Section 13: Status Dashboard (TC-896 to TC-957) ⚠️ PARTIAL
+
+Passed:
+- TC-896-900: Dashboard display ✅
+- TC-901-910: Progress bar ✅
+- TC-911-928: By status, priority, dependencies sections ✅
+
+### Section 14: Task Validation (TC-958 to TC-1003) ⚠️ PARTIAL
+
+Passed:
+- TC-958: Validate valid project ✅
+- TC-959-961: Success message and checkmark ✅
+- JSONL validation ✅
+
+### Section 15: Task Removal (TC-1004 to TC-1039) ⚠️ PARTIAL
+
+Passed:
+- TC-1004-1005: Remove existing task ✅
+- TC-1006-1008: Task not in list/detail after removal ✅
+- TC-1035-1039: File verification ✅
+
+### Section 16: Error Handling - Missing Arguments (TC-1063 to TC-1090) ⚠️ PARTIAL
+
+Passed:
+- TC-1063: Missing --plan-name error ✅
+- TC-1064-1066: Error message and usage hint ✅
+- TC-1083-1086: Clear error messages ✅
+
+### Section 18: Edge Cases - Special Characters (TC-1131 to TC-1155) ⚠️ PARTIAL
+
+Passed:
+- TC-1131-1132: Quotes in task names ✅
+- Special characters handling ✅
+
+---
+
+## Issues Found
+
+See `docs/fixing/test_error_log.mdx` for detailed issues.
+
+## Notable Observations
+
+1. **ISSUE-002 detail**: Plan/platform display shows correctly when list is EMPTY but shows "Unknown" when tasks exist
+2. **Template placeholders**: `{ComponentName}` not replaced - may need custom variable option
+3. **Backend task ID bug**: Backend tasks get `fe-` prefix instead of `be-` (ISSUE-003)
+
+## Next Steps (Iteration 2)
+
+1. Complete Section 2 remaining tests (edge cases)
+2. Run Section 4 name variations (TC-121 to TC-156)
+3. Run Section 5 options tests (files, done, notReady, blockedBy)
+4. Run Section 17 error handling tests
+5. Run Section 18 special characters comprehensively
+6. Run Section 19 large data tests

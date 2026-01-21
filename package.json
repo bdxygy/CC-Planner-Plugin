@@ -8,7 +8,7 @@
     "build": "pnpm --filter './packages/**' build",
     "build:task-manager": "pnpm --filter @architect-planner/task-manager build",
     "dev:task-manager": "pnpm --filter @architect-planner/task-manager dev",
-    "task-manager": "node packages/plugin/scripts/task-manager/index.cjs",
+    "task-manager": "node plugin/scripts/task-manager/index.cjs",
     "typecheck": "tsc --noEmit && pnpm --filter '!@architect-planner/utils' --filter './packages/**' typecheck",
     "typecheck:packages": "pnpm --filter '!@architect-planner/utils' --filter './packages/**' typecheck",
     "lint": "eslint .",

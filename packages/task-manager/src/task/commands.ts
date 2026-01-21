@@ -47,6 +47,10 @@ export function registerTaskCommands(program: Command, getTaskService: () => Tas
         taskData = options;
       }
 
+      // Handle boolean flags
+      if (options.done) taskData.done = true;
+      if (options.notReady) taskData.ready = false;
+
       if (!taskData.id) {
         taskData.id = service.getNextId();
       }
@@ -114,7 +118,11 @@ export function registerTaskCommands(program: Command, getTaskService: () => Tas
       if (options.foundation) listOptions.foundation = true;
 
       const tasks = service.list(listOptions);
-      renderTaskList(tasks, service.metadata ?? {});
+      const metadata = service.metadata || {
+        planName: 'unknown',
+        platform: 'unknown',
+      };
+      renderTaskList(tasks, metadata);
     });
 
   // Show task detail

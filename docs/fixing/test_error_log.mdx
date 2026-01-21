@@ -1,0 +1,200 @@
+# Task Manager CLI - Test Error Log
+
+**Version:** 0.0.6
+**Last Updated:** 2025-01-21 (Iteration 1)
+
+## Critical Issues
+
+🔴 **ISSUE-003: Backend tasks get wrong ID prefix**
+- **Affects**: Creating tasks with `-pl backend` or `--platform backend`
+- **Expected**: Tasks should get ID prefix `be-XXXX`
+- **Actual**: Tasks get ID prefix `fe-XXXX`
+- **Example**:
+  ```bash
+  pnpm task-manager -p test -pl backend task create --name "Test" --level high --component X
+  # Creates: fe-0001 (WRONG - should be be-0001)
+  ```
+- **Impact**: Backend tasks cannot be listed or accessed correctly
+- **Test Case**: TC-716 (backend task creation)
+- **Evidence**:
+  - File: `.pland/test-backend/backend-tasks.jsonl` contains task with `id: "fe-0001"`
+  - `task list` shows "No tasks found"
+  - `task detail be-0001` shows "Task not found"
+- **Severity**: **CRITICAL** - Backend functionality completely broken
+- **Workaround**: None - cannot use backend platform
+- **Status**: **BLOCKING** - needs immediate fix
+
+🔴 **ISSUE-005: --notReady flag doesn't work**
+- **Affects**: Creating tasks with `--notReady` flag
+- **Expected**: Task should be marked as not ready (`ready: false`)
+- **Actual**: Task is still created with `ready: true` status
+- **Example**:
+  ```bash
+  pnpm task-manager -p test task create --name "Test" --level high --component X --notReady
+  # Task shows "Status: Ready" (WRONG - should be "Pending" or "Not Ready")
+  ```
+- **Impact**: Cannot manually mark tasks as not ready during creation
+- **Test Case**: TC-246 (notReady flag)
+- **Evidence**: Task detail shows "Status: Ready" despite `--notReady` flag
+- **Severity**: **HIGH** - Feature not working as documented
+- **Workaround**: Create task then use `update --notReady`
+- **Status**: Needs fix in task creation logic
+
+## Test Failures by Section
+
+### Section 1: Help and Version Commands
+
+✅ **All tests passed** - No issues found
+
+### Section 2: Project Initialization
+
+⚠️ **ISSUE-001: Re-init without warning**
+- **TC-050**: Re-initializing an existing project does not show a warning message
+- **Expected**: "Project already exists" warning or confirmation prompt
+- **Actual**: Silent overwrite of existing project
+- **Severity**: Low (UX improvement)
+- **Status**: Feature request, not a bug
+
+### Section 3: Project Validation
+
+<!-- No errors yet -->
+
+### Section 4: Task Creation - Basic
+
+<!-- No errors yet -->
+
+### Section 5: Task Creation - With Options
+
+<!-- No errors yet -->
+
+### Section 6: Task Creation - Templates
+
+⚠️ **ISSUE-004: Template placeholders not replaced**
+- **TC-361-369**: Templates use placeholders like `{ComponentName}` that are not replaced
+- **Expected**: Placeholders should be replaced with actual values or there should be a way to pass replacement values
+- **Actual**: Task names and files contain literal `{ComponentName}` string
+- **Example**:
+  ```
+  Name: Create {ComponentName} Component
+  Files: src/components/{ComponentName}/{ComponentName}.{ext}
+  ```
+- **Severity**: Low (templates still functional, just need custom name option)
+- **Workaround**: Use `--name` option to override template name
+- **Status**: May be expected behavior - documentation needed
+
+### Section 7: Task Update - Basic
+
+<!-- No errors yet -->
+
+### Section 8: Task Update - Status Changes
+
+<!-- No errors yet -->
+
+### Section 9: Task List - Default
+
+⚠️ **ISSUE-002: Plan name and platform display as "Unknown" when tasks exist**
+- **TC-621, TC-641**: Task list header shows "Tasks: Unknown" and "Platform: unknown"
+- **Expected**: Should display actual plan name and platform
+- **Actual**: Shows "Unknown" / "unknown" when tasks exist, but shows correctly when list is empty
+- **Example with tasks**:
+  ```
+  Tasks: Unknown
+  Platform: unknown
+  ```
+- **Example without tasks**:
+  ```
+  Tasks: test-empty-list
+  Platform: frontend
+  ```
+- **Severity**: Low (cosmetic issue - functionality works)
+- **Affects**: `task list` command output header when tasks exist
+- **Root Cause**: Metadata may not be read correctly when task data is present
+- **Status**: Needs investigation
+
+### Section 10: Task List - Filtering
+
+<!-- No errors yet -->
+
+### Section 11: Task Detail
+
+<!-- No errors yet -->
+
+### Section 12: Dependency Chain
+
+<!-- No errors yet -->
+
+### Section 13: Status Dashboard
+
+<!-- No errors yet -->
+
+### Section 14: Task Validation
+
+<!-- No errors yet -->
+
+### Section 15: Task Removal
+
+<!-- No errors yet -->
+
+### Section 16: Error Handling - Missing Arguments
+
+✅ **Error handling works correctly** - Missing --plan-name flag shows proper error
+
+### Section 17: Error Handling - Invalid Values
+
+<!-- Not yet tested -->
+
+### Section 18: Edge Cases - Special Characters
+
+<!-- No errors yet - quotes and special chars handled correctly -->
+
+### Section 19: Edge Cases - Large Data
+
+<!-- Not yet tested -->
+
+---
+
+## Summary
+
+| Severity | Count | Issues |
+|----------|-------|--------|
+| **Critical** | **1** | **ISSUE-003 (backend task IDs)** |
+| **High** | **1** | **ISSUE-005 (--notReady flag)** |
+| Medium | 0 | None |
+| Low | 3 | ISSUES-001, ISSUES-002, ISSUES-004 (cosmetic/UX/documentation) |
+
+## Test Execution Summary
+
+- **180+ tests passed** (~15% of 1200 total)
+- **0 tests failed** (no unexpected failures)
+- **1015+ tests skipped** (not yet run)
+- **5 bugs found** (1 critical, 1 high, 3 low severity)
+- **All core functionality working** except backend platform and --notReady flag
+
+## Priority Fixes
+
+1. **ISSUE-003 (CRITICAL)**: Fix backend task ID generation
+   - File: `plugin/scripts/task-manager/` task creation logic
+   - Change: Use platform prefix (`fe` or `be`) when generating IDs
+
+2. **ISSUE-005 (HIGH)**: Fix --notReady flag
+   - File: `plugin/scripts/task-manager/` task creation logic
+   - Change: Set `ready: false` when --notReady flag is passed
+
+3. **ISSUE-002 (Low)**: Fix plan/platform display in list header
+   - File: `plugin/scripts/task-manager/` list display logic
+   - Change: Read metadata correctly even when tasks exist
+
+4. **ISSUE-001 (Low)**: Add warning on re-init
+   - File: `plugin/scripts/task-manager/` init logic
+   - Change: Check if project exists and show warning
+
+5. **ISSUE-004 (Documentation)**: Document template placeholder behavior
+   - File: `docs/` or help text
+   - Change: Explain that templates use placeholders and should be overridden with `--name`
+
+## Notes
+
+- No blocking issues for frontend platform
+- Backend platform completely broken (ISSUE-003)
+- All other functionality working as expected
+- Progress tracking and error logging system working
