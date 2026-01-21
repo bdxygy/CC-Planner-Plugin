@@ -1,6 +1,16 @@
 ---
 description: Define project-specific rules that guide /planning and /revise-planning decisions
-allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa", "mcp__exa__deep_researcher_start", "mcp__exa__deep_researcher_check"]
+allowed-tools:
+  [
+    'AskUserQuestion',
+    'Read',
+    'Write',
+    'Glob',
+    'mcp__exa__get_code_context_exa',
+    'mcp__exa__web_search_exa',
+    'mcp__exa__deep_researcher_start',
+    'mcp__exa__deep_researcher_check',
+  ]
 ---
 
 # /rules-plan
@@ -10,6 +20,7 @@ Define project-specific rules and constraints that will be referenced when creat
 ## When to Use
 
 Use this command when:
+
 - Starting a new project and want to establish planning rules
 - Updating existing rules for a project
 - Enforcing team standards and conventions
@@ -28,11 +39,13 @@ Glob ".pland/rules.mdx"
 ```
 
 **If rules exist:**
+
 - Read existing rules
 - Ask user if they want to replace or extend them
 - Show current rules for review
 
 **If no rules exist:**
+
 - Proceed to create new rules
 
 ### 2. Gather Rule Categories
@@ -42,12 +55,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Architecture Rules
 
 **Ask about architecture preferences:**
+
 - Which architectural patterns are preferred? (layered, clean architecture, hexagonal, etc.)
 - State management approach for frontend?
 - API design patterns? (REST, GraphQL, RPC)
 - Database approach? (SQL vs NoSQL preferences)
 
 **Example rules:**
+
 - "Use clean architecture with clear separation of concerns"
 - "Frontend must use Redux for state management"
 - "All APIs must follow RESTful conventions"
@@ -55,12 +70,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Technology Constraints
 
 **Ask about technology requirements:**
+
 - Required frameworks or libraries?
 - Forbidden technologies?
 - Version constraints?
 - Language preferences?
 
 **Example rules:**
+
 - "Use React 18+ with TypeScript"
 - "No jQuery allowed in new code"
 - "Backend must use Node.js 20+ LTS"
@@ -68,12 +85,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Coding Standards
 
 **Ask about coding standards:**
+
 - Code style guide? (Airbnb, Standard, Custom)
 - Naming conventions?
 - File organization patterns?
 - Comment/documentation requirements?
 
 **Example rules:**
+
 - "Follow Airbnb JavaScript style guide"
 - "Use camelCase for variables, PascalCase for components"
 - "All functions must have JSDoc comments"
@@ -81,12 +100,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Security Requirements
 
 **Ask about security rules:**
+
 - Authentication requirements?
 - Data encryption requirements?
 - Input validation standards?
 - API security standards?
 
 **Example rules:**
+
 - "All APIs must require authentication"
 - "Sensitive data must be encrypted at rest"
 - "Validate all user input on both client and server"
@@ -94,12 +115,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Performance Requirements
 
 **Ask about performance constraints:**
+
 - Response time requirements?
 - Bundle size limits?
 - Database query constraints?
 - Caching strategies?
 
 **Example rules:**
+
 - "API responses must be under 200ms"
 - "Initial bundle size must be under 200KB"
 - "All database queries must use indexed columns"
@@ -107,12 +130,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Testing Standards
 
 **Ask about testing requirements:**
+
 - Minimum test coverage percentage?
 - Required test types? (unit, integration, E2E)
 - Testing framework preferences?
 - Mock/stub policies?
 
 **Example rules:**
+
 - "Maintain 80% minimum test coverage"
 - "All critical paths must have E2E tests"
 - "Use Vitest for unit tests, Playwright for E2E"
@@ -120,12 +145,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Documentation Rules
 
 **Ask about documentation requirements:**
+
 - README requirements?
 - API documentation standards?
 - Code commenting policies?
 - Diagram requirements?
 
 **Example rules:**
+
 - "All modules must have README.md"
 - "API endpoints must be documented in OpenAPI format"
 - "Complex algorithms must have explanatory comments"
@@ -133,12 +160,14 @@ Use AskUserQuestion to collect rules in each category:
 #### Team/Process Rules
 
 **Ask about process constraints:**
+
 - Code review requirements?
 - Branching strategy?
 - CI/CD requirements?
 - Deployment policies?
 
 **Example rules:**
+
 - "All code must be reviewed before merging"
 - "Use GitFlow branching strategy"
 - "Main branch must always be deployable"
@@ -148,6 +177,7 @@ Use AskUserQuestion to collect rules in each category:
 When defining rules, use Exa MCP tools to research best practices:
 
 **Use Exa for code examples and latest practices:**
+
 - `get_code_context_exa` to find real-world coding standards examples
 - `web_search_exa` to find industry best practices for:
   - Architecture patterns and conventions
@@ -161,6 +191,7 @@ When defining rules, use Exa MCP tools to research best practices:
   - Team scaling and process best practices
 
 **Examples:**
+
 ```
 Use Exa to find coding standards examples:
   get_code_context_exa: "TypeScript naming conventions examples"
@@ -185,91 +216,115 @@ Create `.pland/rules.mdx` with the collected rules:
 ## Architecture Rules
 
 ### Pattern Preferences
+
 - [rule 1]
 - [rule 2]
 
 ### State Management
+
 - [state management rule]
 
 ### API Design
+
 - [API rule]
 
 ## Technology Constraints
 
 ### Required Technologies
+
 - [required framework/library]
 - [version requirements]
 
 ### Forbidden Technologies
+
 - [forbidden technology]
 
 ### Language Preferences
+
 - [language rules]
 
 ## Coding Standards
 
 ### Style Guide
+
 - [style guide reference]
 
 ### Naming Conventions
+
 - [convention rules]
 
 ### File Organization
+
 - [organization rules]
 
 ## Security Requirements
 
 ### Authentication
+
 - [auth rules]
 
 ### Data Protection
+
 - [encryption rules]
 
 ### Validation
+
 - [validation rules]
 
 ## Performance Requirements
 
 ### Response Times
+
 - [performance targets]
 
 ### Resource Limits
+
 - [bundle size, memory, etc.]
 
 ### Optimization
+
 - [caching, optimization rules]
 
 ## Testing Standards
 
 ### Coverage Requirements
+
 - [minimum coverage %]
 
 ### Required Test Types
+
 - [test type requirements]
 
 ### Testing Frameworks
+
 - [framework preferences]
 
 ## Documentation Rules
 
 ### Code Documentation
+
 - [commenting rules]
 
 ### API Documentation
+
 - [API doc standards]
 
 ### Project Documentation
+
 - [README requirements]
 
 ## Team/Process Rules
 
 ### Code Review
+
 - [review requirements]
 
 ### Branching Strategy
+
 - [branching rules]
 
 ### CI/CD
+
 - [automation rules]
 
 ---
@@ -283,6 +338,7 @@ Create `.pland/rules.mdx` with the collected rules:
 Update planning commands to reference rules:
 
 **For `/planning`:**
+
 - Read `.pland/rules.mdx` at the start
 - Apply technology constraints when selecting tech stack
 - Use architecture rules when designing structure
@@ -290,6 +346,7 @@ Update planning commands to reference rules:
 - Include testing requirements in testing scenarios
 
 **For `/revise-planning`:**
+
 - Check that changes comply with rules
 - Warn if revisions violate established rules
 - Suggest alternatives when conflicts arise
@@ -313,6 +370,7 @@ When rules exist, asks if you want to replace or extend them.
 **File location:** `.pland/rules.mdx`
 
 **Example snippet:**
+
 ```markdown
 # Project Rules
 
@@ -325,11 +383,13 @@ When rules exist, asks if you want to replace or extend them.
 ## Technology Constraints
 
 ### Required
+
 - React 18+
 - TypeScript 5+
 - Node.js 20 LTS
 
 ### Forbidden
+
 - jQuery
 - var declarations (use const/let)
 

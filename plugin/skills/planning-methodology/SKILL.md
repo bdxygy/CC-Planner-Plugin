@@ -29,12 +29,14 @@ Follow this workflow for comprehensive project planning:
 First, establish whether the project is new or existing:
 
 **New projects:**
+
 - Identify the problem being solved and target users
 - Define project scope and boundaries
 - Establish baseline technology choices
 - Identify success criteria
 
 **Existing projects:**
+
 - Scan codebase structure and identify current patterns
 - Analyze package.json, configuration files, and entry points
 - Identify architectural patterns, state management, and API patterns
@@ -47,18 +49,21 @@ Use the codebase-scanner agent for autonomous analysis, then ask clarifying ques
 Break down the project into concrete features:
 
 **For new projects:**
+
 - Start with user stories or product requirements
 - Decompose into atomic, implementable features
 - Group related features into logical modules
 - Establish feature dependencies and priority
 
 **For existing projects:**
+
 - Identify existing features through codebase scanning
 - List new features to be added or modified
 - Document which features remain unchanged
 - Analyze impact of new features on existing code
 
 **For each feature, document:**
+
 - Purpose and user value (why this matters)
 - Frontend responsibilities (UI, state, behavior)
 - Backend responsibilities (API, business logic, data)
@@ -71,12 +76,14 @@ Break down the project into concrete features:
 Design frontend and backend architectures independently, with clear integration points:
 
 **Frontend:**
+
 - Define component hierarchy and module boundaries
 - Choose state management strategy (local, global, server state)
 - Specify API interaction patterns (fetching, mutations, caching)
 - Plan error, loading, and empty-state handling
 
 **Backend:**
+
 - Define module structure and layering
 - Specify endpoints, request/response contracts
 - Plan validation, authentication, and authorization
@@ -89,11 +96,13 @@ For technology-specific details (React patterns, Hono middleware, etc.), use Con
 Define explicit unit test scenarios for every feature:
 
 **Frontend testing scenarios:**
+
 - User-centric actions (clicks, form submissions, navigation)
 - Edge cases (empty states, boundary values, invalid input)
 - Failure states (network errors, server errors, timeouts)
 
 **Backend testing cases:**
+
 - Business rules (validations, calculations, transformations)
 - Boundary conditions (min/max values, empty collections, null handling)
 - Failure modes (database errors, external API failures)
@@ -105,6 +114,7 @@ Unit tests must be isolated from HTTP, databases, and external services. Mock or
 Generate structured `.mdx` files under `.pland/[plan-name]/`:
 
 **Standard file set:**
+
 - `project-context.mdx` - Project overview, tech stack, constraints
 - `features.mdx` - Complete feature breakdown with responsibilities
 - `frontend-architecture.mdx` - Component structure, state, APIs
@@ -114,6 +124,7 @@ Generate structured `.mdx` files under `.pland/[plan-name]/`:
 - `e2e-overview.mdx` - High-level feature flow overview
 
 **File organization:**
+
 - Use plan-name directories (e.g., `.pland/user-authentication/`)
 - Never overwrite existing plans - subdirectories prevent conflicts
 - Each `.mdx` file is self-contained and independently readable
@@ -130,41 +141,52 @@ For each feature, use this structure:
 **Purpose:** [What problem does this solve? What user value does it provide?]
 
 ### Frontend Responsibilities
+
 - [UI component and behavior responsibilities]
 - [State management responsibilities]
 - [API interaction responsibilities]
 
 ### Backend Responsibilities
+
 - [API endpoint definitions]
 - [Business logic responsibilities]
 - [Data persistence responsibilities]
 
 ### Impact on Existing Code
+
 - [For brownfield: what existing code changes?]
 - [New dependencies or refactoring required?]
 
 ### Frontend Testing Scenarios
+
 **Happy Path:**
+
 - [User action steps and expected outcome]
 
 **Edge Cases:**
+
 - [Edge case 1: description and expected handling]
 - [Edge case 2: description and expected handling]
 
 **Failure States:**
+
 - [Network error: expected behavior]
 - [Server error: expected behavior]
 
 ### Backend Testing Cases
+
 **Business Rules:**
+
 - [Rule 1: validation or transformation logic]
 - [Rule 2: calculation or constraint logic]
 
 **Boundary Conditions:**
+
 - [Boundary case 1: min/max/empty handling]
 - [Boundary case 2: null/undefined handling]
 
 **Failure Modes:**
+
 - [Database failure: expected error handling]
 - [External API failure: expected error handling]
 ```
@@ -177,20 +199,24 @@ For frontend architecture:
 ## Frontend Architecture
 
 ### Component Structure
+
 - [Component hierarchy and module organization]
 - [Component boundaries and responsibilities]
 
 ### State Management
+
 - [State type: local, global, or server]
 - [State update patterns]
 - [State synchronization strategy]
 
 ### API Interaction
+
 - [Fetching patterns (libraries, caching, revalidation)]
 - [Mutation patterns (optimistic updates, rollback)]
 - [Error handling and retry logic]
 
 ### Error & Loading States
+
 - [Loading state display strategy]
 - [Error boundary placement and handling]
 - [Empty state presentation]
@@ -202,15 +228,18 @@ For backend architecture:
 ## Backend Architecture
 
 ### Module Structure
+
 - [Folder and module organization]
 - [Layer separation (HTTP, business logic, data)]
 
 ### API Endpoints
+
 - [Endpoint definitions with methods and paths]
 - [Request/response contracts]
 - [Validation and authentication requirements]
 
 ### Error Handling
+
 - [Error response format]
 - [HTTP status code conventions]
 - [Logging and monitoring strategy]
@@ -245,6 +274,7 @@ Use `/validate-plan` to verify completeness and quality.
 ## Context7 Integration
 
 For technology-specific documentation:
+
 - Use Context7 to retrieve current docs for frameworks (React, Hono, etc.)
 - Apply Context7 guidance for API patterns and best practices
 - Reference Context7 for testing library usage (Vitest, Jest, etc.)

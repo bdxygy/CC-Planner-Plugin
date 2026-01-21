@@ -1,0 +1,24 @@
+{
+  "name": "@architect-planner/types",
+  "version": "0.0.6",
+  "description": "Shared TypeScript types for architect-planner packages",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./task": "./src/task/index.ts",
+    "./plan": "./src/plan/index.ts",
+    "./platform": "./src/platform/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "types",
+    "typescript"
+  ],
+  "author": "Budi Santoso",
+  "license": "MIT"
+}

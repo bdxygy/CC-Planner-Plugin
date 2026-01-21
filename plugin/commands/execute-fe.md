@@ -11,6 +11,7 @@ Implement frontend features from an existing plan using Test-Driven Development.
 ## When to Use
 
 Use this command when:
+
 - Implementing frontend components, views, or widgets
 - Building UI features from a plan
 - Following TDD methodology for frontend development
@@ -42,6 +43,7 @@ Read .pland/[plan-name]/frontend-testing-scenarios.mdx
 ```
 
 **Use AskUserQuestion to ask:**
+
 - Which plan-name plan to execute?
 - Has the plan been validated with `/validate-plan`?
   - If not, recommend running `/validate-plan` first
@@ -51,6 +53,7 @@ Read .pland/[plan-name]/frontend-testing-scenarios.mdx
 - Select specific tasks for implementation
 
 **If using task list from `/task-fe`:**
+
 - Load tasks from YAML for token efficiency
 - Respect task priorities (High → Medium → Low)
 - Check `dependencySummary` for foundation vs blocked tasks
@@ -66,12 +69,14 @@ Glob ".pland/[plan-name]/validation-report.mdx"
 ```
 
 **If validation report doesn't exist or is old:**
+
 - Recommend running `/validate-plan [plan-name]` first
 - Explain benefits: catches issues early, ensures plan quality
 - Ask if they want to validate before proceeding
 - If they proceed without validation, note that issues may be found during implementation
 
 **If validation passed:**
+
 - Continue with implementation
 - Note any warnings from validation that should be addressed
 
@@ -80,6 +85,7 @@ Glob ".pland/[plan-name]/validation-report.mdx"
 Auto-detect the frontend platform from existing codebase:
 
 **Use Glob to detect:**
+
 - **Android**: `app/src/main/**/*.kt`, `build.gradle` with Compose/XML
 - **iOS/Swift**: `**/*.swift`, `*.xcodeproj`
 - **Flutter**: `lib/**/*.dart`, `pubspec.yaml`
@@ -88,6 +94,7 @@ Auto-detect the frontend platform from existing codebase:
 - **Web**: `src/components/**`, framework detection
 
 **Load appropriate platform-specific skill:**
+
 - Android → `android-patterns`
 - iOS/Swift → `ios-swift-patterns`
 - Flutter → `flutter-patterns`
@@ -101,26 +108,31 @@ Auto-detect the frontend platform from existing codebase:
 **Use AskUserQuestion to present platform-specific options:**
 
 **Android:**
+
 - Compose UI Tests (Jetpack Compose)
 - Espresso (classic UI tests)
 - JUnit (unit tests)
 
 **iOS/Swift:**
+
 - XCTest (SwiftUI/UIKit)
 - XCUITest (UI tests)
 - Snapshot tests (iSnapshot)
 
 **Flutter:**
+
 - flutter_test (widget tests)
 - golden tests (snapshot)
 - integration tests
 
 **React Native:**
+
 - React Native Testing Library
 - Jest (component tests)
 - Detox (E2E tests)
 
 **Web (React/Vue/Svelte):**
+
 - Vitest/Jest (unit tests)
 - Testing Library (component tests)
 - Playwright/Cypress (E2E)
@@ -128,35 +140,59 @@ Auto-detect the frontend platform from existing codebase:
 ### 4. Create TODO List
 
 **If using task list from `/task-fe`:**
+
 ```javascript
 // Load tasks from frontend-tasks.yaml
 // Create TODO items for each task with TDD phases
 [
-  { "content": "fe-001: Setup Navigation & Routing (RED)", "status": "pending", "phase": "red", "taskId": "fe-001" },
-  { "content": "fe-001: Setup Navigation & Routing (GREEN)", "status": "pending", "phase": "green", "taskId": "fe-001" },
-  { "content": "fe-001: Setup Navigation & Routing (REFACTOR)", "status": "pending", "phase": "refactor", "taskId": "fe-001" },
-  { "content": "fe-002: Create ProductCard Component (RED)", "status": "pending", "phase": "red", "taskId": "fe-002" },
+  {
+    content: 'fe-001: Setup Navigation & Routing (RED)',
+    status: 'pending',
+    phase: 'red',
+    taskId: 'fe-001',
+  },
+  {
+    content: 'fe-001: Setup Navigation & Routing (GREEN)',
+    status: 'pending',
+    phase: 'green',
+    taskId: 'fe-001',
+  },
+  {
+    content: 'fe-001: Setup Navigation & Routing (REFACTOR)',
+    status: 'pending',
+    phase: 'refactor',
+    taskId: 'fe-001',
+  },
+  {
+    content: 'fe-002: Create ProductCard Component (RED)',
+    status: 'pending',
+    phase: 'red',
+    taskId: 'fe-002',
+  },
   // ...
-]
+];
 ```
 
 **If loading plan directly:**
+
 ```javascript
 // Example TODO structure
 [
-  { "content": "Write test for ProductCard component", "status": "pending", "phase": "red" },
-  { "content": "Implement ProductCard component", "status": "pending", "phase": "green" },
-  { "content": "Refactor ProductCard for reusability", "status": "pending", "phase": "refactor" },
+  { content: 'Write test for ProductCard component', status: 'pending', phase: 'red' },
+  { content: 'Implement ProductCard component', status: 'pending', phase: 'green' },
+  { content: 'Refactor ProductCard for reusability', status: 'pending', phase: 'refactor' },
   // ...
-]
+];
 ```
 
 **TODO phases:**
+
 - `red`: Write failing test
 - `green`: Implement to pass test
 - `refactor`: Improve implementation
 
 **Task execution order (from task list):**
+
 1. Start with foundation tasks (empty `blockedBy`)
 2. Follow priority: High → Medium → Low
 3. Check `dependencyChain` for transitive dependencies
@@ -169,6 +205,7 @@ For each feature component, follow Red-Green-Refactor:
 #### RED Phase: Write Failing Test
 
 **Generate test file first:**
+
 ```bash
 # Create test file alongside component
 # Android: app/src/test/java/com/example/ProductCardTest.kt
@@ -178,18 +215,21 @@ For each feature component, follow Red-Green-Refactor:
 ```
 
 **Test structure based on plan scenarios:**
+
 - Happy path tests
 - Edge case tests
 - Failure state tests
 - Platform-specific scenarios (rotation, permissions, etc.)
 
 **Write test using Context7 and Exa for framework-specific patterns:**
+
 - Query Context7 for testing framework documentation (official APIs)
 - Use Exa `get_code_context_exa` for real-world test examples
 - Use Exa `web_search_exa` for latest testing patterns and tutorials
 - Use platform-specific testing patterns
 
 **Run test - must FAIL:**
+
 ```bash
 # Platform-specific test commands
 # Android: ./gradlew test
@@ -201,6 +241,7 @@ For each feature component, follow Red-Green-Refactor:
 #### GREEN Phase: Implement Feature
 
 **Generate implementation file:**
+
 ```bash
 # Create component file
 # Android: app/src/main/java/com/example/ProductCard.kt
@@ -210,6 +251,7 @@ For each feature component, follow Red-Green-Refactor:
 ```
 
 **Implementation guidelines:**
+
 - Write MINIMAL code to pass the test
 - Focus on happy path first
 - Use platform-specific patterns from loaded skill
@@ -218,6 +260,7 @@ For each feature component, follow Red-Green-Refactor:
 - Use Exa `web_search_exa` for latest implementation tutorials
 
 **Run test - must PASS:**
+
 ```bash
 # Re-run test
 ```
@@ -225,12 +268,14 @@ For each feature component, follow Red-Green-Refactor:
 #### REFACTOR Phase: Improve Code
 
 **Refactoring checklist:**
+
 - Extract reusable logic
 - Improve naming
 - Remove duplication
 - Apply platform-specific best practices
 
 **Re-run tests after each refactor:**
+
 ```bash
 # All tests must still pass
 ```
@@ -241,21 +286,25 @@ After each phase, **use AskUserQuestion to ask:**
 
 **After RED phase:**
 "Test written. Verify it fails?"
+
 - Run test and confirm failure
 - Show test output to user
 
 **After GREEN phase:**
 "Implementation complete. Run tests?"
+
 - Run test and confirm passing
 - Show test output to user
 
 **After REFACTOR phase:**
 "Refactoring complete. Re-run tests?"
+
 - Run all tests to confirm still passing
 - Show test output to user
 
 **After full cycle:**
 "Continue to next component?"
+
 - Move to next TODO item
 - Complete TDD cycle for all components
 
@@ -264,6 +313,7 @@ After each phase, **use AskUserQuestion to ask:**
 ### Android TDD (Jetpack Compose)
 
 **RED - Write test:**
+
 ```kotlin
 // app/src/test/java/com/example/ProductCardTest.kt
 class ProductCardTest {
@@ -284,6 +334,7 @@ class ProductCardTest {
 ```
 
 **GREEN - Implement:**
+
 ```kotlin
 // app/src/main/java/com/example/ProductCard.kt
 @Composable
@@ -298,6 +349,7 @@ fun ProductCard(product: Product) {
 ```
 
 **REFACTOR - Improve:**
+
 ```kotlin
 // Extract styles, add modifiers, improve structure
 @Composable
@@ -328,6 +380,7 @@ fun ProductCard(
 ### iOS TDD (SwiftUI)
 
 **RED - Write test:**
+
 ```swift
 // Tests/ProductCardTests.swift
 import XCTest
@@ -347,6 +400,7 @@ struct ProductCardTests: XCTestCase {
 ```
 
 **GREEN - Implement:**
+
 ```swift
 // Sources/ProductCard.swift
 import SwiftUI
@@ -367,6 +421,7 @@ struct ProductCard: View {
 ```
 
 **REFACTOR - Improve:**
+
 ```swift
 struct ProductCard: View {
     let product: Product
@@ -401,6 +456,7 @@ extension Product {
 ### Flutter TDD
 
 **RED - Write test:**
+
 ```dart
 // test/product_card_test.dart
 import 'package:flutter_test/flutter_test.dart';
@@ -420,6 +476,7 @@ void main() {
 ```
 
 **GREEN - Implement:**
+
 ```dart
 // lib/product_card.dart
 class ProductCard extends StatelessWidget {
@@ -446,6 +503,7 @@ class ProductCard extends StatelessWidget {
 ```
 
 **REFACTOR - Improve:**
+
 ```dart
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -496,6 +554,7 @@ extension Product on Product {
 ### React Native TDD
 
 **RED - Write test:**
+
 ```typescript
 // __tests__/components/ProductCard.test.tsx
 import { render, screen } from '@testing-library/react-native';
@@ -513,6 +572,7 @@ describe('ProductCard', () => {
 ```
 
 **GREEN - Implement:**
+
 ```typescript
 // src/components/ProductCard.tsx
 import React from 'react';
@@ -533,6 +593,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 ```
 
 **REFACTOR - Improve:**
+
 ```typescript
 // src/components/ProductCard.tsx
 import React from 'react';
@@ -586,6 +647,7 @@ const styles = StyleSheet.create({
 ## Output Summary
 
 After implementation, provide:
+
 ```
 ✅ Frontend TDD Implementation Complete
 

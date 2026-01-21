@@ -11,12 +11,14 @@ React Native enables building native mobile apps using React and JavaScript/Type
 ## Core React Native Principles
 
 **Component Architecture:**
+
 - Functional components with hooks
 - Reusable, composable component design
 - Platform-specific code handling (Platform OS)
 - Native module integration when needed
 
 **Architecture Guidelines:**
+
 - Follow React principles (unidirectional flow, composition)
 - Separate concerns (presentation, business logic, data)
 - Implement proper state management (Context, Redux, Zustand)
@@ -24,6 +26,7 @@ React Native enables building native mobile apps using React and JavaScript/Type
 - Use TypeScript for type safety
 
 **Testability:**
+
 - Component tests with React Native Testing Library
 - Unit tests for hooks and business logic
 - E2E tests with Detox
@@ -34,12 +37,14 @@ React Native enables building native mobile apps using React and JavaScript/Type
 ### Presentation Layer
 
 **Responsibilities:**
+
 - Display components and handle user interaction
 - Manage component-local state with hooks
 - Consume data from state management
 - Handle navigation
 
 **Structure:**
+
 ```
 src/
   components/
@@ -66,12 +71,14 @@ src/
 ### Business Logic Layer
 
 **Responsibilities:**
+
 - Custom hooks for feature logic
 - State management (stores, contexts, reducers)
 - Use cases / services
 - API clients
 
 **Structure:**
+
 ```
 src/
   store/
@@ -94,12 +101,14 @@ src/
 ### Data Layer
 
 **Responsibilities:**
+
 - Data models and DTOs
 - Local storage (AsyncStorage, SQLite, Realm)
 - Network requests
 - Data transformation and caching
 
 **Structure:**
+
 ```
 src/
   models/
@@ -118,6 +127,7 @@ src/
 ### Functional Components with Hooks
 
 **Screen component:**
+
 ```tsx
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
@@ -152,10 +162,7 @@ export const HomeScreen: React.FC = () => {
       data={products}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <ProductCard
-          product={item}
-          onPress={() => navigateToDetail(item.id)}
-        />
+        <ProductCard product={item} onPress={() => navigateToDetail(item.id)} />
       )}
       contentContainerStyle={styles.list}
       ListEmptyComponent={
@@ -169,6 +176,7 @@ export const HomeScreen: React.FC = () => {
 ```
 
 **Reusable component:**
+
 ```tsx
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
@@ -181,11 +189,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      <Image
-        source={{ uri: product.imageUrl }}
-        style={styles.image}
-        resizeMode="cover"
-      />
+      <Image source={{ uri: product.imageUrl }} style={styles.image} resizeMode="cover" />
       <View style={styles.content}>
         <Text style={styles.name}>{product.name}</Text>
         <Text style={styles.price}>${product.price}</Text>
@@ -228,6 +232,7 @@ const styles = StyleSheet.create({
 ## Custom Hooks
 
 **Data fetching hook:**
+
 ```tsx
 import { useState, useEffect } from 'react';
 import { productService } from '../services/productService';
@@ -255,6 +260,7 @@ export const useProducts = () => {
 ```
 
 **Hook with React Query (Recommended):**
+
 ```tsx
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productService } from '../services/productService';
@@ -283,6 +289,7 @@ export const useAddToCart = () => {
 ### Context API (Simple apps)
 
 **Context creation:**
+
 ```tsx
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 
@@ -297,10 +304,13 @@ type Action =
   | { type: 'ADD_TO_CART'; payload: CartItem }
   | { type: 'SET_USER'; payload: User | null };
 
-const AppContext = createContext<{
-  state: State;
-  dispatch: React.Dispatch<Action>;
-} | undefined>(undefined);
+const AppContext = createContext<
+  | {
+      state: State;
+      dispatch: React.Dispatch<Action>;
+    }
+  | undefined
+>(undefined);
 
 const appReducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -322,11 +332,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     user: null,
   });
 
-  return (
-    <AppContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 };
 
 export const useAppContext = () => {
@@ -341,6 +347,7 @@ export const useAppContext = () => {
 ### Redux Toolkit (Complex apps)
 
 **Slice definition:**
+
 ```tsx
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -380,23 +387,22 @@ export default productsSlice.reducer;
 ```
 
 **Thunk for async actions:**
+
 ```tsx
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { productService } from '../services/productService';
 
-export const fetchProducts = createAsyncThunk(
-  'products/fetch',
-  async (_, { rejectWithValue }) => {
-    try {
-      return await productService.getProducts();
-    } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
-    }
+export const fetchProducts = createAsyncThunk('products/fetch', async (_, { rejectWithValue }) => {
+  try {
+    return await productService.getProducts();
+  } catch (error) {
+    return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
   }
-);
+});
 ```
 
 **Component usage:**
+
 ```tsx
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '../store/productsSlice';
@@ -416,6 +422,7 @@ export const HomeScreen: React.FC = () => {
 ### Zustand (Modern alternative)
 
 **Store creation:**
+
 ```tsx
 import create from 'zustand';
 
@@ -447,6 +454,7 @@ export const useProductStore = create<ProductStore>((set) => ({
 ### React Navigation (Standard)
 
 **Stack navigator:**
+
 ```tsx
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -455,11 +463,7 @@ const Stack = createStackNavigator();
 const AppNavigator: React.FC = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ title: 'Home' }}
-      />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
@@ -471,6 +475,7 @@ const AppNavigator: React.FC = () => {
 ```
 
 **Tab navigator:**
+
 ```tsx
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -499,6 +504,7 @@ const TabNavigator: React.FC = () => {
 ```
 
 **Navigation with params:**
+
 ```tsx
 // Navigate
 navigation.navigate('Detail', { productId: '123' });
@@ -510,6 +516,7 @@ const { productId } = route.params;
 ## Platform-Specific Code
 
 **Platform module:**
+
 ```tsx
 import { Platform, StyleSheet } from 'react-native';
 
@@ -541,6 +548,7 @@ const PlatformButton = Platform.select({
 ### Frontend Testing Scenarios (User-Centric)
 
 **Happy Path:**
+
 - User opens app → Home screen displays correctly
 - User taps product → Navigates to detail with correct product
 - User scrolls list → FlatList scrolls smoothly
@@ -548,6 +556,7 @@ const PlatformButton = Platform.select({
 - User navigates back → Previous screen restores state
 
 **Edge Cases:**
+
 - Empty product list → ListEmptyComponent displays helpful message
 - Single product → Displays correctly
 - Large list → FlatList lazy loads efficiently
@@ -555,6 +564,7 @@ const PlatformButton = Platform.select({
 - Different screen sizes → Layout adapts responsively
 
 **Failure States:**
+
 - Network error → Error message displays with retry
 - Server error (5xx) → User-friendly error, retry available
 - Timeout → Loading indicator with timeout message
@@ -564,6 +574,7 @@ const PlatformButton = Platform.select({
 ### Backend Testing Cases (Logic-Driven)
 
 **Hook Tests:**
+
 - Initial state → Returns correct default values
 - Success response → State updates with data
 - Error response → Error state set correctly
@@ -571,12 +582,14 @@ const PlatformButton = Platform.select({
 - Cleanup → Effects clean up properly
 
 **Service Tests:**
+
 - API calls → Fetch returns correct data
 - Error handling → HTTP errors map correctly
 - Data transformation → JSON maps to models
 - Caching → Cache strategy works
 
 **Component Tests:**
+
 - Render → Component renders without crashing
 - Props → Component handles prop changes
 - User interaction → onPress handlers fire correctly
@@ -585,6 +598,7 @@ const PlatformButton = Platform.select({
 ## Context7 Integration
 
 For React Native-specific documentation:
+
 - Use Context7 for React Navigation API
 - Query Context7 for React Native Testing Library
 - Reference Context7 for React Query hooks
@@ -594,6 +608,7 @@ For React Native-specific documentation:
 ## Best Practices
 
 **DO:**
+
 - Use functional components with hooks
 - Implement proper TypeScript types
 - Use React Query for server state
@@ -603,6 +618,7 @@ For React Native-specific documentation:
 - Platform-specific code when needed
 
 **DON'T:**
+
 - Use class components (use hooks instead)
 - Put business logic in components (use hooks/services)
 - Forget cleanup in useEffect

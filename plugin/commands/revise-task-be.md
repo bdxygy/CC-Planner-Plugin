@@ -1,7 +1,20 @@
 ---
 description: Regenerate backend task lists after revising a plan with /revise-planning
 argument-hint: [plan-name]
-allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "TodoWrite", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
+allowed-tools:
+  [
+    'AskUserQuestion',
+    'Read',
+    'Write',
+    'Glob',
+    'Grep',
+    'TodoWrite',
+    'Bash',
+    'mcp__plugin_context7_context7__resolve-library-id',
+    'mcp__plugin_context7_context7__query-docs',
+    'mcp__exa__get_code_context_exa',
+    'mcp__exa__web_search_exa',
+  ]
 ---
 
 # /revise-task-be
@@ -11,6 +24,7 @@ Regenerate backend task lists after revising a plan with `/revise-planning`. Thi
 ## When to Use
 
 Use this command when:
+
 - You have run `/revise-planning` to update an existing plan
 - You previously generated backend task lists with `/task-be`
 - You need to update task lists to reflect the revised plan
@@ -21,9 +35,11 @@ Use this command when:
 ### 1. Locate Plan and Task Files
 
 **Ask the user:**
+
 - Which plan-name plan to regenerate tasks for?
 
 **Identify and read all relevant plan files:**
+
 ```bash
 # Read all backend plan files (same files affected by /revise-planning)
 Read .pland/[plan-name]/features.mdx
@@ -41,6 +57,7 @@ Glob ".pland/[plan-name]/backend-tasks.*"
 ### 2. Confirm Regeneration
 
 **Before proceeding, confirm with user:**
+
 - Existing task files will be deleted
 - New task files will be generated from the revised plan
 - All task IDs, priorities, and dependencies will be recalculated
@@ -50,6 +67,7 @@ Glob ".pland/[plan-name]/backend-tasks.*"
 ### 3. Delete Existing Task Files
 
 Remove the old task files:
+
 ```bash
 # Delete existing backend task files
 Bash: rm -f .pland/[plan-name]/backend-tasks.mdx
@@ -61,41 +79,49 @@ Bash: rm -f .pland/[plan-name]/backend-tasks.yaml
 Follow the same workflow as `/task-be`, reading from all plan files:
 
 **Parse features from features.mdx:**
+
 - Extract all feature definitions
 - Identify backend responsibilities for each feature (services, repositories, endpoints)
 - Note feature dependencies mentioned in descriptions
 
 **Parse modules from backend-architecture.mdx:**
+
 - Extract service/repository layer structure
 - Identify endpoint definitions and contracts
 - Note module relationships and data flow
 
 **Parse test cases from backend-testing-cases.mdx:**
+
 - Extract testing requirements for each feature
 - Identify business logic that needs unit tests
 - Note test-specific dependencies (e.g., services needed for test cases)
 
 **Parse tech stack from project-context.mdx (if exists):**
+
 - Extract backend framework, runtime, and libraries
 - Note platform-specific requirements
 - Consider tech stack when estimating task complexity
 
 **Auto-detect dependencies:**
+
 - Scan feature descriptions for dependency keywords (requires, depends on, after, needs)
 - Parse endpoint dependencies (e.g., endpoints that depend on shared services)
 - Build dependency graph from identified relationships
 
 **Check for circular dependencies:**
+
 - Run DFS-based cycle detection on dependency graph
 - If cycles found, reject and report to user for resolution
 - Only proceed if dependency graph is acyclic
 
 **Calculate transitive dependencies:**
+
 - For each task, compute full dependency chain
 - Calculate `blockedByTransitive` (all ancestors)
 - Calculate `blocks` (all dependents)
 
 **Generate task list:**
+
 - Assign task IDs: be-001, be-002, be-003, etc.
 - Set priority: High (data models, core services), Medium (endpoints), Low (nice-to-have)
 - Calculate dependencies for each task
@@ -106,6 +132,7 @@ Follow the same workflow as `/task-be`, reading from all plan files:
 Create the task list files:
 
 **backend-tasks.yaml** (token-efficient):
+
 ```yaml
 tasks:
   - id: be-001
@@ -143,10 +170,12 @@ dependencySummary:
 ```
 
 **backend-tasks.mdx** (human-readable):
+
 ```markdown
 # Backend Task List
 
 ## Overview
+
 This document contains the organized task list for backend implementation.
 
 ## Tasks
@@ -154,6 +183,7 @@ This document contains the organized task list for backend implementation.
 ### High Priority
 
 #### be-001: Define Product Data Model
+
 **Status:** pending
 **Priority:** High
 **Dependencies:** None
@@ -161,12 +191,14 @@ This document contains the organized task list for backend implementation.
 **Description:** Define Product entity with properties and validation
 
 **Dependency Analysis:**
+
 - Foundation task (no dependencies)
 - Blocks: be-002, be-003
 
 ---
 
 #### be-002: Implement ProductRepository Interface
+
 **Status:** pending
 **Priority:** High
 **Dependencies:** be-001
@@ -174,6 +206,7 @@ This document contains the organized task list for backend implementation.
 **Description:** Repository interface for Product data access operations
 
 **Dependency Analysis:**
+
 - Blocked by: be-001 (Define Product Data Model)
 - Dependency chain: ProductRepository → Product
 - Blocks: be-003
@@ -183,6 +216,7 @@ This document contains the organized task list for backend implementation.
 ### Medium Priority
 
 #### be-003: Implement ProductService
+
 **Status:** pending
 **Priority:** Medium
 **Dependencies:** be-001, be-002
@@ -190,6 +224,7 @@ This document contains the organized task list for backend implementation.
 **Description:** Service layer for product business logic
 
 **Dependency Analysis:**
+
 - Blocked by: be-001 (Define Product Data Model)
 - Blocked by: be-002 (Implement ProductRepository Interface)
 - Dependency chain: ProductService → ProductRepository → Product
@@ -199,11 +234,15 @@ This document contains the organized task list for backend implementation.
 ## Dependency Summary
 
 ### Foundation Tasks
+
 Tasks with no dependencies that should be completed first:
+
 - be-001: Define Product Data Model
 
 ### Blocked Tasks
+
 Tasks that depend on other tasks:
+
 - **be-002** (ProductRepository Interface)
   - Direct dependencies: be-001
   - Transitive dependencies: None
@@ -215,6 +254,7 @@ Tasks that depend on other tasks:
 ### 6. Summary
 
 Report to user:
+
 - Number of tasks generated
 - Number of foundation tasks vs blocked tasks
 - Any dependency cycles detected and resolved

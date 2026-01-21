@@ -11,12 +11,14 @@ Tauri enables building cross-platform desktop applications using web technologie
 ## Core Tauri Principles
 
 **Architecture:**
+
 - **Frontend**: Web framework (React, Vue, Svelte, Solid) running in webview
 - **Backend**: Rust for native operations and system access
 - **IPC (Inter-Process Communication)**: Tauri invoke API for frontend-backend communication
 - **Security**: Sandboxed webview with controlled IPC
 
 **Architecture Guidelines:**
+
 - Minimize IPC calls (batch when possible)
 - Keep Rust backend focused on native operations
 - Implement proper error handling across IPC boundary
@@ -24,6 +26,7 @@ Tauri enables building cross-platform desktop applications using web technologie
 - Follow Rust best practices (ownership, borrowing, error handling)
 
 **Testability:**
+
 - Frontend: Standard web testing (vitest, jest, testing-library)
 - Rust: Unit tests for business logic, integration tests for commands
 - E2E: Tests that invoke commands from frontend
@@ -33,12 +36,14 @@ Tauri enables building cross-platform desktop applications using web technologie
 ### Frontend Layer (Web)
 
 **Responsibilities:**
+
 - UI rendering and user interaction
 - State management (Redux, Zustand, Solid stores)
 - API invocation to Rust backend
 - Business logic that doesn't require native access
 
 **Structure:**
+
 ```
 src/
   components/
@@ -64,12 +69,14 @@ src/
 ### Backend Layer (Rust)
 
 **Responsibilities:**
+
 - Native system operations (file, network, system)
 - Business logic requiring native performance
 - Data persistence
 - System integration (tray, notifications, shortcuts)
 
 **Structure:**
+
 ```
 src-tauri/
   src/
@@ -95,6 +102,7 @@ src-tauri/
 ### Tauri Commands (Rust)
 
 **Command definition:**
+
 ```rust
 use tauri::State;
 
@@ -120,6 +128,7 @@ async fn get_system_info() -> Result<SystemInfo, String> {
 ```
 
 **Register commands in main:**
+
 ```rust
 fn main() {
     tauri::Builder::default()
@@ -136,6 +145,7 @@ fn main() {
 ### Command with State Management
 
 **Shared state:**
+
 ```rust
 use std::sync::Mutex;
 use tauri::State;
@@ -169,6 +179,7 @@ async fn get_cached_files(
 ### Frontend Invocation (TypeScript)
 
 **Tauri API wrapper:**
+
 ```typescript
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -188,6 +199,7 @@ export const fileApi = {
 ```
 
 **Using in component (React example):**
+
 ```tsx
 import { useState, useEffect } from 'react';
 import { fileApi } from '../api/commands';
@@ -221,6 +233,7 @@ export const FileExplorer: React.FC = () => {
 ### Zustand (Recommended)
 
 **Store with Tauri integration:**
+
 ```typescript
 import create from 'zustand';
 import { fileApi } from '../api/commands';
@@ -267,6 +280,7 @@ export const useFileStore = create<FileStore>((set) => ({
 ### Service Layer
 
 **File service:**
+
 ```rust
 use std::path::Path;
 use serde::{Deserialize, Serialize};
@@ -317,6 +331,7 @@ impl FileService {
 ```
 
 **Command using service:**
+
 ```rust
 use tauri::State;
 
@@ -336,6 +351,7 @@ async fn read_directory(
 ### Error Handling
 
 **Custom error type:**
+
 ```rust
 use thiserror::Error;
 
@@ -363,6 +379,7 @@ impl Into<String> for AppError {
 ```
 
 **Command with proper error:**
+
 ```rust
 #[tauri::command]
 async fn read_file(path: String) -> Result<String, String> {
@@ -376,6 +393,7 @@ async fn read_file(path: String) -> Result<String, String> {
 ### tauri.conf.json
 
 **Basic configuration:**
+
 ```json
 {
   "$schema": "..",
@@ -429,6 +447,7 @@ async fn read_file(path: String) -> Result<String, String> {
 ### Allowlist Configuration
 
 **Enable specific APIs:**
+
 ```json
 {
   "tauri": {
@@ -463,6 +482,7 @@ async fn read_file(path: String) -> Result<String, String> {
 ### Tray Icon
 
 **Setup tray in main:**
+
 ```rust
 use tauri::{
     AppHandle, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
@@ -501,6 +521,7 @@ fn main() {
 ### Native Notifications
 
 **Command for notifications:**
+
 ```rust
 use tauri::api::notification::Notification;
 
@@ -523,6 +544,7 @@ async fn show_notification(
 ### Frontend Testing Scenarios (User-Centric)
 
 **Happy Path:**
+
 - User opens app → Main window displays correctly
 - User selects file → File content loads and displays
 - User saves file → File writes successfully
@@ -530,6 +552,7 @@ async fn show_notification(
 - User changes settings → Settings persist and apply
 
 **Edge Cases:**
+
 - Empty file → Empty state displays correctly
 - Large file → Handles without blocking UI
 - Special characters in path → Path handles correctly
@@ -537,6 +560,7 @@ async fn show_notification(
 - Permission denied → Error message displays
 
 **Failure States:**
+
 - File not found → User-friendly error message
 - Permission denied → Error with suggestion
 - Invalid file type → Error message
@@ -545,6 +569,7 @@ async fn show_notification(
 ### Backend Testing Cases (Logic-Driven)
 
 **Command Tests:**
+
 - Valid input → Returns correct result
 - Invalid input → Returns appropriate error
 - Edge cases → Handles boundary conditions
@@ -552,6 +577,7 @@ async fn show_notification(
 - State changes → State updates correctly
 
 **Service Tests:**
+
 - File operations → Read/write works correctly
 - Path handling → Handles various path formats
 - Error conditions → Proper error propagation
@@ -560,6 +586,7 @@ async fn show_notification(
 ## Context7 Integration
 
 For Tauri-specific documentation:
+
 - Use Context7 for Tauri API reference
 - Query Context7 for latest Tauri patterns
 - Reference Context7 for Rust best practices
@@ -569,6 +596,7 @@ For Tauri-specific documentation:
 ## Best Practices
 
 **DO:**
+
 - Minimize IPC calls (batch when possible)
 - Use TypeScript for type-safe command invocation
 - Implement proper error handling across boundary
@@ -578,6 +606,7 @@ For Tauri-specific documentation:
 - Test on all target platforms
 
 **DON'T:**
+
 - Block on main thread (use async commands)
 - Expose entire filesystem (use scoped access)
 - Ignore platform differences (handle Windows/macOS/Linux)

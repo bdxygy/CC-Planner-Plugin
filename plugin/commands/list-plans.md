@@ -1,6 +1,6 @@
 ---
 description: List all available project plans in the .pland directory
-allowed-tools: ["Glob", "Read", "Grep"]
+allowed-tools: ['Glob', 'Read', 'Grep']
 ---
 
 # /list-plans
@@ -10,6 +10,7 @@ List all available project plans stored in the `.pland/` directory. Displays pla
 ## When to Use
 
 Use this command when:
+
 - You want to see all existing plans
 - You need to find a specific plan name
 - You want to check plan completeness
@@ -31,12 +32,14 @@ Glob ".pland/*/project-context.mdx"
 For each plan found, extract key information:
 
 **Read project-context.mdx to get:**
+
 - Plan name (from directory name)
 - Project overview/goals
 - Technology stack
 - Creation date (from file metadata if available)
 
 **Check plan completeness:**
+
 ```bash
 # Required files
 Glob ".pland/[plan-name]/features.mdx"
@@ -58,6 +61,7 @@ Present the information in a clear, organized format:
 # Available Plans
 
 ## [plan-name]
+
 **Status:** Complete / Incomplete
 **Overview:** [Brief description from project-context]
 **Tech Stack:** [Key technologies]
@@ -67,6 +71,7 @@ Present the information in a clear, organized format:
 ---
 
 ## [another-plan]
+
 **Status:** Incomplete (missing backend-testing-cases.mdx)
 **Overview:** [Brief description]
 **Tech Stack:** [Key technologies]
@@ -88,6 +93,7 @@ After displaying the list, offer quick actions:
 ## Output Format
 
 **Summary View:**
+
 ```
 Found 3 plans:
 
@@ -97,6 +103,7 @@ Found 3 plans:
 ```
 
 **Detailed View:** (use /list-plans --detail or ask for details)
+
 ```
 [user-authentication]
 Location: .pland/user-authentication/

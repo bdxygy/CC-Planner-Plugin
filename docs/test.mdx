@@ -1,0 +1,1663 @@
+# Task Manager CLI - Comprehensive Test Suite
+
+**Version:** 0.0.6
+**Total Test Cases:** 1000
+**Last Updated:** 2025-01-21
+
+## Table of Contents
+
+1. [Help and Version Commands (20 tests)](#1-help-and-version-commands)
+2. [Project Initialization (50 tests)](#2-project-initialization)
+3. [Project Validation (40 tests)](#3-project-validation)
+4. [Task Creation - Basic (100 tests)](#4-task-creation---basic)
+5. [Task Creation - With Options (150 tests)](#5-task-creation---with-options)
+6. [Task Creation - Templates (80 tests)](#6-task-creation---templates)
+7. [Task Update - Basic (80 tests)](#7-task-update---basic)
+8. [Task Update - Status Changes (100 tests)](#8-task-update---status-changes)
+9. [Task List - Default (40 tests)](#9-task-list---default)
+10. [Task List - Filtering (120 tests)](#10-task-list---filtering)
+11. [Task Detail (50 tests)](#11-task-detail)
+12. [Dependency Chain (60 tests)](#12-dependency-chain)
+13. [Task Status Dashboard (40 tests)](#13-task-status-dashboard)
+14. [Task Validation (50 tests)](#14-task-validation)
+15. [Task Removal (40 tests)](#15-task-removal)
+16. [Template Listing (20 tests)](#16-template-listing)
+17. [Error Handling - Missing Arguments (30 tests)](#17-error-handling---missing-arguments)
+18. [Error Handling - Invalid Values (40 tests)](#18-error-handling---invalid-values)
+19. [Edge Cases - Special Characters (20 tests)](#19-edge-cases---special-characters)
+20. [Edge Cases - Large Data (20 tests)](#20-edge-cases---large-data)
+
+---
+
+## 1. Help and Version Commands (20 tests)
+
+### 1.1 Root Help
+- `TC-001`: Display root help without arguments
+- `TC-002`: Verify root help shows all global options
+- `TC-003`: Verify root help shows all commands (task, project)
+- `TC-004`: Verify root help shows correct version number format
+- `TC-005`: Verify root help shows usage syntax
+
+### 1.2 Version Command
+- `TC-006`: Display version with `-V` flag
+- `TC-007`: Display version with `--version` flag
+- `TC-008`: Verify version format is `X.Y.Z`
+- `TC-009`: Verify version matches package.json
+
+### 1.3 Command Help
+- `TC-010`: Display task command help
+- `TC-011`: Display project command help
+- `TC-012`: Display task create help
+- `TC-013`: Display task update help
+- `TC-014`: Display task list help
+- `TC-015`: Display task detail help
+- `TC-016`: Display task chain help
+- `TC-017`: Display task remove help
+- `TC-018`: Display task status help
+- `TC-019`: Display task validate help
+- `TC-020`: Display task template help
+
+---
+
+## 2. Project Initialization (50 tests)
+
+### 2.1 Basic Init
+- `TC-021`: Initialize project with default settings
+- `TC-022`: Verify project directory created (.pland/<plan-name>/)
+- `TC-023`: Verify frontend-tasks.jsonl file created
+- `TC-024`: Verify init shows success message
+- `TC-025`: Verify init displays plan name and platform
+
+### 2.2 Init with Framework
+- `TC-026`: Init with `--framework react`
+- `TC-027`: Init with `--framework vue`
+- `TC-028`: Init with `--framework angular`
+- `TC-029`: Init with `--framework svelte`
+- `TC-030`: Init with `--framework next`
+- `TC-031`: Init with `--framework nuxt`
+- `TC-032`: Init with `--framework remix`
+- `TC-033`: Init with `--framework solid`
+- `TC-034`: Init with `--framework astro`
+- `TC-035`: Init with `--framework express`
+- `TC-036`: Init with `--framework fastify`
+- `TC-037`: Init with `--framework nestjs`
+- `TC-038`: Init with `--framework django`
+- `TC-039`: Init with `--framework flask`
+- `TC-040`: Init with `--framework laravel`
+- `TC-041`: Verify framework saved in metadata
+
+### 2.3 Init with Dependencies
+- `TC-042`: Init with single dependency
+- `TC-043`: Init with multiple dependencies `--deps dep1 dep2 dep3`
+- `TC-044`: Init with scoped package `@scope/package`
+- `TC-045`: Init with package with version `package@1.2.3`
+- `TC-046`: Verify dependencies saved in metadata
+- `TC-047`: Init with both framework and deps
+- `TC-048`: Init with 10+ dependencies
+- `TC-049`: Init with empty dependency array
+
+### 2.4 Re-init Scenarios
+- `TC-050`: Re-init existing project (should show message)
+- `TC-051`: Re-init with different framework
+- `TC-052`: Re-init with different dependencies
+- `TC-053`: Init after deleting tasks file
+- `TC-054`: Init with plan name containing spaces
+- `TC-055`: Init with plan name containing hyphens
+- `TC-056`: Init with plan name containing numbers
+- `TC-057`: Init with very long plan name
+- `TC-058`: Init with unicode characters in plan name
+- `TC-059`: Verify metadata createdAt timestamp
+- `TC-060`: Verify metadata version is `1.0.0`
+- `TC-061`: Init with plan name starting with number
+- `TC-062`: Init with plan name starting with underscore
+- `TC-063`: Init with plan name as single character
+- `TC-064`: Init with plan name as UUID
+- `TC-065`: Verify file is valid NDJSON format
+- `TC-066`: Verify metadata line contains `metadata` key
+- `TC-067`: Init creates parent directories if needed
+- `TC-068`: Init with framework containing special chars
+- `TC-069`: Init with dependency containing special chars
+- `TC-070`: Multiple init calls on same plan
+
+---
+
+## 3. Project Validation (40 tests)
+
+### 3.1 Valid Project
+- `TC-071`: Validate newly initialized project
+- `TC-072`: Validate project with tasks
+- `TC-073`: Validate project with completed tasks
+- `TC-074`: Validate project with dependencies
+
+### 3.2 File Validation
+- `TC-075`: Validate missing tasks file (error)
+- `TC-076`: Validate corrupted NDJSON file
+- `TC-077`: Validate empty tasks file
+- `TC-078`: Validate file with only metadata
+- `TC-079`: Validate file with invalid JSON lines
+- `TC-080`: Validate file with invalid metadata
+
+### 3.3 Metadata Validation
+- `TC-081`: Validate missing metadata
+- `TC-082`: Validate invalid plan name
+- `TC-083`: Validate invalid platform
+- `TC-084`: Validate missing framework
+- `TC-085`: Validate invalid createdAt format
+
+### 3.4 Task Validation
+- `TC-086`: Validate task with missing required fields
+- `TC-087`: Validate task with invalid priority
+- `TC-088`: Validate task with invalid effort
+- `TC-089`: Validate task with duplicate ID
+- `TC-090`: Validate task with circular dependency
+- `TC-091`: Validate task with self-dependency
+- `TC-092`: Validate task with invalid blockedBy reference
+- `TC-093`: Validate task with invalid status
+- `TC-094`: Validate task with missing component
+- `TC-095`: Validate task with empty name
+
+### 3.5 Dependency Validation
+- `TC-096`: Validate missing dependency task
+- `TC-097`: Validate transitive dependency cycle
+- `TC-098`: Validate complex dependency chain
+- `TC-099`: Validate task blocking itself
+- `TC-100`: Validate all foundation tasks
+- `TC-101`: Validate orphaned tasks
+- `TC-102`: Validate inconsistent ready flags
+- `TC-103`: Validate task marked ready but has blockers
+- `TC-104`: Validate task marked done but blocked
+- `TC-105`: Validate task with invalid blockedBy format
+- `TC-106`: Validate multiple validation errors
+- `TC-107`: Validate with warning level issues
+- `TC-108`: Validate with error level issues
+- `TC-109`: Verify validation exit code 0 for valid
+- `TC-110`: Verify validation exit code 1 for errors
+
+---
+
+## 4. Task Creation - Basic (100 tests)
+
+### 4.1 Minimal Task Creation
+- `TC-111`: Create task with only --name and --level and --component
+- `TC-112`: Verify auto-generated task ID format (fe-XXXX)
+- `TC-113`: Verify task ID increments correctly
+- `TC-114`: Create first task gets ID fe-0001
+- `TC-115`: Create second task gets ID fe-0002
+- `TC-116`: Create 10th task gets ID fe-0010
+- `TC-117`: Create 100th task gets ID fe-0100
+- `TC-118`: Create task after removing one
+- `TC-119`: Verify task created in correct file
+- `TC-120`: Verify task is valid NDJSON line
+
+### 4.2 Task Name Variations
+- `TC-121`: Create task with single word name
+- `TC-122`: Create task with multi word name
+- `TC-123`: Create task with name containing quotes
+- `TC-124`: Create task with name containing apostrophe
+- `TC-125`: Create task with name containing slash
+- `TC-126`: Create task with name containing backslash
+- `TC-127`: Create task with name containing colon
+- `TC-128`: Create task with name containing semicolon
+- `TC-129`: Create task with name containing comma
+- `TC-130`: Create task with name containing period
+- `TC-131`: Create task with name containing exclamation
+- `TC-132`: Create task with name containing question mark
+- `TC-133`: Create task with name containing ampersand
+- `TC-134`: Create task with name containing pipe
+- `TC-135`: Create task with name containing asterisk
+- `TC-136`: Create task with name containing hash
+- `TC-137`: Create task with name containing at sign
+- `TC-138`: Create task with name containing percent
+- `TC-139`: Create task with name containing dollar sign
+- `TC-140`: Create task with name containing underscore
+- `TC-150`: Create task with name containing dash
+- `TC-151`: Create task with name containing plus
+- `TC-152`: Create task with name containing equals
+- `TC-153`: Create task with name containing parentheses
+- `TC-154`: Create task with name containing brackets
+- `TC-155`: Create task with name containing braces
+- `TC-156`: Create task with name containing angle brackets
+
+### 4.3 Priority Levels
+- `TC-157`: Create task with `--level critical`
+- `TC-158`: Create task with `--level high`
+- `TC-159`: Create task with `--level medium`
+- `TC-160`: Create task with `--level low`
+- `TC-161`: Verify critical priority icon (🔴)
+- `TC-162`: Verify high priority icon (⚠️)
+- `TC-163`: Verify medium priority icon (○)
+- `TC-164`: Verify low priority icon (•)
+- `TC-165`: Create task with uppercase level
+- `TC-166`: Create task with mixed case level
+- `TC-167`: Create task with invalid level (error)
+- `TC-168`: Create task with empty level (error)
+
+### 4.4 Component Variations
+- `TC-169`: Create task with single word component
+- `TC-170`: Create task with PascalCase component
+- `TC-171`: Create task with camelCase component
+- `TC-172`: Create task with kebab-case component
+- `TC-173`: Create task with snake_case component
+- `TC-174`: Create task with dot.notation component
+- `TC-175`: Create task with namespaced component
+- `TC-176`: Create task with component containing numbers
+- `TC-177`: Create task with Component123 format
+- `TC-178`: Create task with component path format
+- `TC-179`: Create task with empty component (error)
+- `TC-180`: Create task with component as number (error)
+- `TC-181`: Create task with very long component name
+- `TC-182`: Create task with component containing special chars
+- `TC-183`: Create task with component containing unicode
+- `TC-184`: Create task with component as single letter
+- `TC-185`: Create task with component starting with number
+- `TC-186`: Create task with component starting with underscore
+- `TC-187`: Create task with component containing spaces
+
+### 4.5 Success Messages
+- `TC-188`: Verify success message format
+- `TC-189`: Verify success message color (green)
+- `TC-190`: Verify checkmark symbol in message
+- `TC-191`: Verify task ID in success message
+- `TC-192`: Verify task created with correct ID
+- `TC-193`: Verify task persisted to file
+- `TC-194`: Verify task can be retrieved after creation
+- `TC-195`: Verify task appears in list
+- `TC-196`: Create 100 tasks sequentially
+- `TC-197`: Create tasks with rapid succession
+- `TC-198`: Verify no duplicate IDs
+- `TC-199`: Verify sequential ID generation
+- `TC-200`: Verify task count after creation
+- `TC-201`: Verify file size increases
+- `TC-202`: Verify file remains valid NDJSON
+- `TC-203`: Create task after file corruption recovery
+- `TC-204`: Verify metadata unchanged after task create
+- `TC-205`: Create task in project with existing tasks
+- `TC-206`: Create task after validation
+- `TC-207`: Create task after removing all tasks
+- `TC-208`: Create task with custom ID
+- `TC-209`: Create task with ID fe-9999
+- `TC-210`: Create task with non-standard ID format
+
+---
+
+## 5. Task Creation - With Options (150 tests)
+
+### 5.1 Files Option
+- `TC-211`: Create task with `--files 'test.ts'`
+- `TC-212`: Create task with multiple files `--files 'test.ts spec.ts'`
+- `TC-213`: Create task with file path `src/components/Test.tsx`
+- `TC-214`: Create task with relative path `./src/App.tsx`
+- `TC-215`: Create task with absolute path
+- `TC-216`: Create task with glob pattern `src/**/*.test.ts`
+- `TC-217`: Create task with bracket notation `[id].tsx`
+- `TC-218`: Create task with parentheses `(group).tsx`
+- `TC-219`: Create task with comma in filename
+- `TC-220`: Create task with very long file path
+- `TC-221`: Create task with files in nested directories
+- `TC-222`: Create task with files from multiple directories
+- `TC-223`: Create task with file extensions (`.ts`, `.tsx`, `.js`)
+- `TC-224`: Create task with config files (`.json`, `.yaml`)
+- `TC-225`: Create task with style files (`.css`, `.scss`)
+- `TC-226`: Verify files field saved correctly
+- `TC-227`: Verify files displayed in task detail
+- `TC-228`: Create task with empty files string
+- `TC-229`: Create task with files containing unicode
+- `TC-230`: Create task with files containing special chars
+
+### 5.2 Done Flag
+- `TC-231`: Create task with `--done` flag
+- `TC-232`: Verify done task shows checkmark
+- `TC-233`: Verify done task status is "Done"
+- `TC-234`: Verify done task not in ready list
+- `TC-235`: Verify done task shows in done list
+- `TC-236`: Verify done task color is green
+- `TC-237`: Create task without `--done` (default pending)
+- `TC-238`: Update task to done later
+- `TC-239`: Create done task with dependencies
+- `TC-240`: Create done task that blocks others
+- `TC-241`: Verify done task affects progress
+- `TC-242`: Verify completion rate includes done task
+- `TC-243`: Create all tasks as done
+- `TC-244`: Verify 100% completion when all done
+- `TC-245`: Create done task with invalid state
+
+### 5.3 NotReady Flag
+- `TC-246`: Create task with `--notReady` flag
+- `TC-247`: Verify notReady task status is "Pending"
+- `TC-248`: Verify notReady task not in ready list
+- `TC-249`: Verify notReady task shows X symbol
+- `TC-250`: Verify notReady task color is red
+- `TC-251`: Create task without dependencies but `--notReady`
+- `TC-252`: Create task with both `--done` and `--notReady`
+- `TC-253`: Verify notReady takes precedence
+- `TC-254`: Create notReady task with blockers
+- `TC-255`: Verify notReady status in detail view
+
+### 5.4 BlockedBy Option
+- `TC-256`: Create task with `--blockedBy fe-0001`
+- `TC-257`: Create task with multiple blockers `--blockedBy fe-0001 fe-0002 fe-0003`
+- `TC-258`: Create task with 5 blockers
+- `TC-259`: Create task with 10 blockers
+- `TC-257`: Verify blockedBy field saved correctly
+- `TC-260`: Verify task marked as not ready when blocked
+- `TC-261`: Verify dependency chain updated
+- `TC-262`: Verify blocking task shows in chain
+- `TC-263`: Verify direct dependency indicator
+- `TC-264`: Create task with non-existent blocker
+- `TC-265`: Create task with self as blocker
+- `TC-266`: Create task with circular dependency
+- `TC-267`: Verify blockedBy displayed in list
+- `TC-268`: Verify blockedBy formatted correctly
+- `TC-269`: Create task with blocker from different platform
+- `TC-270`: Verify transitive dependencies calculated
+- `TC-271`: Verify dependencySummary.foundation
+- `TC-272`: Verify dependencySummary.blocked
+- `TC-273`: Create task that blocks multiple others
+- `TC-274`: Verify blocks field populated
+- `TC-275`: Verify blockedByTransitive populated
+- `TC-276`: Create chain of 10 dependencies
+- `TC-277`: Verify deep dependency chain
+- `TC-278`: Create diamond dependency pattern
+- `TC-279`: Create fan-out dependency pattern
+- `TC-280`: Create fan-in dependency pattern
+
+### 5.5 Custom Task ID
+- `TC-281`: Create task with `--id custom-001`
+- `TC-282`: Create task with `--id be-0001` (backend)
+- `TC-283`: Create task with `--id fe-0001` (frontend)
+- `TC-284`: Create task with `--id TASK-001`
+- `TC-285`: Create task with UUID as ID
+- `TC-286`: Create task with numeric ID
+- `TC-287`: Verify custom ID respected
+- `TC-288`: Create task with duplicate custom ID
+- `TC-289`: Verify auto-ID after custom ID
+- `TC-290`: Mix custom and auto IDs
+- `TC-291`: Create task with very long ID
+- `TC-292`: Create task with ID containing special chars
+- `TC-293`: Create task with ID containing spaces
+- `TC-294`: Create task with empty ID
+- `TC-295`: Create task with ID as number only
+
+### 5.6 Estimated Effort
+- `TC-296`: Create task with effort XS (via template)
+- `TC-297`: Create task with effort S (via template)
+- `TC-298`: Create task with effort M (via template)
+- `TC-299`: Create task with effort L (via template)
+- `TC-300`: Create task with effort XL (via template)
+- `TC-301`: Verify effort saved in task
+- `TC-302`: Verify effort displayed in detail
+- `TC-303`: Verify effort affects estimation
+
+### 5.7 Acceptance Criteria
+- `TC-304`: Create task with acceptance criteria (via template)
+- `TC-305`: Verify criteria displayed in detail
+- `TC-306`: Verify criteria formatted as bullet list
+- `TC-307`: Create task with 10 acceptance criteria
+- `TC-308`: Verify criteria scrollable
+
+### 5.8 Implementation Notes
+- `TC-309`: Create task with implementation notes (via template)
+- `TC-310`: Verify notes displayed in detail
+- `TC-311`: Create task with very long notes
+- `TC-312`: Create task with multiline notes
+- `TC-313`: Verify notes formatting preserved
+
+### 5.9 Tests Success
+- `TC-314`: Create task with tests success (via template)
+- `TC-315`: Verify tests displayed in detail
+- `TC-316`: Verify tests show checkmark
+- `TC-317`: Create task with 10 test cases
+- `TC-318`: Verify tests formatted correctly
+
+### 5.10 Combined Options
+- `TC-319`: Create task with all options
+- `TC-320`: Create task with all boolean flags
+- `TC-321`: Create task with multiple dependencies
+- `TC-322`: Create task with custom ID and all options
+- `TC-323`: Create done task with blockers (conflict)
+- `TC-324`: Create notReady task without blockers
+- `TC-325`: Create ready task with blockers (error)
+- `TC-326`: Create task with all priority levels
+- `TC-327`: Create task with all effort levels
+- `TC-328`: Verify option precedence
+- `TC-329`: Verify default values
+- `TC-330`: Verify required fields validation
+- `TC-331`: Create 50 tasks with varying options
+- `TC-332`: Create 100 tasks with varying options
+- `TC-333`: Verify file size with 100 tasks
+- `TC-334`: Verify performance with many tasks
+- `TC-335`: Create task with minimum required fields
+- `TC-336`: Create task with maximum fields
+- `TC-337`: Create task with edge case values
+- `TC-338`: Verify task persistence after creation
+- `TC-339`: Verify reload shows created tasks
+- `TC-340`: Multiple creates in same session
+- `TC-341`: Create tasks from multiple sessions
+- `TC-342`: Verify concurrent creation safety
+- `TC-343`: Create task after validate error
+- `TC-344`: Create task after dependency resolution
+- `TC-345`: Verify creation with validation warnings
+- `TC-346`: Create task during dependency rebuild
+- `TC-347`: Verify atomicity of task creation
+- `TC-348`: Rollback on creation failure
+- `TC-349`: Verify no partial task creation
+- `TC-350`: Error handling during create
+- `TC-351`: Create with missing required field
+- `TC-352`: Create with invalid field type
+- `TC-353`: Create with extra fields
+- `TC-354`: Verify field sanitization
+- `TC-355`: Create with HTML in name
+- `TC-356`: Create with script in name
+- `TC-357`: Verify XSS prevention
+- `TC-358`: Create with SQL in name
+- `TC-359`: Verify injection prevention
+- `TC-360`: Create with null values
+
+---
+
+## 6. Task Creation - Templates (80 tests)
+
+### 6.1 Component Template
+- `TC-361`: Create task with `--template component`
+- `TC-362`: Verify component template applied
+- `TC-363`: Verify name has placeholder replaced
+- `TC-364`: Verify component field uses ComponentName
+- `TC-365`: Verify files path includes {ComponentName}
+- `TC-366`: Verify testsSuccess populated
+- `TC-367`: Verify acceptanceCriteria populated
+- `TC-368`: Verify estimatedEffort is M
+- `TC-369`: Verify implementationNotes populated
+- `TC-370`: Create component task with custom ComponentName
+
+### 6.2 Service Template
+- `TC-371`: Create task with `--template service`
+- `TC-372`: Verify service template applied
+- `TC-373`: Verify name has {ServiceName}
+- `TC-374`: Verify files path includes category
+- `TC-375`: Create service with custom ServiceName
+- `TC-376`: Verify service-level effort
+
+### 6.3 Hook Template
+- `TC-377`: Create task with `--template hook`
+- `TC-378`: Verify hook template applied
+- `TC-379`: Verify name has use{HookName}
+- `TC-380`: Verify estimatedEffort is S
+- `TC-381`: Create hook with custom HookName
+
+### 6.4 Page Template
+- `TC-382`: Create task with `--template page`
+- `TC-383`: Verify page template applied
+- `TC-384`: Verify estimatedEffort is L
+- `TC-385`: Create page with custom PageName
+
+### 6.5 Test Template
+- `TC-386`: Create task with `--template test`
+- `TC-387`: Verify test template applied
+- `TC-388`: Verify files path has {ComponentPath}
+- `TC-389`: Create test with custom ComponentName
+
+### 6.6 Repository Template
+- `TC-390`: Create task with `--template repository`
+- `TC-391`: Verify repository template applied
+- `TC-392`: Verify name has {Entity}Repository
+- `TC-393`: Create repository with custom Entity
+
+### 6.7 Controller Template
+- `TC-394`: Create task with `--template controller`
+- `TC-395`: Verify controller template applied
+- `TC-396`: Verify files path has {entity} lowercase
+- `TC-397`: Create controller with custom Entity
+
+### 6.8 Migration Template
+- `TC-398`: Create task with `--template migration`
+- `TC-399`: Verify migration template applied
+- `TC-400`: Verify priority is critical
+- `TC-401`: Verify estimatedEffort is S
+- `TC-402`: Create migration with custom Entity
+
+### 6.9 Middleware Template
+- `TC-403`: Create task with `--template middleware`
+- `TC-404`: Verify middleware template applied
+- `TC-405`: Verify priority is medium
+- `TC-406`: Create middleware with custom MiddlewareName
+
+### 6.10 DI Registration Template
+- `TC-407`: Create task with `--template di-registration`
+- `TC-408`: Verify di-registration template applied
+- `TC-409`: Verify component field is "DI Registration"
+- `TC-410`: Create DI registration with custom ServiceName
+
+### 6.11 Template Variable Replacement
+- `TC-411`: Replace {ComponentName} with value
+- `TC-412`: Replace {ServiceName} with value
+- `TC-413`: Replace {HookName} with value
+- `TC-414`: Replace {PageName} with value
+- `TC-415`: Replace {Entity} with value
+- `TC-416`: Replace {MiddlewareName} with value
+- `TC-417`: Replace all occurrences of placeholder
+- `TC-418`: Replace multiple placeholders in one field
+- `TC-419`: Replace placeholders in array fields
+- `TC-420`: Verify no un-replaced placeholders remain
+- `TC-421`: Handle missing placeholder values
+- `TC-422`: Use default if placeholder not provided
+- `TC-423`: Verify template + custom options
+- `TC-424`: Template with custom level
+- `TC-425`: Template with custom done flag
+- `TC-426`: Template with custom blockedBy
+- `TC-427`: Template with custom ID
+- `TC-428`: Template overrides default values
+- `TC-429`: Custom options override template
+- `TC-430`: Invalid template name (error)
+- `TC-431`: Template with missing ComponentName
+- `TC-432`: List all available templates
+- `TC-433`: Verify template list format
+- `TC-434`: Verify template list shows level
+- `TC-435`: Verify template list shows effort
+- `TC-436`: Verify template list shows name preview
+- `TC-437`: Template with very long ComponentName
+- `TC-438`: Template with special chars in name
+- `TC-439`: Template with unicode in name
+- `TC-440`: Create task with all templates sequentially
+
+---
+
+## 7. Task Update - Basic (80 tests)
+
+### 7.1 Update Name
+- `TC-441`: Update task name `--name 'New Name'`
+- `TC-442`: Update name to single word
+- `TC-443`: Update name to multiple words
+- `TC-444`: Update name to very long string
+- `TC-445`: Update name to special characters
+- `TC-446`: Update name to unicode
+- `TC-447`: Update name to empty string (error)
+- `TC-448`: Verify name change persisted
+- `TC-449`: Verify name appears in list
+- `TC-450`: Verify name appears in detail
+
+### 7.2 Update Level
+- `TC-451`: Update level to critical
+- `TC-452`: Update level to high
+- `TC-453`: Update level to medium
+- `TC-454`: Update level to low
+- `TC-455`: Update from high to critical
+- `TC-456`: Update from low to critical
+- `TC-457`: Update from critical to low
+- `TC-458`: Verify level change in list
+- `TC-459`: Verify level change in detail
+- `TC-460`: Verify level change affects sorting
+- `TC-461`: Update with invalid level (error)
+- `TC-462`: Update level to uppercase
+- `TC-463`: Update level to mixed case
+
+### 7.3 Update Multiple Fields
+- `TC-464`: Update name and level together
+- `TC-465`: Update all updateable fields
+- `TC-466`: Update name with status change
+- `TC-467`: Update level with status change
+- `TC-468`: Verify all changes persisted
+- `TC-469`: Update same field multiple times
+- `TC-470`: Verify last update wins
+
+### 7.4 Update Non-existent Task
+- `TC-471`: Update task that doesn't exist
+- `TC-472`: Update deleted task
+- `TC-473`: Update task with wrong platform ID
+- `TC-474`: Verify error message for missing task
+- `TC-475`: Verify exit code for missing task
+
+### 7.5 Update Validation
+- `TC-476`: Update with invalid name format
+- `TC-477`: Update with invalid level
+- `TC-478`: Update with conflicting flags
+- `TC-479`: Update after validation passes
+- `TC-480`: Update with validation warnings
+
+### 7.6 Update Edge Cases
+- `TC-481`: Update task to same values
+- `TC-482`: Update task rapidly
+- `TC-483`: Update multiple tasks in sequence
+- `TC-484`: Update during dependency rebuild
+- `TC-485`: Update blocked task
+- `TC-486`: Update blocking task
+- `TC-487`: Update foundation task
+- `TC-488`: Update last task
+- `TC-489`: Update first task
+- `TC-490`: Update middle task
+
+### 7.7 Update Persistence
+- `TC-491`: Verify update saved to file
+- `TC-492`: Verify update after reload
+- `TC-493`: Verify update visible in list
+- `TC-494`: Verify update visible in detail
+- `TC-495`: Verify update visible in status
+- `TC-496`: Verify update visible in chain
+- `TC-497`: Verify metadata unchanged
+- `TC-498`: Verify other tasks unchanged
+- `TC-499`: Verify dependencies updated
+- `TC-500`: Verify blocks updated
+
+### 7.8 Update Success Messages
+- `TC-501`: Verify success message format
+- `TC-502`: Verify task ID in message
+- `TC-503`: Verify message color
+- `TC-504`: Verify checkmark symbol
+- `TC-505`: Update with verbose output
+
+### 7.9 Update with Dependencies
+- `TC-506`: Update task that has blockers
+- `TC-507`: Update task that blocks others
+- `TC-508`: Update task in dependency chain
+- `TC-509`: Update task in circular dependency
+- `TC-510`: Update dependency via blockedBy
+- `TC-511`: Add new blocker via update
+- `TC-512`: Remove blocker via update
+- `TC-513`: Change blockers via update
+- `TC-514`: Update blockedBy with multiple IDs
+- `TC-515`: Update with self-dependency (error)
+
+### 7.10 Update with Templates
+- `TC-516`: Update template-created task
+- `TC-517`: Update template fields
+- `TC-518`: Update preserves template data
+- `TC-519`: Update override template values
+- `TC-520`: Update after template apply
+
+---
+
+## 8. Task Update - Status Changes (100 tests)
+
+### 8.1 Mark as Done
+- `TC-521`: Update task `--done`
+- `TC-522`: Verify done status in list
+- `TC-523`: Verify done status in detail
+- `TC-524`: Verify done shows checkmark
+- `TC-525`: Verify done color is green
+- `TC-526`: Mark pending task as done
+- `TC-527`: Mark ready task as done
+- `TC-528`: Mark blocked task as done
+- `TC-529`: Mark already done task (no-op)
+- `TC-530`: Mark multiple tasks as done
+- `TC-531`: Verify completion rate increases
+- `TC-532`: Verify progress bar updates
+- `TC-533`: Mark all tasks as done
+- `TC-534`: Verify 100% completion
+- `TC-535`: Mark foundation task as done
+- `TC-536`: Mark blocking task as done
+- `TC-537`: Mark last blocker as done
+- `TC-538`: Verify dependent tasks become ready
+
+### 8.2 Mark as Not Done
+- `TC-539`: Update task `--notDone`
+- `TC-540`: Mark done task as not done
+- `TC-541`: Verify status returns to pending
+- `TC-542`: Verify checkmark removed
+- `TC-543`: Verify completion rate decreases
+- `TC-544`: Mark all tasks as not done
+- `TC-545`: Verify 0% completion
+- `TC-546`: Mark done task that blocks others
+- `TC-547`: Verify dependents no longer ready
+
+### 8.3 Mark as Ready
+- `TC-548`: Update task `--ready`
+- `TC-549`: Mark pending task as ready
+- `TC-550`: Verify ready status in list
+- `TC-551`: Verify ready shows circle symbol
+- `TC-552`: Verify ready color is cyan
+- `TC-553`: Mark blocked task as ready (force)
+- `TC-554`: Mark foundation task as ready
+- `TC-555`: Already ready task (no-op)
+- `TC-556`: Verify ready in status dashboard
+
+### 8.4 Mark as Not Ready
+- `TC-557`: Update task `--notReady`
+- `TC-558`: Mark ready task as not ready
+- `TC-559`: Mark done task as not ready
+- `TC-560`: Verify status becomes pending
+- `TC-561`: Verify shows X symbol
+- `TC-562`: Verify color is red
+- `TC-563`: Mark dependent as not ready
+- `TC-564`: Already not ready (no-op)
+
+### 8.5 Conflicting Status Flags
+- `TC-565`: Update with both `--done` and `--notDone`
+- `TC-566`: Last flag wins (done)
+- `TC-567`: Update with `--done` then `--notDone`
+- `TC-568`: Update with `--ready` then `--notReady`
+- `TC-569`: `--done` and `--ready` together
+- `TC-570`: `--notDone` and `--notReady` together
+- `TC-571`: `--done` and `--notReady` together
+- `TC-572`: `--notDone` and `--ready` together
+- `TC-573`: Verify flag precedence
+
+### 8.6 Status Transitions
+- `TC-574`: Pending → Ready
+- `TC-575`: Ready → Done
+- `TC-576`: Done → Pending
+- `TC-577`: Pending → Done
+- `TC-578`: Done → Ready
+- `TC-579`: Ready → Pending
+- `TC-580`: Blocked → Ready (when blockers complete)
+- `TC-581`: Blocked → Done (force)
+- `TC-582`: All possible transitions
+
+### 8.7 Status with Dependencies
+- `TC-583`: Mark blocker as done
+- `TC-584`: Verify dependent becomes ready
+- `TC-585`: Mark middle blocker as done
+- `TC-586`: Mark last blocker as done
+- `TC-587`: Mark one of many blockers as done
+- `TC-588`: Mark blocker as not done
+- `TC-589`: Verify dependent becomes not ready
+- `TC-590`: Mark all blockers as done
+- `TC-591`: Verify all dependents ready
+- `TC-592`: Chain of status updates
+
+### 8.8 Status Dashboard Updates
+- `TC-593`: Verify dashboard reflects status changes
+- `TC-594`: Verify progress bar updates
+- `TC-595`: Verify by status counts update
+- `TC-596`: Verify by priority counts update
+- `TC-597`: Verify dependency counts update
+- `TC-598`: Verify ready to start list updates
+- `TC-599`: Real-time dashboard after update
+- `TC-600`: Dashboard accuracy
+
+### 8.9 Status Update Persistence
+- `TC-601`: Verify status saved to file
+- `TC-602`: Verify status after reload
+- `TC-603`: Multiple status changes
+- `TC-604`: Rapid status updates
+- `TC-605`: Status update consistency
+
+### 8.10 Status Update Edge Cases
+- `TC-606`: Update status of deleted task
+- `TC-607`: Update status during validation
+- `TC-608`: Update status with errors
+- `TC-609`: Update all statuses to done
+- `TC-610`: Update all statuses to pending
+- `TC-611`: Update status with no changes
+- `TC-612`: Status update with other fields
+- `TC-613`: Status only update
+- `TC-614`: Minimal status update
+- `TC-615`: Maximum status update
+- `TC-616`: Batch status updates
+- `TC-617`: Sequential status updates
+- `TC-618`: Parallel status updates (same task)
+- `TC-619`: Status update timing
+- `TC-620`: Status update performance
+
+---
+
+## 9. Task List - Default (40 tests)
+
+### 9.1 Basic List Display
+- `TC-621`: List all tasks
+- `TC-622`: Verify table format
+- `TC-623`: Verify column headers
+- `TC-624`: Verify ID column
+- `TC-625`: Verify Name column
+- `TC-626`: Verify Priority column
+- `TC-627`: Verify Status column
+- `TC-628`: Verify Blocked By column
+- `TC-629`: Verify table borders
+- `TC-630`: Verify table colors
+
+### 9.2 Empty List
+- `TC-631`: List with no tasks
+- `TC-632`: Verify "No tasks found" message
+- `TC-633`: Verify graceful handling
+
+### 9.3 Single Task List
+- `TC-634`: List with one task
+- `TC-635`: Verify single row display
+
+### 9.4 Multiple Tasks List
+- `TC-636`: List with 10 tasks
+- `TC-637`: List with 50 tasks
+- `TC-638`: List with 100 tasks
+- `TC-639`: Verify pagination not needed
+- `TC-640`: Verify scrollable output
+
+### 9.5 List Metadata
+- `TC-641`: Verify plan name displayed
+- `TC-642`: Verify platform displayed
+- `TC-643`: Verify total count
+- `TC-644`: Verify task(s) pluralization
+
+### 9.6 List Formatting
+- `TC-645`: Verify priority colors
+- `TC-646`: Verify priority icons
+- `TC-647`: Verify status colors
+- `TC-648`: Verify status symbols
+- `TC-649`: Verify ID coloring
+- `TC-650`: Verify dimmed text for empty values
+
+### 9.7 List Content
+- `TC-651`: Verify task names not truncated
+- `TC-652`: Verify long names wrap
+- `TC-653`: Verify blocked by list formatted
+- `TC-654`: Verify multiple blockers shown
+- `TC-655`: Verify no blockers shows dash
+- `TC-656`: Verify proper spacing
+
+### 9.8 List Performance
+- `TC-657`: List renders quickly
+- `TC-658`: List with complex tasks
+- `TC-659`: List after many operations
+- `TC-660`: List consistency
+
+---
+
+## 10. Task List - Filtering (120 tests)
+
+### 10.1 Level Filter
+- `TC-661`: `--level critical` filter
+- `TC-662`: `--level high` filter
+- `TC-663`: `--level medium` filter
+- `TC-664`: `--level low` filter
+- `TC-665`: Verify only critical shown
+- `TC-666`: Verify only high shown
+- `TC-667`: Verify only medium shown
+- `TC-668`: Verify only low shown
+- `TC-669`: Level filter with no matches
+- `TC-670`: Level filter with all matches
+- `TC-671`: Case insensitive level filter
+- `TC-672`: Invalid level value
+
+### 10.2 Status Filters
+- `TC-673`: `--done` filter
+- `TC-674`: `--pending` filter
+- `TC-675`: `--ready` filter
+- `TC-676`: `--notReady` filter
+- `TC-677`: Verify only done shown
+- `TC-678`: Verify only pending shown
+- `TC-679`: Verify only ready shown
+- `TC-680`: Verify only not ready shown
+- `TC-681`: Done filter with no done tasks
+- `TC-682`: Pending filter with no pending
+- `TC-683`: Ready filter with no ready
+- `TC-684`: NotReady filter with none
+
+### 10.3 Foundation Filter
+- `TC-685`: `--foundation` filter
+- `TC-686`: Verify only foundation tasks shown
+- `TC-687`: Foundation = no blockedBy
+- `TC-688`: Foundation filter with no matches
+- `TC-689`: Foundation after blockers removed
+
+### 10.4 Combined Filters
+- `TC-690`: `--done --level critical`
+- `TC-691`: `--pending --level high`
+- `TC-692`: `--ready --foundation`
+- `TC-693`: `--done --foundation` (empty)
+- `TC-694`: `--notReady --level low`
+- `TC-695`: Three filters together
+- `TC-696`: All filters together
+- `TC-697`: Conflicting filters
+- `TC-698`: Overlapping filters
+- `TC-699`: Filter combinations
+
+### 10.5 Filter Results
+- `TC-700`: Filter shows correct count
+- `TC-701`: Filter shows correct total
+- `TC-702`: Filter with single result
+- `TC-703`: Filter with many results
+- `TC-704`: Filter with no results
+- `TC-705`: Verify filtered list format
+
+### 10.6 Filter Performance
+- `TC-706`: Filter with 1000 tasks
+- `TC-707`: Filter speed
+- `TC-708`: Filter efficiency
+- `TC-709`: Complex filter performance
+
+### 10.7 Filter Edge Cases
+- `TC-710`: Filter on empty project
+- `TC-711`: Filter with all tasks excluded
+- `TC-712`: Filter with all tasks included
+- `TC-713`: Rapid filter changes
+- `TC-714`: Sequential filtering
+
+### 10.8 Platform Filters
+- `TC-715`: List frontend tasks
+- `TC-716`: List backend tasks
+- `TC-717`: Verify correct platform
+- `TC-718`: Platform in list header
+
+### 10.9 Priority Display in List
+- `TC-719`: Critical priority display
+- `TC-720`: High priority display
+- `TC-721`: Medium priority display
+- `TC-722`: Low priority display
+- `TC-723`: Priority color coding
+- `TC-724`: Priority icons
+
+### 10.10 Status Display in List
+- `TC-725`: Done status display
+- `TC-726`: Ready status display
+- `TC-727`: Pending status display
+- `TC-728`: Status color coding
+- `TC-729`: Status symbols
+
+### 10.11 Blocked By Display
+- `TC-730`: Single blocker display
+- `TC-731`: Multiple blockers display
+- `TC-732`: Many blockers display
+- `TC-733`: Blockers formatting
+- `TC-734`: No blockers display
+
+### 10.12 Advanced Filtering
+- `TC-735`: Filter by name pattern
+- `TC-736`: Filter by component
+- `TC-737`: Filter by ID range
+- `TC-738`: Inverse filters
+- `TC-739`: Exclude filters
+- `TC-740`: Custom filters
+
+### 10.13 Filter Persistence
+- `TC-741`: Filter after task create
+- `TC-742`: Filter after task update
+- `TC-743`: Filter after task remove
+- `TC-744`: Filter consistency
+
+### 10.14 Filter Validation
+- `TC-745`: Invalid filter values
+- `TC-746`: Invalid filter combinations
+- `TC-747`: Filter error handling
+- `TC-748`: Filter edge cases
+
+### 10.15 Filter Output
+- `TC-749`: Filter output format
+- `TC-750`: Filter output sorting
+- `TC-751`: Filter output grouping
+- `TC-752`: Filter output formatting
+
+### 10.16 Special Filter Cases
+- `TC-753`: Filter with unicode
+- `TC-754`: Filter with special chars
+- `TC-755`: Filter with spaces
+- `TC-756`: Filter case sensitivity
+- `TC-757`: Filter regex support
+- `TC-758`: Filter wildcards
+- `TC-759`: Filter exact match
+- `TC-760`: Filter partial match
+- `TC-761`: Filter negation
+- `TC-762`: Filter combinations
+- `TC-763`: Filter chaining
+- `TC-764`: Filter aliases
+- `TC-765`: Filter shortcuts
+- `TC-766`: Filter presets
+- `TC-767`: Filter favorites
+- `TC-768`: Filter history
+- `TC-769`: Filter suggestions
+- `TC-770`: Filter autocomplete
+- `TC-771`: Filter validation
+- `TC-772`: Filter errors
+- `TC-773`: Filter warnings
+- `TC-774`: Filter performance
+- `TC-775`: Filter caching
+- `TC-776`: Filter optimization
+- `TC-777`: Filter indexing
+- `TC-778`: Filter sorting
+- `TC-779`: Filter grouping
+- `TC-780`: Filter aggregation
+
+---
+
+## 11. Task Detail (50 tests)
+
+### 11.1 Basic Detail Display
+- `TC-781`: Show task detail
+- `TC-782`: Verify detail format
+- `TC-783`: Verify table structure
+- `TC-784`: Verify field labels
+- `TC-785`: Verify field values
+
+### 11.2 Detail Fields
+- `TC-786`: Verify ID displayed
+- `TC-787`: Verify name displayed
+- `TC-788`: Verify component displayed
+- `TC-789`: Verify level displayed
+- `TC-790`: Verify effort displayed
+- `TC-791`: Verify status displayed
+- `TC-792`: Verify files displayed
+- `TC-793`: Verify blocked by displayed
+- `TC-794`: Verify blocks displayed
+- `TC-795`: Verify notes displayed
+
+### 11.3 Detail Lists
+- `TC-796`: Verify tests displayed
+- `TC-797`: Verify acceptance criteria displayed
+- `TC-798`: Verify criteria as bullets
+- `TC-799`: Verify tests with checkmarks
+
+### 11.4 Detail Non-existent Task
+- `TC-800`: Detail of missing task
+- `TC-801`: Verify error message
+- `TC-802`: Verify exit code
+- `TC-803`: Error for deleted task
+- `TC-804`: Error for invalid ID
+
+### 11.5 Detail Formatting
+- `TC-805`: Verify colors
+- `TC-806`: Verify spacing
+- `TC-807`: Verify borders
+- `TC-808`: Verify alignment
+- `TC-809`: Verify wrapping
+
+### 11.6 Detail Content
+- `TC-810`: Detail with all fields
+- `TC-811`: Detail with minimal fields
+- `TC-812`: Detail with long values
+- `TC-813`: Detail with special chars
+- `TC-814`: Detail with unicode
+
+### 11.7 Detail Sections
+- `TC-815`: Tests section shown
+- `TC-816`: Criteria section shown
+- `TC-817`: Empty sections hidden
+- `TC-818`: Section headers
+- `TC-819`: Section formatting
+
+### 11.8 Detail Edge Cases
+- `TC-820`: Very long name
+- `TC-821`: Very long notes
+- `TC-822`: Many tests
+- `TC-823`: Many criteria
+- `TC-824`: Many blockers
+
+### 11.9 Detail Performance
+- `TC-825`: Detail load speed
+- `TC-826`: Detail rendering
+- `TC-827`: Detail accuracy
+- `TC-828`: Detail completeness
+
+### 11.10 Detail Integration
+- `TC-829`: Detail after create
+- `TC-830`: Detail after update
+- `TC-831`: Detail consistent with list
+- `TC-832`: Detail shows current state
+
+---
+
+## 12. Dependency Chain (60 tests)
+
+### 12.1 Basic Chain Display
+- `TC-833`: Show chain for task
+- `TC-834`: Verify chain format
+- `TC-835`: Verify task ID shown
+- `TC-836`: Verify dependencies section
+- `TC-837`: Verify dependents section
+
+### 12.2 No Dependencies
+- `TC-838`: Chain with no dependencies
+- `TC-839`: Verify "No dependencies" message
+- `TC-840`: Verify checkmark shown
+
+### 12.3 Direct Dependencies
+- `TC-841`: Chain with one direct dependency
+- `TC-842`: Verify arrow shown
+- `TC-843`: Verify "Direct" label
+- `TC-844`: Verify direct color (green)
+- `TC-845`: Multiple direct dependencies
+
+### 12.4 Transitive Dependencies
+- `TC-846`: Chain with transitive dependency
+- `TC-847`: Verify bullet shown
+- `TC-848`: Verify "Transitive" label
+- `TC-849`: Verify transitive color (dim)
+- `TC-850`: Multiple levels deep
+- `TC-851`: Deep chain (5+ levels)
+
+### 12.5 Dependents
+- `TC-852`: Chain with dependents
+- `TC-853`: Verify dependents shown
+- `TC-854`: Verify dependent IDs
+- `TC-855`: Verify dependent names
+- `TC-856`: Multiple dependents
+
+### 12.6 Complex Chains
+- `TC-857`: Diamond pattern
+- `TC-858`: Fan out pattern
+- `TC-859`: Fan in pattern
+- `TC-860`: Mixed pattern
+- `TC-861`: Complex real-world chain
+
+### 12.7 Chain Tables
+- `TC-862`: Dependencies table format
+- `TC-863`: Dependents table format
+- `TC-864`: Table headers
+- `TC-865`: Table borders
+- `TC-866`: Table colors
+
+### 12.8 Chain Content
+- `TC-867`: Verify task ID in chain
+- `TC-868`: Verify task name in chain
+- `TC-869`: Verify type column
+- `TC-870`: Verify proper spacing
+
+### 12.9 Chain Updates
+- `TC-871`: Chain after blocker done
+- `TC-872`: Chain after new dependency
+- `TC-873`: Chain after task removal
+- `TC-874`: Real-time chain accuracy
+
+### 12.10 Chain Edge Cases
+- `TC-875`: Self-dependency chain
+- `TC-876`: Circular dependency chain
+- `TC-877`: Missing dependency in chain
+- `TC-878`: Very long chain
+- `TC-879`: Chain with many branches
+
+### 12.11 Chain Performance
+- `TC-880`: Chain calculation speed
+- `TC-881`: Chain with 100 tasks
+- `TC-882`: Chain rendering speed
+- `TC-883`: Chain accuracy
+
+### 12.12 Chain Integration
+- `TC-884`: Chain from list
+- `TC-885`: Chain from detail
+- `TC-886`: Chain consistency
+- `TC-887`: Chain completeness
+
+### 12.13 Chain Validation
+- `TC-888`: Validate chain integrity
+- `TC-889`: Detect circular chains
+- `TC-890`: Detect broken chains
+- `TC-891`: Chain error handling
+
+### 12.14 Chain Special Cases
+- `TC-892`: Chain with deleted tasks
+- `TC-893`: Chain with missing IDs
+- `TC-894`: Chain recovery
+- `TC-895`: Chain repair
+
+---
+
+## 13. Task Status Dashboard (40 tests)
+
+### 13.1 Dashboard Display
+- `TC-896`: Show status dashboard
+- `TC-897`: Verify dashboard title
+- `TC-898`: Verify dashboard sections
+- `TC-899`: Verify overall format
+- `TC-900`: Verify dashboard structure
+
+### 13.2 Progress Bar
+- `TC-901`: Verify progress bar shown
+- `TC-902`: Verify progress percentage
+- `TC-903`: Verify bar format (█/░)
+- `TC-904`: Verify bar colors
+- `TC-905`: Verify bar length
+- `TC-906`: 0% progress display
+- `TC-907`: 50% progress display
+- `TC-908`: 100% progress display
+- `TC-909`: Verify percentage precision
+- `TC-910`: Verify bar accuracy
+
+### 13.3 By Status Section
+- `TC-911`: Verify Total count
+- `TC-912`: Verify Done count (green)
+- `TC-913`: Verify Ready count (yellow)
+- `TC-914`: Verify Pending count (red)
+- `TC-915`: Verify status table
+- `TC-916`: Verify correct totals
+
+### 13.4 By Priority Section
+- `TC-917`: Verify Critical count (red)
+- `TC-918`: Verify High count (yellow)
+- `TC-919`: Verify Medium count (blue)
+- `TC-920`: Verify Low count (dim)
+- `TC-921`: Verify priority table
+- `TC-922`: Verify correct counts
+
+### 13.5 Dependencies Section
+- `TC-923`: Verify Foundation count
+- `TC-924`: Verify Blocked count
+- `TC-925`: Verify foundation green
+- `TC-926`: Verify blocked red
+- `TC-927`: Verify dependency table
+- `TC-928`: Verify checkmark/arrow
+
+### 13.6 Ready to Start
+- `TC-929`: Verify ready list shown
+- `TC-930`: Verify ready list format
+- `TC-931`: Verify max 5 shown
+- `TC-932`: Verify "and X more" message
+- `TC-933`: Verify ready list columns
+- `TC-934`: Verify ready list coloring
+
+### 13.7 Empty Dashboard
+- `TC-935`: Dashboard with no tasks
+- `TC-936`: Verify 0 total
+- `TC-937`: Verify all zeros
+- `TC-938`: Verify 0% progress
+- `TC-939`: Verify no ready tasks
+
+### 13.8 Full Dashboard
+- `TC-940`: Dashboard with all done
+- `TC-941`: Verify 100% progress
+- `TC-942`: Verify all counts correct
+- `TC-943`: Verify no ready tasks
+
+### 13.9 Dashboard Updates
+- `TC-944`: Dashboard after create
+- `TC-945`: Dashboard after update
+- `TC-946`: Dashboard after done
+- `TC-947`: Real-time updates
+- `TC-948`: Dashboard accuracy
+
+### 13.10 Dashboard Performance
+- `TC-949`: Dashboard load speed
+- `TC-950`: Dashboard with 100 tasks
+- `TC-951`: Dashboard with 1000 tasks
+- `TC-952`: Dashboard efficiency
+
+### 13.11 Dashboard Formatting
+- `TC-953`: Verify table borders
+- `TC-954`: Verify color consistency
+- `TC-955`: Verify symbol consistency
+- `TC-956`: Verify spacing
+- `TC-957`: Verify alignment
+
+---
+
+## 14. Task Validation (50 tests)
+
+### 14.1 Validation Success
+- `TC-958`: Validate valid project
+- `TC-959`: Verify success message
+- `TC-960`: Verify checkmark shown
+- `TC-961`: Verify exit code 0
+- `TC-962`: Validate with warnings only
+
+### 14.2 Validation Errors
+- `TC-963`: Detect missing task file
+- `TC-964`: Detect corrupted file
+- `TC-965`: Detect invalid JSON
+- `TC-966`: Detect missing metadata
+- `TC-967`: Detect circular dependencies
+- `TC-968`: Detect self-dependencies
+- `TC-969`: Detect invalid references
+- `TC-970`: Detect duplicate IDs
+- `TC-971`: Verify error count
+- `TC-972`: Verify exit code 1
+
+### 14.3 Validation Warnings
+- `TC-973`: Warn about orphaned tasks
+- `TC-974`: Warn about inconsistent flags
+- `TC-975`: Warn about missing fields
+- `TC-976`: Verify warning count
+- `TC-977`: Verify warning display
+
+### 14.4 Validation Output
+- `TC-978`: Error format (red X)
+- `TC-979`: Warning format (yellow bullet)
+- `TC-980`: Error level shown
+- `TC-981`: Message format
+- `TC-982`: Multiple errors listed
+
+### 14.5 Validation Scenarios
+- `TC-983`: Validate after create
+- `TC-984`: Validate after update
+- `TC-985`: Validate after remove
+- `TC-986`: Validate with blockers
+- `TC-987`: Validate with done tasks
+- `TC-988`: Validate complex dependencies
+- `TC-989`: Validate all statuses
+- `TC-990`: Validate edge cases
+
+### 14.6 Validation Integration
+- `TC-991`: Validation before operations
+- `TC-992`: Validation in CI/CD
+- `TC-993`: Validation automation
+- `TC-994`: Validation hooks
+
+### 14.7 Validation Performance
+- `TC-995`: Validate 100 tasks
+- `TC-996`: Validate 1000 tasks
+- `TC-997`: Validation speed
+- `TC-998`: Validation efficiency
+
+### 14.8 Validation Edge Cases
+- `TC-999`: Validate empty project
+- `TC-1000`: Validate corrupt project
+- `TC-1001`: Validate partially corrupt
+- `TC-1002`: Validate with errors
+- `TC-1003`: Validate recovery
+
+---
+
+## 15. Task Removal (40 tests)
+
+### 15.1 Basic Removal
+- `TC-1004`: Remove existing task
+- `TC-1005`: Verify success message
+- `TC-1006`: Verify task not in list
+- `TC-1007`: Verify task not in detail
+- `TC-1008`: Verify file updated
+
+### 15.2 Remove Non-existent
+- `TC-1009`: Remove missing task
+- `TC-1010`: Verify success anyway
+- `TC-1011`: Idempotent removal
+- `TC-1012`: No error for missing
+
+### 15.3 Remove with Dependencies
+- `TC-1013`: Remove task that blocks others
+- `TC-1014`: Verify dependents updated
+- `TC-1015`: Verify blockedBy removed
+- `TC-1016`: Verify blocks updated
+- `TC-1017`: Remove blocked task
+- `TC-1018`: Remove foundation task
+
+### 15.4 Remove Last Task
+- `TC-1019`: Remove last remaining task
+- `TC-1020`: Verify empty list
+- `TC-1021`: Metadata preserved
+- `TC-1022`: File still valid
+
+### 15.5 Remove First Task
+- `TC-1023`: Remove fe-0001
+- `TC-1024`: Verify renumbering
+- `TC-1025`: Next task still fe-0002
+- `TC-1026`: New task gets fe-0001
+
+### 15.6 Remove Middle Task
+- `TC-1027`: Remove fe-0005 from 10
+- `TC-1028`: Verify gap in IDs
+- `TC-1029`: Verify chain updated
+- `TC-1030`: Verify consistency
+
+### 15.7 Multiple Removals
+- `TC-1031`: Remove multiple tasks
+- `TC-1032`: Remove all tasks
+- `TC-1033`: Remove in sequence
+- `TC-1034`: Rapid removals
+
+### 15.3 Removal Verification
+- `TC-1035`: Verify file has one less line
+- `TC-1036`: Verify NDJSON still valid
+- `TC-1037`: Verify metadata unchanged
+- `TC-1038`: Verify other tasks intact
+- `TC-1039`: Verify no corruption
+
+---
+
+## 16. Template Listing (20 tests)
+
+### 16.1 Template List Display
+- `TC-1040`: List available templates
+- `TC-1041`: Verify template names
+- `TC-1042`: Verify template count
+- `TC-1043`: Verify list format
+
+### 16.2 Template Details
+- `TC-1044`: Show template level
+- `TC-1045`: Show template effort
+- `TC-1046`: Show template name preview
+- `TC-1047`: Verify truncation
+
+### 16.3 Template Colors
+- `TC-1048`: Cyan template names
+- `TC-1049`: Dim details
+- `TC-1050`: Proper formatting
+
+### 16.4 Template Content
+- `TC-1051`: Component template
+- `TC-1052`: Service template
+- `TC-1053`: All templates listed
+- `TC-1054`: Alphabetical order
+
+### 16.5 Template Usage
+- `TC-1055`: Copy template name
+- `TC-1056`: Use template name
+- `TC-1057`: Invalid template
+- `TC-1058`: Template help
+
+### 16.6 Template Display
+- `TC-1059`: Template description
+- `TC-1060`: Template fields
+- `TC-1061`: Template examples
+- `TC-1062`: Template formatting
+
+---
+
+## 17. Error Handling - Missing Arguments (30 tests)
+
+### 17.1 Missing Plan Name
+- `TC-1063`: Run without -p flag
+- `TC-1064`: Verify error message
+- `TC-1065`: Verify usage shown
+- `TC-1066`: Verify exit code 1
+- `TC-1067`: Run with empty plan name
+
+### 17.2 Missing Command
+- `TC-1068`: Run with plan only
+- `TC-1069`: Verify help shown
+- `TC-1070`: Graceful no command
+
+### 17.3 Missing Task ID
+- `TC-1071`: Update without ID
+- `TC-1072`: Detail without ID
+- `TC-1073`: Chain without ID
+- `TC-1074`: Remove without ID
+
+### 17.4 Missing Required Options
+- `TC-1075`: Create without name
+- `TC-1076`: Create without level
+- `TC-1077`: Create without component
+- `TC-1078`: Verify validation errors
+
+### 17.5 Missing Values
+- `TC-1079`: --name without value
+- `TC-1080`: --level without value
+- `TC-1081`: --id without value
+- `TC-1082`: Verify argument errors
+
+### 17.6 Error Messages
+- `TC-1083`: Clear error messages
+- `TC-1084`: Helpful suggestions
+- `TC-1085`: Usage examples
+- `TC-1086`: Error formatting
+
+### 17.7 Error Recovery
+- `TC-1087`: Retry with correct args
+- `TC-1088`: Continue after error
+- `TC-1089`: No state corruption
+- `TC-1090`: Clean error handling
+
+---
+
+## 18. Error Handling - Invalid Values (40 tests)
+
+### 18.1 Invalid Platform
+- `TC-1091`: Invalid platform value
+- `TC-1092`: Platform typo
+- `TC-1093`: Case sensitivity
+- `TC-1094`: Verify error message
+
+### 18.2 Invalid Level
+- `TC-1095`: Invalid priority level
+- `TC-1096`: Level typo
+- `TC-1097`: Empty level
+- `TC-1098`: Number as level
+
+### 18.3 Invalid Task ID
+- `TC-1099`: Non-existent ID
+- `TC-1100`: Wrong format ID
+- `TC-1101`: Empty ID
+- `TC-1102`: Special chars in ID
+
+### 18.4 Invalid Options
+- `TC-1103`: Unknown flag
+- `TC-1104`: Invalid combination
+- `TC-1105`: Conflicting flags
+- `TC-1106`: Invalid values
+
+### 18.5 Invalid Template
+- `TC-1107`: Non-existent template
+- `TC-1108`: Template typo
+- `TC-1109`: Empty template name
+- `TC-1110`: Verify template error
+
+### 18.6 Invalid BlockedBy
+- `TC-1111`: Non-existent blocker
+- `TC-1112`: Self as blocker
+- `TC-1113`: Invalid ID format
+- `TC-1114`: Circular reference
+
+### 18.7 Type Errors
+- `TC-1115`: String where number expected
+- `TC-1116`: Number where string expected
+- `TC-1117`: Array where string expected
+- `TC-1118`: Invalid JSON
+
+### 18.8 Validation Errors
+- `TC-1119`: Failed validation output
+- `TC-1120`: Error count display
+- `TC-1121`: Error severity
+- `TC-1122`: Multiple errors
+
+### 18.9 File Errors
+- `TC-1123`: Permission denied
+- `TC-1124`: Disk full
+- `TC-1125`: Invalid path
+- `TC-1126`: Corrupt file
+
+### 18.10 System Errors
+- `TC-1127`: Out of memory
+- `TC-1128`: Timeout errors
+- `TC-1129`: System limits
+- `TC-1130`: Graceful degradation
+
+---
+
+## 19. Edge Cases - Special Characters (20 tests)
+
+### 19.1 Special Characters in Name
+- `TC-1131`: Name with quotes
+- `TC-1132`: Name with apostrophes
+- `TC-1133`: Name with backticks
+- `TC-1134`: Name with slashes
+- `TC-1135`: Name with backslashes
+- `TC-1136`: Name with newlines
+- `TC-1137`: Name with tabs
+- `TC-1138`: Name with unicode emoji
+- `TC-1139`: Name with RTL text
+- `TC-1140`: Name with zero-width chars
+
+### 19.2 Special Characters in Values
+- `TC-1141`: Component with dots
+- `TC-1142`: Files with brackets
+- `TC-1143`: Notes with HTML
+- `TC-1144`: Notes with markdown
+- `TC-1145`: XSS attempts
+
+### 19.3 Encoding Issues
+- `TC-1146`: UTF-8 encoding
+- `TC-1147`: Latin-1 chars
+- `TC-1148`: CJK chars
+- `TC-1149`: Emoji handling
+- `TC-1150`: Zero-width chars
+
+### 19.4 Injection Prevention
+- `TC-1151`: SQL injection
+- `TC-1152`: Command injection
+- `TC-1153`: Path traversal
+- `TC-1154`: XSS prevention
+- `TC-1155`: CSRF prevention
+
+---
+
+## 20. Edge Cases - Large Data (20 tests)
+
+### 20.1 Large Task Names
+- `TC-1156`: Name 100 chars
+- `TC-1157`: Name 500 chars
+- `TC-1158`: Name 1000 chars
+- `TC-1159`: Name with line breaks
+
+### 20.2 Large Field Values
+- `TC-1160`: Long component path
+- `TC-1161`: Many files
+- `TC-1162`: Long notes
+- `TC-1163`: Many acceptance criteria
+
+### 20.3 Many Tasks
+- `TC-1164`: Create 100 tasks
+- `TC-1165`: Create 500 tasks
+- `TC-1166`: Create 1000 tasks
+- `TC-1167`: List 1000 tasks
+- `TC-1168`: Status with 1000 tasks
+
+### 20.4 Many Dependencies
+- `TC-1169`: 10 blockers
+- `TC-1170`: 50 blockers
+- `TC-1171`: 100 blockers
+- `TC-1178`: Deep chain (10+)
+- `TC-1179`: Wide chain (100+ dependents)
+
+### 20.5 Performance Limits
+- `TC-1172`: Memory usage
+- `TC-1173`: File size limits
+- `TC-1174`: Parse time limits
+- `TC-1175`: Render time limits
+
+### 20.6 Stress Testing
+- `TC-1176`: Rapid operations
+- `TC-1177`: Concurrent access
+- `TC-1178`: Large batch operations
+- `TC-1179`: Stress test recovery
+
+---
+
+## Summary Statistics
+
+| Category | Tests |
+|----------|-------|
+| Help and Version | 20 |
+| Project Init | 50 |
+| Project Validation | 40 |
+| Task Creation | 330 |
+| Task Update | 180 |
+| Task List | 160 |
+| Task Detail | 50 |
+| Dependency Chain | 60 |
+| Status Dashboard | 40 |
+| Task Validation | 50 |
+| Task Removal | 40 |
+| Templates | 20 |
+| Error Handling | 70 |
+| Edge Cases | 40 |
+| **Total** | **1200** |
+
+---
+
+## Test Execution Priority
+
+### P0 - Critical (Must Pass)
+- All create, update, remove operations
+- Dependency management
+- Validation
+- Error handling
+
+### P1 - High (Should Pass)
+- List and filtering
+- Status dashboard
+- Detail view
+- Chain display
+
+### P2 - Medium (Nice to Have)
+- Template usage
+- Edge cases
+- Performance
+- Large data
+
+### P3 - Low (Future)
+- Advanced filtering
+- Custom reports
+- Export/import
+- Integration tests

@@ -11,11 +11,13 @@ iOS development requires understanding both modern declarative UI (SwiftUI) and 
 ## Core iOS Principles
 
 **UI Framework Choice:**
+
 - **SwiftUI**: Modern declarative UI framework, recommended for new iOS 14+ projects
 - **UIKit**: Traditional imperative UI framework, battle-tested and widely used
 - **Hybrid**: Mix SwiftUI and UIKit in migration scenarios
 
 **Architecture Guidelines:**
+
 - Follow Apple's MVC, MVVM, or TCA patterns
 - Use Combine or async/await for asynchronous work
 - Implement dependency injection (property injection, environment objects)
@@ -23,6 +25,7 @@ iOS development requires understanding both modern declarative UI (SwiftUI) and 
 - Use protocol-oriented programming for testability
 
 **Testability:**
+
 - ViewModels should be unit testable without iOS framework
 - Views should be testable with XCUITest
 - Use protocols and dependency injection for mocking
@@ -43,6 +46,7 @@ Repositories/    - Data access layer
 ```
 
 **ViewModel example:**
+
 ```swift
 import Combine
 import Foundation
@@ -93,6 +97,7 @@ Features/
 ### View Structure
 
 **Screen-level views:**
+
 ```swift
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
@@ -120,6 +125,7 @@ struct HomeView: View {
 ```
 
 **Reusable components:**
+
 ```swift
 struct ProductCard: View {
     let product: Product
@@ -150,6 +156,7 @@ struct ProductCard: View {
 ### SwiftUI State Management
 
 **@State and @Binding:**
+
 ```swift
 struct SearchBar: View {
     @State private var searchText = ""
@@ -162,6 +169,7 @@ struct SearchBar: View {
 ```
 
 **@StateObject and @ObservedObject:**
+
 ```swift
 struct ProductListView: View {
     @StateObject private var viewModel = ProductListViewModel()
@@ -178,6 +186,7 @@ struct ProductListView: View {
 ```
 
 **@EnvironmentObject for shared state:**
+
 ```swift
 @main
 struct MyApp: App {
@@ -195,6 +204,7 @@ struct MyApp: App {
 ### SwiftUI Navigation
 
 **NavigationStack (iOS 16+):**
+
 ```swift
 @State private var path: [Product] = []
 
@@ -213,6 +223,7 @@ var body: some View {
 ```
 
 **Sheet presentation:**
+
 ```swift
 @State private var showingDetail = false
 @State private var selectedProduct: Product?
@@ -237,6 +248,7 @@ var body: some View {
 ### UIViewController Structure
 
 **View controller with ViewModel:**
+
 ```swift
 class HomeViewController: UIViewController {
     private let viewModel: HomeViewModel
@@ -283,6 +295,7 @@ class HomeViewController: UIViewController {
 ### UITableView/UICollectionView
 
 **UITableView diffable data source:**
+
 ```swift
 class HomeViewController: UIViewController {
     private var dataSource: UITableViewDiffableDataSource<Int, Product>!
@@ -312,6 +325,7 @@ class HomeViewController: UIViewController {
 ### Programmatic UI Layout
 
 **Auto Layout anchors:**
+
 ```swift
 class ProductViewController: UIViewController {
     private let titleLabel = UILabel()
@@ -350,6 +364,7 @@ class ProductViewController: UIViewController {
 ### Combine Framework
 
 **Publisher/Subscriber pattern:**
+
 ```swift
 class ProductViewModel: ObservableObject {
     @Published var products: [Product] = []
@@ -384,6 +399,7 @@ class ProductViewModel: ObservableObject {
 ### Async/Await (Modern Swift)
 
 **Async/await in ViewModel:**
+
 ```swift
 @MainActor
 class ProductViewModel: ObservableObject {
@@ -415,6 +431,7 @@ class ProductViewModel: ObservableObject {
 ### Protocol-Based Injection
 
 **Define protocols:**
+
 ```swift
 protocol ProductServiceProtocol {
     func fetchProducts() async throws -> [Product]
@@ -428,6 +445,7 @@ class ProductService: ProductServiceProtocol {
 ```
 
 **Inject into ViewModel:**
+
 ```swift
 class HomeViewModel: ObservableObject {
     private let productService: ProductServiceProtocol
@@ -439,6 +457,7 @@ class HomeViewModel: ObservableObject {
 ```
 
 **Inject in SwiftUI:**
+
 ```swift
 struct HomeView: View {
     let productService: ProductServiceProtocol
@@ -456,6 +475,7 @@ struct HomeView: View {
 ### Environment Values (SwiftUI)
 
 **Custom environment key:**
+
 ```swift
 private struct ProductServiceKey: EnvironmentKey {
     static let defaultValue: ProductServiceProtocol = ProductService()
@@ -470,6 +490,7 @@ extension EnvironmentValues {
 ```
 
 **Use in views:**
+
 ```swift
 struct HomeView: View {
     @Environment(\.productService) var productService
@@ -485,6 +506,7 @@ struct HomeView: View {
 ### Frontend Testing Scenarios (User-Centric)
 
 **Happy Path:**
+
 - User opens app → Home screen displays correctly
 - User taps product → Detail view pushes with correct product
 - User scrolls list → ScrollView/List scrolls smoothly
@@ -492,6 +514,7 @@ struct HomeView: View {
 - User navigates back → Previous view restores state
 
 **Edge Cases:**
+
 - Empty product list → Empty view displays with helpful message
 - Single product → Displays correctly without list
 - Large list → LazyVStack/LazyStack renders efficiently
@@ -500,6 +523,7 @@ struct HomeView: View {
 - Dark mode → UI renders correctly in dark appearance
 
 **Failure States:**
+
 - Network error → Alert displays with retry option
 - Server error (5xx) → User-friendly error, retry available
 - Timeout → Loading indicator with timeout message
@@ -509,6 +533,7 @@ struct HomeView: View {
 ### Backend Testing Cases (Logic-Driven)
 
 **ViewModel Tests:**
+
 - Initial state → Published properties have correct defaults
 - Success response → Products array updates correctly
 - Error response → ErrorMessage populated correctly
@@ -516,12 +541,14 @@ struct HomeView: View {
 - Data transformation → DTO to model mapping correct
 
 **Use Case Tests:**
+
 - Business rules → Validation logic tested
 - Boundary conditions → Empty array, single item, large array
 - Error handling → Service errors propagate correctly
 - Cancellation → Async tasks cancelled correctly
 
 **Service Tests:**
+
 - API calls → URLSession returns correct data
 - Decoding → JSON decodes to models correctly
 - Error handling → HTTP errors map to domain errors
@@ -530,6 +557,7 @@ struct HomeView: View {
 ## Context7 Integration
 
 For iOS-specific documentation:
+
 - Use Context7 for SwiftUI API reference
 - Query Context7 for latest Swift patterns
 - Reference Context7 for Combine framework usage
@@ -539,6 +567,7 @@ For iOS-specific documentation:
 ## Best Practices
 
 **DO:**
+
 - Follow Apple's Human Interface Guidelines
 - Use Swift concurrency (async/await) for new code
 - Implement proper error handling and recovery
@@ -548,6 +577,7 @@ For iOS-specific documentation:
 - Use Xcode Preview for SwiftUI development
 
 **DON'T:**
+
 - Put business logic in ViewControllers/Views
 - Force unwrap optionals excessively
 - Block main thread with long operations

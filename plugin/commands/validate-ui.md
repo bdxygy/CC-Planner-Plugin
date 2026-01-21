@@ -11,6 +11,7 @@ Validate implemented UI against four core principles: Modern, Aesthetic, Borderl
 ## When to Use
 
 Use this command when:
+
 - Reviewing UI implementation after `/execute-fe`
 - Ensuring UI follows modern design standards
 - Checking code consistency across platforms
@@ -20,24 +21,28 @@ Use this command when:
 ## The Four Principles
 
 ### 1. Modern
+
 - Modern design patterns and aesthetics
 - Current framework versions and syntax
 - No deprecated APIs or legacy components
 - Modern UI composition (hooks, composables, etc.)
 
 ### 2. Aesthetic
+
 - **Design consistency**: Consistent spacing, typography, colors, and patterns
 - **Visual hierarchy**: Clear information hierarchy with proper contrast
 - **Layout quality**: Proper use of white space, alignment, and grid systems
 - **Polish and motion**: Appropriate animations, transitions, and micro-interactions
 
 ### 3. Borderless
+
 - **No visible borders**: Cards, inputs, and containers without visible borders
 - **Alternative separation**: Uses shadows, elevation, spacing, or background contrast instead
 - **Edge-to-edge design**: Seamless, edge-to-edge layouts (especially on mobile)
 - **Subtle focus states**: No harsh outline on focus; uses subtle indicators
 
 ### 4. Responsive (mobile-first)
+
 - **Mobile baseline**: Works on mobile (320px+) without horizontal scroll
 - **Adaptive breakpoints**: Responsive layouts for tablets and desktops
 - **Touch targets**: Minimum 44px tap targets for touch interaction
@@ -48,6 +53,7 @@ Use this command when:
 ### 1. Detect Platform and UI Framework
 
 **Use Glob to detect platform:**
+
 ```bash
 # Android (Compose)
 Glob "**/ui/**/*.kt"
@@ -80,6 +86,7 @@ Glob "src/components/**/*.{tsx,jsx}"
 ### 2. Scan UI Code Files
 
 **Read all UI component files:**
+
 ```bash
 # Platform-specific patterns
 Android: app/src/main/java/**/*Activity.kt, **/*Fragment.kt, **/*Screen.kt
@@ -96,12 +103,14 @@ For each UI file, run validation checks:
 #### Modern Validation
 
 **Check for:**
+
 - ❌ Deprecated APIs and components
 - ❌ Legacy patterns (class components in React, Activities in Compose projects)
 - ❌ Old framework versions
 - ❌ Outdated design patterns
 
 **Examples:**
+
 ```kotlin
 // ❌ BAD: Using deprecated Material components
 Card(elevation = 4.dp)  // Old API
@@ -122,35 +131,40 @@ Text("Hello")  // Modern
 
 ```tsx
 // ❌ BAD: Class components
-class MyComponent extends React.Component {  }
+class MyComponent extends React.Component {}
 
 // ✅ GOOD: Functional components with hooks
-function MyComponent() {  }
+function MyComponent() {}
 ```
 
 #### Aesthetic Validation
 
 **Design Consistency:**
+
 - Check for hardcoded values (colors, spacing, typography)
 - Verify use of design tokens or theme system
 - Check for consistent spacing patterns
 
 **Visual Hierarchy:**
+
 - Check font size variations (too similar sizes = poor hierarchy)
 - Check color contrast ratios
 - Verify heading levels and semantic structure
 
 **Layout Quality:**
+
 - Check for magic numbers in padding/margin
 - Verify alignment and grid usage
 - Check white space balance
 
 **Polish and Motion:**
+
 - Check for missing transitions
 - Verify loading states
 - Check for harsh or missing animations
 
 **Examples:**
+
 ```kotlin
 // ❌ BAD: Hardcoded values
 Padding(16)  // Magic number
@@ -174,17 +188,20 @@ Text("Title", color = MaterialTheme.colorScheme.primary)
 #### Borderless Validation
 
 **Check for:**
+
 - ❌ Visible border properties (border, borderWidth, borderColor)
 - ❌ Border-top, border-left, etc. in stylesheets
 - ❌ Border on cards, inputs, buttons, containers
 
 **Valid alternatives:**
+
 - Shadows and elevation
 - Background color contrast
 - Spacing and padding
 - Subtle dividers (hairlines)
 
 **Examples:**
+
 ```kotlin
 // ❌ BAD: Visible border
 Surface(
@@ -218,12 +235,13 @@ Card(
 
 /* ✅ GOOD: Shadow instead */
 .card {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 ```
 
 **Edge-to-edge check:**
+
 - Verify no unnecessary padding on edges
 - Check for full-width content
 - Verify immersive layouts where appropriate
@@ -231,26 +249,31 @@ Card(
 #### Responsive Validation
 
 **Mobile baseline (320px+):**
+
 - Check for fixed widths
 - Verify flexible layouts (flex, grid, etc.)
 - Check for overflow issues
 
 **Adaptive breakpoints:**
+
 - Verify responsive breakpoints
 - Check for mobile-first approach
 - Verify use of platform responsive APIs
 
 **Touch targets (44px min):**
+
 - Check button/interactive element sizes
 - Verify padding on touchable elements
 - Check minimum tap target dimensions
 
 **Responsive typography:**
+
 - Verify relative units (rem, em, %, sp)
 - Check for readable base font size
 - Verify text scaling support
 
 **Examples:**
+
 ```tsx
 // ❌ BAD: Fixed width
 <div style={{ width: 1200 }}>  // Won't fit mobile
@@ -269,19 +292,25 @@ Card(
 
 ```css
 /* ❌ BAD: Fixed font size */
-.text { font-size: 14px; }
+.text {
+  font-size: 14px;
+}
 
 /* ✅ GOOD: Responsive */
-.text { font-size: clamp(1rem, 2.5vw, 1.25rem); }
+.text {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+}
 ```
 
 ### 4. Generate Violation Report
 
 **Detailed report format:**
-```markdown
+
+````markdown
 # UI Validation Report: [plan-name] - [platform]
 
 ## Summary
+
 - Total files scanned: [number]
 - Violations found: [number]
   - Modern: [x] violations
@@ -294,6 +323,7 @@ Card(
 ### 1. Modern Violations ([x])
 
 #### [VIOLATION] - [file:line]
+
 - **Severity:** Critical/Warning/Info
 - **Issue:** [Description of violation]
 - **Location:** [file path:line number]
@@ -301,33 +331,39 @@ Card(
   ```[language]
   [code snippet]
   ```
+````
+
 - **Suggested Fix:**
   ```[language]
   [fixed code snippet]
   ```
 
 ### 2. Aesthetic Violations ([x])
+
 [... same format ...]
 
 ### 3. Borderless Violations ([x])
+
 [... same format ...]
 
 ### 4. Responsive Violations ([x])
+
 [... same format ...]
 
 ## Summary by File
 
-| File | Modern | Aesthetic | Borderless | Responsive | Total |
-|------|--------|------------|------------|------------|-------|
-| [file1] | ✅ | ⚠️ 2 | ❌ 1 | ✅ | 3 |
-| [file2] | ✅ | ✅ | ✅ | ❌ 2 | 2 |
-| [file3] | ⚠️ 1 | ✅ | ✅ | ✅ | 1 |
+| File    | Modern | Aesthetic | Borderless | Responsive | Total |
+| ------- | ------ | --------- | ---------- | ---------- | ----- |
+| [file1] | ✅     | ⚠️ 2      | ❌ 1       | ✅         | 3     |
+| [file2] | ✅     | ✅        | ✅         | ❌ 2       | 2     |
+| [file3] | ⚠️ 1   | ✅        | ✅         | ✅         | 1     |
 
 ## Recommendations
 
 1. [High-priority recommendation]
 2. [Medium-priority recommendation]
 3. [Low-priority recommendation]
+
 ```
 
 ### 5. Interactive Fixing
@@ -335,15 +371,18 @@ Card(
 After generating the report, **use AskUserQuestion** for each critical or warning violation:
 
 ```
+
 "Found violation: [description] at [file:line]
 
 Fix options:
+
 1. Auto-fix (safe changes)
 2. Show me the fix (review before applying)
 3. Skip this violation
 4. Skip all remaining violations
 
 Which would you like?"
+
 ```
 
 **For each fix:**
@@ -357,6 +396,7 @@ Which would you like?"
 
 After all fixes (or user declines), provide:
 ```
+
 ✅ UI Validation Complete
 
 Files Scanned: [number]
@@ -365,9 +405,11 @@ Fixes Applied: [number]
 Remaining Violations: [number]
 
 Next Steps:
+
 - Review remaining violations manually
 - Run [test command] to verify no regressions
 - Commit changes: [git command]
+
 ```
 
 ## Platform-Specific Violations
@@ -498,6 +540,7 @@ Next Steps:
 ## Output Format
 
 ```
+
 Validating UI: [plan-name] - [platform]
 Scanning UI files... ✅
 Analyzing modern patterns... ✅
@@ -506,6 +549,7 @@ Detecting borders... ⚠️ 3 violations
 Verifying responsiveness... ⚠️ 2 violations
 
 Found 5 violations. Detailed report generated.
+
 ```
 
 ## Related Commands
@@ -524,3 +568,4 @@ Found 5 violations. Detailed report generated.
 - **Exa** for modern UI code examples and best practices:
   - `get_code_context_exa` - Modern component patterns
   - `web_search_exa` - Latest UI/UX articles and design trends
+```

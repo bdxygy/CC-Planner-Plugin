@@ -1,7 +1,20 @@
 ---
 description: Regenerate frontend task lists after revising a plan with /revise-planning
 argument-hint: [plan-name]
-allowed-tools: ["AskUserQuestion", "Read", "Write", "Glob", "Grep", "TodoWrite", "Bash", "mcp__plugin_context7_context7__resolve-library-id", "mcp__plugin_context7_context7__query-docs", "mcp__exa__get_code_context_exa", "mcp__exa__web_search_exa"]
+allowed-tools:
+  [
+    'AskUserQuestion',
+    'Read',
+    'Write',
+    'Glob',
+    'Grep',
+    'TodoWrite',
+    'Bash',
+    'mcp__plugin_context7_context7__resolve-library-id',
+    'mcp__plugin_context7_context7__query-docs',
+    'mcp__exa__get_code_context_exa',
+    'mcp__exa__web_search_exa',
+  ]
 ---
 
 # /revise-task-fe
@@ -11,6 +24,7 @@ Regenerate frontend task lists after revising a plan with `/revise-planning`. Th
 ## When to Use
 
 Use this command when:
+
 - You have run `/revise-planning` to update an existing plan
 - You previously generated frontend task lists with `/task-fe`
 - You need to update task lists to reflect the revised plan
@@ -21,9 +35,11 @@ Use this command when:
 ### 1. Locate Plan and Task Files
 
 **Ask the user:**
+
 - Which plan-name plan to regenerate tasks for?
 
 **Identify and read all relevant plan files:**
+
 ```bash
 # Read all frontend plan files (same files affected by /revise-planning)
 Read .pland/[plan-name]/features.mdx
@@ -41,6 +57,7 @@ Glob ".pland/[plan-name]/frontend-tasks.*"
 ### 2. Confirm Regeneration
 
 **Before proceeding, confirm with user:**
+
 - Existing task files will be deleted
 - New task files will be generated from the revised plan
 - All task IDs, priorities, and dependencies will be recalculated
@@ -50,6 +67,7 @@ Glob ".pland/[plan-name]/frontend-tasks.*"
 ### 3. Delete Existing Task Files
 
 Remove the old task files:
+
 ```bash
 # Delete existing frontend task files
 Bash: rm -f .pland/[plan-name]/frontend-tasks.mdx
@@ -61,41 +79,49 @@ Bash: rm -f .pland/[plan-name]/frontend-tasks.yaml
 Follow the same workflow as `/task-fe`, reading from all plan files:
 
 **Parse features from features.mdx:**
+
 - Extract all feature definitions
 - Identify frontend responsibilities for each feature
 - Note feature dependencies mentioned in descriptions
 
 **Parse components from frontend-architecture.mdx:**
+
 - Extract component/view/widget structure
 - Identify reusable components vs feature-specific components
 - Note component relationships and hierarchy
 
 **Parse test scenarios from frontend-testing-scenarios.mdx:**
+
 - Extract testing requirements for each feature
 - Identify UI components that need testing
 - Note test-specific dependencies (e.g., components needed for test scenarios)
 
 **Parse tech stack from project-context.mdx (if exists):**
+
 - Extract frontend framework and libraries
 - Note platform-specific requirements
 - Consider tech stack when estimating task complexity
 
 **Auto-detect dependencies:**
+
 - Scan feature descriptions for dependency keywords (requires, depends on, after, needs)
 - Parse component hierarchy to identify composition dependencies
 - Build dependency graph from identified relationships
 
 **Check for circular dependencies:**
+
 - Run DFS-based cycle detection on dependency graph
 - If cycles found, reject and report to user for resolution
 - Only proceed if dependency graph is acyclic
 
 **Calculate transitive dependencies:**
+
 - For each task, compute full dependency chain
 - Calculate `blockedByTransitive` (all ancestors)
 - Calculate `blocks` (all dependents)
 
 **Generate task list:**
+
 - Assign task IDs: fe-001, fe-002, fe-003, etc.
 - Set priority: High (foundation), Medium (core features), Low (nice-to-have)
 - Calculate dependencies for each task
@@ -106,6 +132,7 @@ Follow the same workflow as `/task-fe`, reading from all plan files:
 Create the task list files:
 
 **frontend-tasks.yaml** (token-efficient):
+
 ```yaml
 tasks:
   - id: fe-001
@@ -143,10 +170,12 @@ dependencySummary:
 ```
 
 **frontend-tasks.mdx** (human-readable):
+
 ```markdown
 # Frontend Task List
 
 ## Overview
+
 This document contains the organized task list for frontend implementation.
 
 ## Tasks
@@ -154,6 +183,7 @@ This document contains the organized task list for frontend implementation.
 ### High Priority
 
 #### fe-001: Setup Navigation & Routing
+
 **Status:** pending
 **Priority:** High
 **Dependencies:** None
@@ -161,12 +191,14 @@ This document contains the organized task list for frontend implementation.
 **Description:** Set up app navigation structure and routing
 
 **Dependency Analysis:**
+
 - Foundation task (no dependencies)
 - Blocks: fe-003, fe-005
 
 ---
 
 #### fe-002: Create ProductCard Component
+
 **Status:** pending
 **Priority:** High
 **Dependencies:** None
@@ -174,6 +206,7 @@ This document contains the organized task list for frontend implementation.
 **Description:** Reusable product card component with image, title, price
 
 **Dependency Analysis:**
+
 - Foundation task (no dependencies)
 - Blocks: fe-003
 
@@ -182,6 +215,7 @@ This document contains the organized task list for frontend implementation.
 ### Medium Priority
 
 #### fe-003: Build ProductList Screen
+
 **Status:** pending
 **Priority:** Medium
 **Dependencies:** fe-001, fe-002
@@ -189,6 +223,7 @@ This document contains the organized task list for frontend implementation.
 **Description:** Product listing screen with grid of ProductCard components
 
 **Dependency Analysis:**
+
 - Blocked by: fe-001 (Setup Navigation & Routing)
 - Blocked by: fe-002 (Create ProductCard Component)
 - Dependency chain: ProductList → ProductCard, Navigation
@@ -198,12 +233,16 @@ This document contains the organized task list for frontend implementation.
 ## Dependency Summary
 
 ### Foundation Tasks
+
 Tasks with no dependencies that should be completed first:
+
 - fe-001: Setup Navigation & Routing
 - fe-002: Create ProductCard Component
 
 ### Blocked Tasks
+
 Tasks that depend on other tasks:
+
 - **fe-003** (ProductList Screen)
   - Direct dependencies: fe-001, fe-002
   - Transitive dependencies: None
@@ -212,6 +251,7 @@ Tasks that depend on other tasks:
 ### 6. Summary
 
 Report to user:
+
 - Number of tasks generated
 - Number of foundation tasks vs blocked tasks
 - Any dependency cycles detected and resolved

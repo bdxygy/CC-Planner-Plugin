@@ -11,6 +11,7 @@ Edit specific sections of an existing project plan with **intelligent cross-file
 ## When to Use
 
 Use this command when:
+
 - A specific section of a plan needs updating
 - Requirements have changed for a planned feature
 - Architecture decisions need revision
@@ -21,18 +22,21 @@ Use this command when:
 The command automatically groups related files based on revision scope:
 
 **Frontend revisions affect:**
+
 - `features.mdx` (feature responsibilities)
 - `frontend-architecture.mdx` (components, state, APIs)
 - `frontend-testing-scenarios.mdx` (test scenarios)
 - `project-context.mdx` (if it exists, for tech stack/dependencies)
 
 **Backend revisions affect:**
+
 - `features.mdx` (feature responsibilities)
 - `backend-architecture.mdx` (modules, endpoints, contracts)
 - `backend-testing-cases.mdx` (test cases)
 - `project-context.mdx` (if it exists, for tech stack/dependencies)
 
 **Standalone revisions:**
+
 - `project-context.mdx` alone (affects both frontend and backend)
 
 ## Revision Workflow
@@ -42,16 +46,19 @@ The command automatically groups related files based on revision scope:
 First, determine what needs to be revised:
 
 **List available plans:**
+
 ```bash
 # Use Glob to find .pland directories
 Glob ".pland/**/project-context.mdx"
 ```
 
 **Ask the user:**
+
 - Which plan-name needs revision?
 - Which section needs to be updated initially?
 
 **Use AskUserQuestion to determine revision scope:**
+
 - Is this a **frontend** change? (affects features.mdx, frontend-architecture.mdx, frontend-testing-scenarios.mdx)
 - Is this a **backend** change? (affects features.mdx, backend-architecture.mdx, backend-testing-cases.mdx)
 - Is this a **project context** change? (affects project-context.mdx)
@@ -61,6 +68,7 @@ Glob ".pland/**/project-context.mdx"
 Based on the revision scope, load all affected files:
 
 **For frontend revisions:**
+
 ```bash
 Read .pland/[plan-name]/features.mdx
 Read .pland/[plan-name]/frontend-architecture.mdx
@@ -73,6 +81,7 @@ Glob ".pland/[plan-name]/project-context.mdx"
 ```
 
 **For backend revisions:**
+
 ```bash
 Read .pland/[plan-name]/features.mdx
 Read .pland/[plan-name]/backend-architecture.mdx
@@ -85,6 +94,7 @@ Glob ".pland/[plan-name]/project-context.mdx"
 ```
 
 **For project-context revisions:**
+
 ```bash
 # project-context must exist to revise it
 Read .pland/[plan-name]/project-context.mdx
@@ -102,6 +112,7 @@ Glob ".pland/rules.mdx"
 ```
 
 **If rules exist, apply them during revision:**
+
 - **Technology constraints**: Check that revisions don't introduce forbidden technologies
 - **Architecture rules**: Verify changes align with specified patterns
 - **Coding standards**: Ensure revisions follow naming conventions and style
@@ -111,6 +122,7 @@ Glob ".pland/rules.mdx"
 - **Documentation rules**: Ensure documentation standards are followed
 
 **If revisions violate rules:**
+
 - Warn user about the violation
 - Show the specific rule being violated
 - Ask user if they want to:
@@ -123,22 +135,26 @@ Glob ".pland/rules.mdx"
 Ask the user what specifically needs to change:
 
 **Use AskUserQuestion to clarify:**
+
 - What needs to be added?
 - What needs to be removed?
 - What needs to be modified?
 - Is this a minor update or major revision?
 
 **For feature changes:**
+
 - Is this a new feature being added?
 - Is an existing feature being modified?
 - Should a feature be removed?
 
 **For architecture changes:**
+
 - Is this a pattern change (e.g., different state management)?
 - Are new modules/components being added?
 - Is the overall structure changing?
 
 **For testing changes:**
+
 - Are new scenarios needed?
 - Are existing scenarios incorrect?
 - Is coverage incomplete?
@@ -174,11 +190,13 @@ Make the requested revisions and propagate changes to related files:
 After making changes, verify plan consistency:
 
 **Cross-file checks for frontend:**
+
 - features.mdx frontend responsibilities align with frontend-architecture.mdx
 - frontend-testing-scenarios.mdx covers all features
 - project-context.mdx tech stack matches frontend-architecture.mdx
 
 **Cross-file checks for backend:**
+
 - features.mdx backend responsibilities align with backend-architecture.mdx
 - backend-testing-cases.mdx covers all features
 - project-context.mdx tech stack matches backend-architecture.mdx
@@ -188,6 +206,7 @@ After making changes, verify plan consistency:
 ### 6. Confirm Cross-File Updates
 
 **Before completing, show user:**
+
 - Primary file modified: [file]
 - Related files updated for consistency:
   - [affected file 1]
@@ -202,11 +221,13 @@ After making changes, verify plan consistency:
 ### Revising frontend-architecture.mdx (Primary)
 
 **Automatically affects:**
+
 - `features.mdx` - Update frontend responsibilities if components changed
 - `frontend-testing-scenarios.mdx` - Add scenarios for new components
 - `project-context.mdx` - Update if tech stack dependencies changed
 
 **Common revisions:**
+
 - Changing component structure
 - Updating state management approach
 - Modifying API interaction patterns
@@ -215,11 +236,13 @@ After making changes, verify plan consistency:
 ### Revising backend-architecture.mdx (Primary)
 
 **Automatically affects:**
+
 - `features.mdx` - Update backend responsibilities if endpoints changed
 - `backend-testing-cases.mdx` - Add test cases for new endpoints
 - `project-context.mdx` - Update if tech stack dependencies changed
 
 **Common revisions:**
+
 - Adding new endpoints
 - Changing validation rules
 - Updating authentication/authorization
@@ -228,28 +251,34 @@ After making changes, verify plan consistency:
 ### Revising features.mdx (Primary)
 
 **Use AskUserQuestion to determine scope:**
+
 - Is this a **frontend feature** change? (affects frontend files)
 - Is this a **backend feature** change? (affects backend files)
 - Is this **both**? (affects all files)
 
 **If frontend feature change:**
+
 - Update `frontend-architecture.mdx` for new components
 - Update `frontend-testing-scenarios.mdx` for new scenarios
 
 **If backend feature change:**
+
 - Update `backend-architecture.mdx` for new endpoints
 - Update `backend-testing-cases.mdx` for new test cases
 
 **If both:**
+
 - Update both architecture and testing files
 
 ### Revising frontend-testing-scenarios.mdx (Primary)
 
 **Automatically affects:**
+
 - `features.mdx` - Ensure feature list matches scenarios
 - `frontend-architecture.mdx` - Ensure components match scenarios
 
 **Common revisions:**
+
 - Adding new test scenarios for features
 - Expanding edge case coverage
 - Adding new failure states
@@ -257,10 +286,12 @@ After making changes, verify plan consistency:
 ### Revising backend-testing-cases.mdx (Primary)
 
 **Automatically affects:**
+
 - `features.mdx` - Ensure feature list matches test cases
 - `backend-architecture.mdx` - Ensure endpoints match test cases
 
 **Common revisions:**
+
 - Adding new test cases for endpoints
 - Expanding boundary condition coverage
 - Adding new failure modes
@@ -270,11 +301,13 @@ After making changes, verify plan consistency:
 **Does NOT automatically affect other files** - but ask user:
 
 **Use AskUserQuestion:**
+
 - Did tech stack changes require architecture updates?
 - Did constraint changes affect feature definitions?
 - Should related files be updated?
 
 **If user confirms:**
+
 - Propagate changes to affected architecture files
 
 ## Interactive Best Practices
@@ -299,6 +332,7 @@ After making changes, verify plan consistency:
 ```
 
 This would:
+
 1. Load: features.mdx, frontend-architecture.mdx, frontend-testing-scenarios.mdx, project-context.mdx (if exists)
 2. Allow editing frontend-architecture.mdx
 3. Automatically update features.mdx if responsibilities changed
@@ -314,6 +348,7 @@ This would prompt for both plan-name and section, then determine scope automatic
 ## Output
 
 After revision, provide a summary:
+
 - **Primary file modified:** [file]
 - **Related files updated:**
   - [file 1] - [reason]

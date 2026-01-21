@@ -11,12 +11,14 @@ Flutter is a cross-platform framework using Dart language with declarative UI th
 ## Core Flutter Principles
 
 **Widget Architecture:**
+
 - Everything is a widget (composition over inheritance)
 - Immutable widgets describe UI for given configuration
 - StatefulWidget manages mutable state
 - Build method runs when state changes or widget rebuilds
 
 **Architecture Guidelines:**
+
 - Follow clean architecture (presentation, domain, data layers)
 - Separate business logic from UI (BLoC, Riverpod, Provider)
 - Use dependency injection for testability
@@ -24,6 +26,7 @@ Flutter is a cross-platform framework using Dart language with declarative UI th
 - Follow unidirectional data flow
 
 **Testability:**
+
 - Widget tests for UI component testing
 - Unit tests for business logic (BLoCs, providers, use cases)
 - Integration tests for end-to-end flows
@@ -34,12 +37,14 @@ Flutter is a cross-platform framework using Dart language with declarative UI th
 ### Presentation Layer
 
 **Responsibilities:**
+
 - Display widgets and handle user interaction
 - Observe state from BLoCs/providers
 - Emit events to business logic
 - Handle navigation
 
 **Structure:**
+
 ```
 lib/
   presentation/
@@ -61,11 +66,13 @@ lib/
 ### Domain Layer
 
 **Responsibilities:**
+
 - Business logic and use cases
 - Domain models (entities)
 - Repository interfaces
 
 **Structure:**
+
 ```
 lib/
   domain/
@@ -82,11 +89,13 @@ lib/
 ### Data Layer
 
 **Responsibilities:**
+
 - Data transfer objects (DTOs)
 - Repository implementations
 - Data sources (API, local database)
 
 **Structure:**
+
 ```
 lib/
   data/
@@ -106,6 +115,7 @@ lib/
 **Recommended for complex state:**
 
 **Event definition:**
+
 ```dart
 abstract class HomeEvent extends Equatable {
   const HomeEvent();
@@ -120,6 +130,7 @@ class HomeRefreshProducts extends HomeEvent {}
 ```
 
 **State definition:**
+
 ```dart
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -152,6 +163,7 @@ class HomeError extends HomeState {
 ```
 
 **BLoC implementation:**
+
 ```dart
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetProductsUseCase getProductsUseCase;
@@ -189,6 +201,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 ```
 
 **BLoC provider in widget:**
+
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -205,6 +218,7 @@ class HomePage extends StatelessWidget {
 ```
 
 **BlocBuilder for state:**
+
 ```dart
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -238,6 +252,7 @@ class HomeView extends StatelessWidget {
 ### Riverpod (Recommended for new projects)
 
 **Provider definition:**
+
 ```dart
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
   return ProductRepositoryImpl(
@@ -256,6 +271,7 @@ final homeViewModelProvider = StateNotifierProvider<HomeViewModel, HomeState>((r
 ```
 
 **StateNotifier:**
+
 ```dart
 class HomeViewModel extends StateNotifier<HomeState> {
   final GetProductsUseCase _getProductsUseCase;
@@ -275,6 +291,7 @@ class HomeViewModel extends StateNotifier<HomeState> {
 ```
 
 **ConsumerWidget:**
+
 ```dart
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -315,6 +332,7 @@ class HomePage extends ConsumerWidget {
 ### Provider (Simple state management)
 
 **ChangeNotifier:**
+
 ```dart
 class HomeViewModel extends ChangeNotifier {
   final GetProductsUseCase _getProductsUseCase;
@@ -348,6 +366,7 @@ class HomeViewModel extends ChangeNotifier {
 ```
 
 **ChangeNotifierProvider:**
+
 ```dart
 MultiProvider(
   providers: [
@@ -364,6 +383,7 @@ MultiProvider(
 ### StatelessWidget
 
 **For widgets without state:**
+
 ```dart
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -417,6 +437,7 @@ class ProductCard extends StatelessWidget {
 ### StatefulWidget
 
 **For widgets with internal state:**
+
 ```dart
 class SearchBar extends StatefulWidget {
   final Function(String) onSearch;
@@ -458,6 +479,7 @@ class _SearchBarState extends State<SearchBar> {
 ### Navigator 2.0 (Recommended)
 
 **Router delegate:**
+
 ```dart
 class AppRouter extends RouterDelegate<AppRoute>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoute> {
@@ -502,6 +524,7 @@ class AppRouter extends RouterDelegate<AppRoute>
 ### go_router (Recommended for simple apps)
 
 **Router configuration:**
+
 ```dart
 final router = GoRouter(
   routes: [
@@ -521,6 +544,7 @@ final router = GoRouter(
 ```
 
 **Use in app:**
+
 ```dart
 MaterialApp.router(
   routerConfig: router,
@@ -532,6 +556,7 @@ MaterialApp.router(
 ### get_it (Service Locator)
 
 **Setup:**
+
 ```dart
 final getIt = GetIt.instance;
 
@@ -561,6 +586,7 @@ void setupLocator() {
 ```
 
 **Use in widget:**
+
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -580,6 +606,7 @@ class HomePage extends StatelessWidget {
 ### Frontend Testing Scenarios (User-Centric)
 
 **Happy Path:**
+
 - User opens app → Home page displays correctly
 - User taps product → Navigates to detail with correct product
 - User scrolls list → ListView scrolls smoothly
@@ -587,6 +614,7 @@ class HomePage extends StatelessWidget {
 - User navigates back → Previous page restores state
 
 **Edge Cases:**
+
 - Empty product list → Empty state displays with helpful message
 - Single product → Displays correctly without list issues
 - Large list → ListView lazy loads efficiently
@@ -594,6 +622,7 @@ class HomePage extends StatelessWidget {
 - Different screen sizes → Responsive layout adapts
 
 **Failure States:**
+
 - Network error → Error message displays with retry
 - Server error (5xx) → User-friendly error, retry available
 - Timeout → Loading indicator with timeout message
@@ -603,6 +632,7 @@ class HomePage extends StatelessWidget {
 ### Backend Testing Cases (Logic-Driven)
 
 **BLoC Tests:**
+
 - Initial state → Emits correct initial state
 - Load products event → Emits loading then loaded
 - Error event → Emits error state with message
@@ -610,12 +640,14 @@ class HomePage extends StatelessWidget {
 - State equality → Equatable implemented correctly
 
 **Use Case Tests:**
+
 - Business rules → Validation logic tested
 - Boundary conditions → Empty list, single item, large list
 - Error handling → Repository errors propagate
 - Cancellation → Stream cancellation works
 
 **Repository Tests:**
+
 - API data source → HTTP client returns correct data
 - Local data source → Database queries work
 - Caching → Cache strategy works correctly
@@ -624,6 +656,7 @@ class HomePage extends StatelessWidget {
 ## Context7 Integration
 
 For Flutter-specific documentation:
+
 - Use Context7 for Flutter widget API reference
 - Query Context7 for latest Dart patterns
 - Reference Context7 for BLoC library usage
@@ -633,6 +666,7 @@ For Flutter-specific documentation:
 ## Best Practices
 
 **DO:**
+
 - Follow Flutter widget composition patterns
 - Use const constructors where possible
 - Implement proper key usage for lists
@@ -642,6 +676,7 @@ For Flutter-specific documentation:
 - Use riverpod or BLoC for state management
 
 **DON'T:**
+
 - Build large widgets → Break into smaller widgets
 - Put business logic in build methods
 - Forget to dispose controllers and subscriptions

@@ -1,7 +1,7 @@
 ---
 description: Delete a project plan directory and all its files
 argument-hint: [plan-name]
-allowed-tools: ["AskUserQuestion", "Glob", "Bash"]
+allowed-tools: ['AskUserQuestion', 'Glob', 'Bash']
 ---
 
 # /delete-plan
@@ -11,6 +11,7 @@ Delete a project plan directory and all its files from the `.pland/` folder. Thi
 ## When to Use
 
 Use this command when:
+
 - A plan is no longer needed
 - You want to clean up abandoned projects
 - A plan was created incorrectly and needs to be removed
@@ -32,6 +33,7 @@ Display the list with plan names and brief descriptions.
 ### 2. Select Plan to Delete
 
 **Ask the user:**
+
 - Which plan do you want to delete?
 
 ### 3. Confirm Deletion
@@ -39,6 +41,7 @@ Display the list with plan names and brief descriptions.
 **Before deleting, confirm with the user:**
 
 Show what will be deleted:
+
 ```
 You are about to delete: [plan-name]
 
@@ -58,6 +61,7 @@ This action CANNOT be undone unless you have git history.
 ```
 
 **Use AskUserQuestion to confirm:**
+
 - "Are you sure you want to delete this plan?"
 - Options: "Yes, delete it", "No, cancel"
 
@@ -80,6 +84,7 @@ Glob ".pland/[plan-name]/*"
 ```
 
 Report success to user:
+
 ```
 ✅ Successfully deleted plan: [plan-name]
 
@@ -92,11 +97,13 @@ Remaining plans: [count] plans
 ## Safety Checks
 
 **Before deletion, check:**
+
 - [ ] Plan directory exists
 - [ ] User has confirmed deletion
 - [ ] No important changes are unsaved (warn if files are modified but not committed)
 
 **Warnings to show:**
+
 - If the plan has task files: "This plan has generated task lists that will be deleted"
 - If git tracking: "Consider using git to preserve history instead of deleting"
 
@@ -107,6 +114,7 @@ Remaining plans: [count] plans
 ```
 
 This would:
+
 1. Show the user what will be deleted
 2. Ask for confirmation
 3. Delete `.pland/user-authentication/` directory
@@ -115,6 +123,7 @@ This would:
 ## Output
 
 **Success:**
+
 ```
 ✅ Plan deleted: user-authentication
 
@@ -130,6 +139,7 @@ Removed 8 files:
 ```
 
 **Cancelled:**
+
 ```
 ❌ Deletion cancelled
 Plan user-authentication was not deleted

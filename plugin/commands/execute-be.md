@@ -11,6 +11,7 @@ Implement backend features from an existing plan using Test-Driven Development. 
 ## When to Use
 
 Use this command when:
+
 - Implementing backend services, repositories, or API endpoints
 - Building business logic from a plan
 - Following TDD methodology for backend development
@@ -25,6 +26,7 @@ This command follows the classic TDD cycle for backend code:
 3. **REFACTOR** - Improve the code while keeping tests green
 
 **Critical**: Backend unit tests MUST be isolated:
+
 - Mock HTTP layer
 - Mock database/repositories
 - Test business logic only
@@ -48,6 +50,7 @@ Read .pland/[plan-name]/backend-testing-cases.mdx
 ```
 
 **Use AskUserQuestion to ask:**
+
 - Which plan-name plan to execute?
 - Has the plan been validated with `/validate-plan`?
   - If not, recommend running `/validate-plan` first
@@ -57,6 +60,7 @@ Read .pland/[plan-name]/backend-testing-cases.mdx
 - Select specific tasks for implementation
 
 **If using task list from `/task-be`:**
+
 - Load tasks from YAML for token efficiency
 - Respect task priorities (High → Medium → Low)
 - Check `dependencySummary` for foundation vs blocked tasks
@@ -72,12 +76,14 @@ Glob ".pland/[plan-name]/validation-report.mdx"
 ```
 
 **If validation report doesn't exist or is old:**
+
 - Recommend running `/validate-plan [plan-name]` first
 - Explain benefits: catches issues early, ensures plan quality
 - Ask if they want to validate before proceeding
 - If they proceed without validation, note that issues may be found during implementation
 
 **If validation passed:**
+
 - Continue with implementation
 - Note any warnings from validation that should be addressed
 
@@ -86,6 +92,7 @@ Glob ".pland/[plan-name]/validation-report.mdx"
 Auto-detect the backend platform from existing codebase:
 
 **Use Glob to detect:**
+
 - **Bun + Hono**: `src/**/*.ts`, `package.json` with "hono"
 - **Node.js + Express**: `src/**/*.ts`, `package.json` with "express"
 - **Python + FastAPI**: `**/*.py`, `requirements.txt` or `pyproject.toml`
@@ -98,6 +105,7 @@ Auto-detect the backend platform from existing codebase:
 - **Flutter (sqflite)**: `database/**/*.dart`
 
 **Load appropriate patterns:**
+
 - Web APIs → Use `architecture-patterns` skill
 - Android Room → Use `android-patterns` skill
 - iOS Core Data → Use `ios-swift-patterns` skill
@@ -110,72 +118,105 @@ Auto-detect the backend platform from existing codebase:
 **Use AskUserQuestion to present platform-specific options:**
 
 **Bun + Hono / Node.js:**
+
 - Vitest (recommended, fast)
 - Jest (classic)
 - Bun's built-in test runner
 
 **Python (FastAPI):**
+
 - pytest
 - unittest
 
 **Go:**
+
 - testing package
 - testify
 
 **Rust:**
+
 - built-in test module
 
 **Tauri (Rust backend):**
+
 - built-in test module
 - cargo test
 
 **Electron (Node.js backend):**
+
 - Jest (recommended)
 - Vitest (faster alternative)
 - Mocha + Chai
 
 **Android (Room):**
+
 - JUnit (Robolectric for in-memory database)
 
 **iOS (Core Data):**
+
 - XCTest with in-memory persistent store
 
 **Flutter (sqflite):**
+
 - flutter_test with sqflite_ffi_test
 - Mockito for mocks
 
 ### 4. Create TODO List
 
 **If using task list from `/task-be`:**
+
 ```javascript
 // Load tasks from backend-tasks.yaml
 // Create TODO items for each task with TDD phases
 [
-  { "content": "be-001: Define Product Data Model (RED)", "status": "pending", "phase": "red", "taskId": "be-001" },
-  { "content": "be-001: Define Product Data Model (GREEN)", "status": "pending", "phase": "green", "taskId": "be-001" },
-  { "content": "be-001: Define Product Data Model (REFACTOR)", "status": "pending", "phase": "refactor", "taskId": "be-001" },
-  { "content": "be-002: Implement ProductRepository Interface (RED)", "status": "pending", "phase": "red", "taskId": "be-002" },
+  {
+    content: 'be-001: Define Product Data Model (RED)',
+    status: 'pending',
+    phase: 'red',
+    taskId: 'be-001',
+  },
+  {
+    content: 'be-001: Define Product Data Model (GREEN)',
+    status: 'pending',
+    phase: 'green',
+    taskId: 'be-001',
+  },
+  {
+    content: 'be-001: Define Product Data Model (REFACTOR)',
+    status: 'pending',
+    phase: 'refactor',
+    taskId: 'be-001',
+  },
+  {
+    content: 'be-002: Implement ProductRepository Interface (RED)',
+    status: 'pending',
+    phase: 'red',
+    taskId: 'be-002',
+  },
   // ...
-]
+];
 ```
 
 **If loading plan directly:**
+
 ```javascript
 // Example TODO structure
 [
-  { "content": "Write test for ProductService.getAll()", "status": "pending", "phase": "red" },
-  { "content": "Implement ProductService.getAll()", "status": "pending", "phase": "green" },
-  { "content": "Refactor ProductService for error handling", "status": "pending", "phase": "refactor" },
+  { content: 'Write test for ProductService.getAll()', status: 'pending', phase: 'red' },
+  { content: 'Implement ProductService.getAll()', status: 'pending', phase: 'green' },
+  { content: 'Refactor ProductService for error handling', status: 'pending', phase: 'refactor' },
   // ...
-]
+];
 ```
 
 **TODO phases:**
+
 - `red`: Write failing unit test
 - `green`: Implement to pass test
 - `refactor`: Improve implementation
 
 **Task execution order (from task list):**
+
 1. Start with foundation tasks (empty `blockedBy`)
 2. Follow priority: High → Medium → Low
 3. Check `dependencyChain` for transitive dependencies
@@ -188,6 +229,7 @@ For each backend component, follow Red-Green-Refactor:
 #### RED Phase: Write Failing Unit Test
 
 **Generate test file first:**
+
 ```bash
 # Create test file alongside source
 # Bun/Hono: src/services/product.service.test.ts
@@ -198,6 +240,7 @@ For each backend component, follow Red-Green-Refactor:
 ```
 
 **Test structure - MUST be isolated:**
+
 - Mock repositories (no database)
 - Mock HTTP clients (no real API calls)
 - Test business rules only
@@ -205,12 +248,14 @@ For each backend component, follow Red-Green-Refactor:
 - Test failure modes
 
 **Write test using Context7 and Exa for framework-specific patterns:**
+
 - Query Context7 for testing framework documentation (official APIs)
 - Use Exa `get_code_context_exa` for real-world test examples
 - Use Exa `web_search_exa` for latest testing patterns and tutorials
 - Use mocking patterns appropriate for framework
 
 **Run test - must FAIL:**
+
 ```bash
 # Platform-specific test commands
 # Bun: bun test
@@ -223,6 +268,7 @@ For each backend component, follow Red-Green-Refactor:
 #### GREEN Phase: Implement Feature
 
 **Generate implementation file:**
+
 ```bash
 # Create source file
 # Bun/Hono: src/services/product.service.ts
@@ -233,6 +279,7 @@ For each backend component, follow Red-Green-Refactor:
 ```
 
 **Implementation guidelines:**
+
 - Write MINIMAL code to pass the test
 - Focus on business logic first
 - Use dependency injection for testability
@@ -242,6 +289,7 @@ For each backend component, follow Red-Green-Refactor:
 - Use Exa `web_search_exa` for latest implementation tutorials
 
 **Run test - must PASS:**
+
 ```bash
 # Re-run test
 ```
@@ -249,6 +297,7 @@ For each backend component, follow Red-Green-Refactor:
 #### REFACTOR Phase: Improve Code
 
 **Refactoring checklist:**
+
 - Extract duplicate logic
 - Improve error handling
 - Add validation
@@ -256,6 +305,7 @@ For each backend component, follow Red-Green-Refactor:
 - Ensure tests still pass
 
 **Re-run tests after each refactor:**
+
 ```bash
 # All tests must still pass
 ```
@@ -266,21 +316,25 @@ After each phase, **use AskUserQuestion to ask:**
 
 **After RED phase:**
 "Test written. Verify it fails?"
+
 - Run test and confirm failure
 - Show test output to user
 
 **After GREEN phase:**
 "Implementation complete. Run tests?"
+
 - Run test and confirm passing
 - Show test output to user
 
 **After REFACTOR phase:**
 "Refactoring complete. Re-run tests?"
+
 - Run all tests to confirm still passing
 - Show test output to user
 
 **After full cycle:**
 "Continue to next component?"
+
 - Move to next TODO item
 - Complete TDD cycle for all components
 
@@ -289,6 +343,7 @@ After each phase, **use AskUserQuestion to ask:**
 ### Bun + Hono Backend TDD
 
 **RED - Write test:**
+
 ```typescript
 // src/services/product.service.test.ts
 import { describe, it, expect, beforeEach } from 'bun:test';
@@ -333,6 +388,7 @@ class MockProductRepository {
 ```
 
 **GREEN - Implement:**
+
 ```typescript
 // src/services/product.service.ts
 export class ProductService {
@@ -345,6 +401,7 @@ export class ProductService {
 ```
 
 **REFACTOR - Improve:**
+
 ```typescript
 // src/services/product.service.ts
 export class ProductService {
@@ -362,7 +419,7 @@ export class ProductService {
 
   async getById(id: string): Promise<Product | null> {
     const products = await this.repository.findAll();
-    return products.find(p => p.id === id) ?? null;
+    return products.find((p) => p.id === id) ?? null;
   }
 
   async create(product: Omit<Product, 'id'>): Promise<Product> {
@@ -376,6 +433,7 @@ export class ProductService {
 ### Android (Room + Hilt) TDD
 
 **RED - Write test:**
+
 ```kotlin
 // app/src/test/java/com/example/ProductServiceTest.kt
 class ProductServiceTest {
@@ -407,6 +465,7 @@ class ProductServiceTest {
 ```
 
 **GREEN - Implement:**
+
 ```kotlin
 // app/src/main/java/com/example/ProductService.kt
 @Singleton
@@ -421,6 +480,7 @@ class ProductService @Inject constructor(
 ```
 
 **REFACTOR - Improve:**
+
 ```kotlin
 @Singleton
 class ProductService @Inject constructor(
@@ -451,6 +511,7 @@ class ProductService @Inject constructor(
 ### Python (FastAPI) TDD
 
 **RED - Write test:**
+
 ```python
 # tests/test_product_service.py
 import pytest
@@ -474,6 +535,7 @@ def test_get_all_products():
 ```
 
 **GREEN - Implement:**
+
 ```python
 # services/product_service.py
 class ProductService:
@@ -485,6 +547,7 @@ class ProductService:
 ```
 
 **REFACTOR - Improve:**
+
 ```python
 # services/product_service.py
 class ProductService:
@@ -518,6 +581,7 @@ class ProductService:
 Backend unit tests MUST NOT depend on:
 
 ❌ **NOT ALLOWED:**
+
 - HTTP requests to external APIs
 - Database connections
 - File system operations (for data)
@@ -525,6 +589,7 @@ Backend unit tests MUST NOT depend on:
 - Real database queries
 
 ✅ **REQUIRED:**
+
 - Mock all repositories
 - Mock all HTTP clients
 - Mock all external dependencies
@@ -534,6 +599,7 @@ Backend unit tests MUST NOT depend on:
 ## Output Summary
 
 After implementation, provide:
+
 ```
 ✅ Backend TDD Implementation Complete
 

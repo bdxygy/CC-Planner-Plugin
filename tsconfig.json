@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "lib": ["ES2022"],
+    "baseUrl": ".",
+    "paths": {
+      "@architect-planner/types": ["packages/types/src"],
+      "@architect-planner/utils": ["packages/utils/src"],
+      "@architect-planner/config": ["packages/config/src"],
+      "@architect-planner/task-manager": ["packages/task-manager/src"]
+    }
+  },
+  "include": [
+    "plugin/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".pland"
+  ],
+  "references": [
+    { "path": "packages/types" },
+    { "path": "packages/config" },
+    { "path": "packages/utils" },
+    { "path": "packages/task-manager" }
+  ]
+}

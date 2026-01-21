@@ -1,0 +1,28 @@
+{
+  "name": "@architect-planner/utils",
+  "version": "0.0.6",
+  "description": "Shared utility functions for architect-planner packages",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ndjson": "./src/ndjson/index.ts",
+    "./format": "./src/format/index.ts",
+    "./fs": "./src/fs/index.ts",
+    "./validation": "./src/validation/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "utils",
+    "utilities"
+  ],
+  "author": "Budi Santoso",
+  "license": "MIT",
+  "dependencies": {
+    "ndjson": "^2.0.0"
+  }
+}

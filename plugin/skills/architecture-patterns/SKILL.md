@@ -27,6 +27,7 @@ This skill provides architecture patterns for frontend and backend systems, with
 Organize components by feature and responsibility:
 
 **Atomic design hierarchy:**
+
 ```
 atoms/      - Smallest UI elements (buttons, inputs, labels)
 molecules/  - Simple compositions (search bars, form fields)
@@ -36,6 +37,7 @@ pages/      - Route-level compositions
 ```
 
 **Feature-based organization (alternative):**
+
 ```
 features/
   user-authentication/
@@ -49,6 +51,7 @@ features/
 ```
 
 **Component boundary rules:**
+
 - Presentational components receive data via props, emit events via callbacks
 - Container components connect to state management, handle business logic
 - Keep components small and focused (< 200 lines ideal)
@@ -59,23 +62,27 @@ features/
 Choose state management based on scope and complexity:
 
 **Local component state:**
+
 - Use for UI-only state (modals, toggles, form input)
 - Implemented with useState, useReducer, or similar
 - No need for global state for isolated UI behavior
 
 **Global application state:**
+
 - Use for state shared across multiple components
 - Consider Redux Toolkit, Zustand, or Context + useReducer
 - Keep global state minimal - derive what can be derived
 - Normalize data structure to avoid duplication
 
 **Server state:**
+
 - Use for data from APIs (cache, refetch, background updates)
 - Prefer React Query, SWR, or similar over manual state management
 - Server state libraries handle caching, invalidation, retries
 - Treat server state as separate from client state
 
 **State synchronization rules:**
+
 - Server state is the source of truth for persisted data
 - Client state optimistically updates, rolls back on error
 - Avoid duplicating server state in global state
@@ -86,6 +93,7 @@ Choose state management based on scope and complexity:
 Design clean API interaction layers:
 
 **API client abstraction:**
+
 ```typescript
 // api/authApi.ts
 export const authApi = {
@@ -96,6 +104,7 @@ export const authApi = {
 ```
 
 **Using React Query for server state:**
+
 ```typescript
 // hooks/useAuth.ts
 export const useLogin = () => {
@@ -103,16 +112,18 @@ export const useLogin = () => {
     mutationFn: authApi.login,
     onSuccess: () => queryClient.invalidateQueries('user'),
   });
-}
+};
 ```
 
 **Fetch patterns:**
+
 - Use library (React Query, SWR) for automatic caching and retries
 - Define API contracts with TypeScript for type safety
 - Handle errors at the call site or with error boundaries
 - Show loading states during mutations and fetches
 
 **Mutation patterns:**
+
 - Optimistic updates: update UI immediately, roll back on error
 - Pessimistic updates: wait for server confirmation
 - Invalidate related queries after mutations
@@ -123,24 +134,28 @@ export const useLogin = () => {
 Design consistent error and loading patterns:
 
 **Loading states:**
+
 - Show skeleton screens for content loading
 - Disable buttons during form submissions
 - Use loading spinners for inline operations
 - Provide progress indication for long operations
 
 **Error boundaries:**
+
 - Place error boundaries around route components
 - Catch errors in component trees, show fallback UI
 - Log errors for debugging
 - Provide recovery options (retry, go back)
 
 **Error types:**
+
 - Network errors: show connection error message, offer retry
 - Server errors (4xx/5xx): show server error message
 - Validation errors: show field-level error messages
 - Timeout errors: show timeout message, offer retry
 
 **Empty states:**
+
 - Show helpful message when no data exists
 - Provide call-to-action (create item, refresh, navigate)
 - Use illustrations or icons for visual clarity
@@ -153,6 +168,7 @@ Design consistent error and loading patterns:
 Organize backend code into clear layers:
 
 **Layered architecture:**
+
 ```
 src/
   http/           - HTTP layer (routes, controllers, middleware)
@@ -163,6 +179,7 @@ src/
 ```
 
 **Alternative: Feature-based modules:**
+
 ```
 src/
   features/
@@ -178,12 +195,14 @@ src/
 ```
 
 **Layer separation rules:**
+
 - HTTP layer handles request parsing, response formatting
 - Service layer contains business logic, validations
 - Repository layer handles data persistence, external APIs
 - Models define types and interfaces used across layers
 
 **Dependency rules:**
+
 - HTTP layer → service layer → repository layer
 - No reverse dependencies (repository never calls HTTP)
 - Lower layers never import from higher layers
@@ -194,12 +213,14 @@ src/
 Design clear, consistent API contracts:
 
 **Endpoint naming:**
+
 - Use nouns for resources (e.g., `/users`, `/posts`)
 - Use plural nouns for collections (e.g., `/users` not `/user`)
 - Use kebab-case for multi-word resources (e.g., `/blog-posts`)
 - Nest resources logically (e.g., `/users/{id}/posts`)
 
 **HTTP method usage:**
+
 - GET: Retrieve resources (no side effects)
 - POST: Create resources or trigger actions
 - PUT: Replace resources entirely
@@ -207,12 +228,14 @@ Design clear, consistent API contracts:
 - DELETE: Remove resources
 
 **Request/response contracts:**
+
 - Define request body schemas with validation
 - Define response body schemas with TypeScript
 - Use consistent response format (envelope or direct)
 - Include error details in error responses
 
 **Example contract:**
+
 ```typescript
 // GET /users/{id}
 // Response: 200 OK
@@ -233,18 +256,21 @@ Design clear, consistent API contracts:
 ### Validation & Authentication
 
 **Request validation:**
+
 - Validate at HTTP layer before business logic
 - Use schema validation (Zod, Yup, Joi)
 - Return 400 Bad Request for invalid input
 - Include field-level error details
 
 **Authentication:**
+
 - Use middleware to extract and verify credentials
 - Support session-based or token-based auth
 - Return 401 Unauthorized for missing/invalid credentials
 - Store user context in request for downstream use
 
 **Authorization:**
+
 - Check permissions after authentication
 - Implement role-based or resource-based access control
 - Return 403 Forbidden for insufficient permissions
@@ -253,6 +279,7 @@ Design clear, consistent API contracts:
 ### Error Handling Conventions
 
 **Error response format:**
+
 ```typescript
 {
   "error": string,        // Human-readable error message
@@ -262,6 +289,7 @@ Design clear, consistent API contracts:
 ```
 
 **HTTP status codes:**
+
 - 200 OK: Successful operation
 - 201 Created: Resource created successfully
 - 400 Bad Request: Invalid input
@@ -273,6 +301,7 @@ Design clear, consistent API contracts:
 - 500 Internal Server Error: Unhandled server error
 
 **Error logging:**
+
 - Log all errors with context (user, request, stack trace)
 - Use structured logging (JSON format)
 - Include correlation IDs for request tracing
@@ -283,12 +312,14 @@ Design clear, consistent API contracts:
 ### Frontend Testability
 
 **Testable component design:**
+
 - Pass data via props, emit events via callbacks
 - Inject dependencies (API clients, hooks) for mocking
 - Keep components pure - no side effects in render
 - Test user behavior, not implementation details
 
 **Testing scenarios:**
+
 - User actions (clicks, form submission, navigation)
 - Edge cases (empty data, boundary values, invalid input)
 - Failure states (network errors, server errors, timeouts)
@@ -297,12 +328,14 @@ Design clear, consistent API contracts:
 ### Backend Testability
 
 **Testable service design:**
+
 - Keep business logic isolated from HTTP
 - Use interfaces for repository dependencies
 - Avoid external dependencies in unit tests
 - Test business rules, boundaries, and failures
 
 **Testing isolation:**
+
 - Mock HTTP layer in service tests
 - Mock database in repository tests
 - Use dependency injection for swapping implementations
@@ -313,12 +346,14 @@ Design clear, consistent API contracts:
 ### Frontend-Backend Contract
 
 **API as contract:**
+
 - Define endpoint contracts in advance
 - Use TypeScript for type safety across boundary
 - Document API with OpenAPI/Swagger
 - Share types between frontend and backend
 
 **Versioning strategy:**
+
 - Use URL versioning (e.g., `/api/v1/users`)
 - Maintain backward compatibility when possible
 - Deprecate old versions before removing
@@ -327,6 +362,7 @@ Design clear, consistent API contracts:
 ### Context7 for Technology Details
 
 For framework-specific architecture guidance:
+
 - Use Context7 for React component patterns
 - Use Context7 for Hono middleware and routing
 - Use Context7 for state management library patterns

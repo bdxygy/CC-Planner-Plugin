@@ -1,0 +1,23 @@
+{
+  "name": "@architect-planner/config",
+  "version": "0.0.6",
+  "description": "Shared configuration files for architect-planner packages",
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    "./tsconfig": "./tsconfig.json",
+    "./tsconfig-base": "./tsconfig.base.json",
+    "./eslint": "./eslint.config.js"
+  },
+  "scripts": {
+    "typecheck": "echo 'Config package has no source code to typecheck'",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "config",
+    "typescript",
+    "eslint"
+  ],
+  "author": "Budi Santoso",
+  "license": "MIT"
+}

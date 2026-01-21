@@ -11,11 +11,13 @@ Android development requires understanding both modern declarative UI (Jetpack C
 ## Core Android Principles
 
 **UI Framework Choice:**
+
 - **Jetpack Compose**: Modern declarative UI toolkit, recommended for new projects
 - **Classic XML**: Traditional View-based UI, still widely used in existing projects
 - **Hybrid**: Mix Compose and XML in migration scenarios
 
 **Architecture Guidelines:**
+
 - Follow Google's official app architecture guide
 - Separate concerns: UI layer, domain layer, data layer
 - Use Kotlin coroutines for asynchronous work
@@ -23,6 +25,7 @@ Android development requires understanding both modern declarative UI (Jetpack C
 - Follow unidirectional data flow
 
 **Testability:**
+
 - UI components should be testable with Compose UI tests or Espresso
 - ViewModels should be unit testable without Android framework
 - Repositories should be testable without Android dependencies
@@ -33,12 +36,14 @@ Android development requires understanding both modern declarative UI (Jetpack C
 ### UI Layer
 
 **Responsibilities:**
+
 - Display application data on screen
 - Capture user input and propagate to business logic
 - Observe and react to state changes
 - Handle navigation between screens
 
 **Jetpack Compose Structure:**
+
 ```
 ui/
   compose/
@@ -56,6 +61,7 @@ ui/
 ```
 
 **Classic XML Structure:**
+
 ```
 ui/
   activities/
@@ -74,12 +80,14 @@ ui/
 ### Domain Layer
 
 **Responsibilities:**
+
 - Contain business logic
 - Use cases for feature-specific logic
 - Repository interfaces (implemented by data layer)
 - Domain models (transform data entities)
 
 **Structure:**
+
 ```
 domain/
   model/
@@ -96,12 +104,14 @@ domain/
 ### Data Layer
 
 **Responsibilities:**
+
 - Expose and manage application data
 - Implement repository interfaces from domain
 - Handle data sources (Room, Retrofit, DataStore)
 - Provide data transformation and caching
 
 **Structure:**
+
 ```
 data/
   repository/
@@ -124,6 +134,7 @@ data/
 ### Composable Components
 
 **Screen-level composables:**
+
 ```kotlin
 @Composable
 fun HomeScreen(
@@ -139,6 +150,7 @@ fun HomeScreen(
 ```
 
 **Reusable components:**
+
 ```kotlin
 @Composable
 fun ProductCard(
@@ -152,6 +164,7 @@ fun ProductCard(
 ```
 
 **State management patterns:**
+
 - Use `remember` for local UI state
 - Use `viewModel()` for screen-level state
 - Use `produceState` for integrating with non-Compose streams
@@ -160,6 +173,7 @@ fun ProductCard(
 ### Compose State Management
 
 **ViewModel with StateFlow:**
+
 ```kotlin
 class HomeViewModel : ViewModel() {
   private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -183,6 +197,7 @@ class HomeViewModel : ViewModel() {
 ```
 
 **Compose collection:**
+
 ```kotlin
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
@@ -194,6 +209,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 ### Compose Navigation
 
 **Navigation setup:**
+
 ```kotlin
 @Composable
 fun AppNavigation() {
@@ -210,6 +226,7 @@ fun AppNavigation() {
 ### Activity/Fragment Structure
 
 **Activity with navigation:**
+
 ```kotlin
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
   private val viewModel: HomeViewModel by viewModels()
@@ -229,6 +246,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 ```
 
 **Fragment with ViewModel:**
+
 ```kotlin
 class HomeFragment : Fragment() {
   private val viewModel: HomeViewModel by viewModels()
@@ -263,6 +281,7 @@ class HomeFragment : Fragment() {
 ### RecyclerView Pattern
 
 **Adapter implementation:**
+
 ```kotlin
 class ProductAdapter(
   private val onItemClick: (Product) -> Unit
@@ -296,6 +315,7 @@ class ProductAdapter(
 ### LiveData (Classic)
 
 **ViewModel with LiveData:**
+
 ```kotlin
 class HomeViewModel : ViewModel() {
   private val _products = MutableLiveData<List<Product>>()
@@ -318,6 +338,7 @@ class HomeViewModel : ViewModel() {
 ### StateFlow (Modern, works with both)
 
 **ViewModel with StateFlow:**
+
 ```kotlin
 class HomeViewModel : ViewModel() {
   private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -340,6 +361,7 @@ class HomeViewModel : ViewModel() {
 ```
 
 **Collect in Fragment:**
+
 ```kotlin
 lifecycleScope.launch {
   repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -359,12 +381,14 @@ lifecycleScope.launch {
 ### Hilt Setup
 
 **Application class:**
+
 ```kotlin
 @HiltAndroidApp
 class MyApp : Application()
 ```
 
 **Provide dependencies:**
+
 ```kotlin
 @Module
 @InstallIn(SingletonComponent::class)
@@ -391,6 +415,7 @@ object DataModule {
 ```
 
 **Inject in ViewModel:**
+
 ```kotlin
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -399,6 +424,7 @@ class HomeViewModel @Inject constructor(
 ```
 
 **Inject in Fragment:**
+
 ```kotlin
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -411,6 +437,7 @@ class HomeFragment : Fragment() {
 ### Frontend Testing Scenarios (User-Centric)
 
 **Happy Path:**
+
 - User opens app → Home screen displays correctly
 - User taps product → Detail screen opens with correct product
 - User scrolls list → LazyColumn/RecyclerView scrolls smoothly
@@ -418,6 +445,7 @@ class HomeFragment : Fragment() {
 - User navigates back → Previous screen restores state
 
 **Edge Cases:**
+
 - Empty product list → Empty state displays with helpful message
 - Single product → Displays correctly without list
 - Large list → Pagination/lazy loading works
@@ -425,6 +453,7 @@ class HomeFragment : Fragment() {
 - Configuration change → Screen rotation preserves state
 
 **Failure States:**
+
 - Network error → Error message displays with retry option
 - Server error (5xx) → User-friendly error, retry available
 - Timeout → Loading indicator with timeout message
@@ -434,6 +463,7 @@ class HomeFragment : Fragment() {
 ### Backend Testing Cases (Logic-Driven)
 
 **ViewModel Tests:**
+
 - Initial state → Loading state is set
 - Success response → Success state with correct data
 - Error response → Error state with message
@@ -441,12 +471,14 @@ class HomeFragment : Fragment() {
 - State transformation → Data maps correctly from domain to UI
 
 **Use Case Tests:**
+
 - Business rules → Validation logic tested
 - Boundary conditions → Empty list, single item, large list
 - Error handling → Repository errors propagate correctly
 - Cancellation → Coroutine cancellation handled
 
 **Repository Tests:**
+
 - Local data → Room queries return correct data
 - Remote data → Retrofit API calls map to DTOs correctly
 - Caching → Data source switches correctly
@@ -455,6 +487,7 @@ class HomeFragment : Fragment() {
 ## Context7 Integration
 
 For Android-specific documentation:
+
 - Use Context7 for Jetpack Compose API reference
 - Query Context7 for latest Jetpack library patterns
 - Reference Context7 for Material 3 Design components
@@ -464,6 +497,7 @@ For Android-specific documentation:
 ## Best Practices
 
 **DO:**
+
 - Follow Google's official architecture recommendations
 - Use Kotlin coroutines for async operations
 - Implement proper lifecycle awareness
@@ -473,6 +507,7 @@ For Android-specific documentation:
 - Use dependency injection for testability
 
 **DON'T:**
+
 - Put business logic in Activities/Fragments
 - Use GlobalScope for coroutines
 - Leak contexts or views

@@ -11,12 +11,14 @@ Electron enables building cross-platform desktop applications using web technolo
 ## Core Electron Principles
 
 **Architecture:**
+
 - **Main Process**: Node.js environment, controls application lifecycle
 - **Renderer Process**: Web environment (Chromium), displays UI
 - **IPC (Inter-Process Communication)**: Communication between main and renderer
 - **Security**: Sandbox renderer, limit Node.js integration
 
 **Architecture Guidelines:**
+
 - Minimize IPC calls (batch when possible)
 - Keep main process focused on native operations
 - Implement proper preload scripts for secure IPC
@@ -24,6 +26,7 @@ Electron enables building cross-platform desktop applications using web technolo
 - Follow security best practices
 
 **Testability:**
+
 - Main process: Unit tests for business logic
 - Renderer process: Standard web testing
 - E2E: Tests with Playwright, Spectron, or custom
@@ -33,6 +36,7 @@ Electron enables building cross-platform desktop applications using web technolo
 ### Main Process Layer
 
 **Responsibilities:**
+
 - Application lifecycle management
 - Window management
 - Native system operations (file, system tray, notifications)
@@ -40,6 +44,7 @@ Electron enables building cross-platform desktop applications using web technolo
 - IPC handlers
 
 **Structure:**
+
 ```
 src/
   main/
@@ -62,11 +67,13 @@ src/
 ### Preload Scripts
 
 **Responsibilities:**
+
 - Secure bridge between main and renderer
 - Expose specific APIs via contextBridge
 - Validate and sanitize all IPC communications
 
 **Structure:**
+
 ```
 src/
   preload/
@@ -79,12 +86,14 @@ src/
 ### Renderer Process Layer
 
 **Responsibilities:**
+
 - UI rendering and user interaction
 - State management
 - Business logic that doesn't require Node.js
 - Invoke exposed preload APIs
 
 **Structure:**
+
 ```
 src/
   renderer/
@@ -110,6 +119,7 @@ src/
 ### Main Process Handlers
 
 **IPC handler setup:**
+
 ```typescript
 import { ipcMain } from 'electron';
 
@@ -144,6 +154,7 @@ export const registerFileHandlers = () => {
 ```
 
 **Service layer:**
+
 ```typescript
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -185,6 +196,7 @@ export const fileService = {
 ### Preload Script
 
 **Secure API exposure:**
+
 ```typescript
 import { contextBridge, ipcRenderer } from 'electron';
 
@@ -192,8 +204,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 const electronAPI = {
   file: {
     read: (path: string) => ipcRenderer.invoke('file:read', path),
-    write: (path: string, content: string) =>
-      ipcRenderer.invoke('file:write', path, content),
+    write: (path: string, content: string) => ipcRenderer.invoke('file:write', path, content),
     list: (path: string) => ipcRenderer.invoke('file:list', path),
   },
 
@@ -225,6 +236,7 @@ contextBridge.exposeInMainWorld('electronAPI', electronAPI);
 ### Type Definitions
 
 **Preload types:**
+
 ```typescript
 // src/renderer/types/preload.d.ts
 interface FileItem {
@@ -268,6 +280,7 @@ export {};
 ### Using Exposed API
 
 **Component with Electron API:**
+
 ```tsx
 import { useState, useEffect } from 'react';
 import { FileItem } from '../types/preload';
@@ -303,6 +316,7 @@ export const FileExplorer: React.FC = () => {
 ### State Management
 
 **Zustand store with Electron API:**
+
 ```typescript
 import create from 'zustand';
 import { FileItem } from '../types/preload';
@@ -355,6 +369,7 @@ export const useFileStore = create<FileStore>((set) => ({
 ## Window Management
 
 **Window creation and management:**
+
 ```typescript
 import { BrowserWindow, app } from 'electron';
 
@@ -404,6 +419,7 @@ export class WindowManager {
 ## Application Lifecycle
 
 **Main entry point:**
+
 ```typescript
 import { app, BrowserWindow } from 'electron';
 import { registerFileHandlers } from './ipc/handlers/fileHandlers';
@@ -443,6 +459,7 @@ app.on('before-quit', () => {
 ### System Tray
 
 **Setup tray icon:**
+
 ```typescript
 import { Tray, Menu, nativeImage } from 'electron';
 import path from 'path';
@@ -456,7 +473,12 @@ export const createTray = (window: BrowserWindow): Tray => {
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show App', click: () => window.show() },
-    { label: 'Quit', click: () => { app.quit(); } },
+    {
+      label: 'Quit',
+      click: () => {
+        app.quit();
+      },
+    },
   ]);
 
   tray.setToolTip('My Electron App');
@@ -477,6 +499,7 @@ export const createTray = (window: BrowserWindow): Tray => {
 ### Native Dialogs
 
 **Dialog handlers:**
+
 ```typescript
 import { dialog, BrowserWindow } from 'electron';
 
@@ -518,6 +541,7 @@ export const registerDialogHandlers = () => {
 ### Notifications
 
 **Notification handler:**
+
 ```typescript
 import { Notification } from 'electron';
 
@@ -539,6 +563,7 @@ export const registerNotificationHandlers = () => {
 ## Security Best Practices
 
 **Electron security configuration:**
+
 ```typescript
 const mainWindow = new BrowserWindow({
   webPreferences: {
@@ -563,9 +588,12 @@ const mainWindow = new BrowserWindow({
 ```
 
 **CSP in renderer HTML:**
+
 ```html
-<meta http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';">
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
+/>
 ```
 
 ## Testing Scenarios
@@ -573,6 +601,7 @@ const mainWindow = new BrowserWindow({
 ### Frontend Testing Scenarios (User-Centric)
 
 **Happy Path:**
+
 - User opens app → Main window displays correctly
 - User selects file → File content loads and displays
 - User saves file → File writes successfully
@@ -580,6 +609,7 @@ const mainWindow = new BrowserWindow({
 - User changes settings → Settings persist and apply
 
 **Edge Cases:**
+
 - Empty file → Empty state displays correctly
 - Large file → Handles without blocking UI
 - Special characters in path → Path handles correctly
@@ -587,6 +617,7 @@ const mainWindow = new BrowserWindow({
 - Permission denied → Error message displays
 
 **Failure States:**
+
 - File not found → User-friendly error message
 - Permission denied → Error with suggestion
 - Invalid file type → Error message
@@ -595,6 +626,7 @@ const mainWindow = new BrowserWindow({
 ### Backend Testing Cases (Logic-Driven)
 
 **IPC Handler Tests:**
+
 - Valid input → Returns correct result
 - Invalid input → Returns appropriate error
 - Edge cases → Handles boundary conditions
@@ -602,6 +634,7 @@ const mainWindow = new BrowserWindow({
 - Sanitization → Input validation works
 
 **Service Tests:**
+
 - File operations → Read/write works correctly
 - Path handling → Handles various path formats
 - Error conditions → Proper error propagation
@@ -610,6 +643,7 @@ const mainWindow = new BrowserWindow({
 ## Context7 Integration
 
 For Electron-specific documentation:
+
 - Use Context7 for Electron API reference
 - Query Context7 for latest Electron patterns
 - Reference Context7 for Node.js best practices
@@ -619,6 +653,7 @@ For Electron-specific documentation:
 ## Best Practices
 
 **DO:**
+
 - Enable context isolation and sandbox
 - Use preload scripts for secure IPC
 - Implement proper CSP headers
@@ -628,6 +663,7 @@ For Electron-specific documentation:
 - Test on all target platforms
 
 **DON'T:**
+
 - Disable security features for convenience
 - Expose entire Node.js API to renderer
 - Ignore platform differences (Windows/macOS/Linux)

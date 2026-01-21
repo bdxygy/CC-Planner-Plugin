@@ -1,0 +1,1836 @@
+planName: calculator-app
+platform: frontend
+framework: react
+currentDependencies: [] # dependencies that are already installed extracted from package.json
+tasks:
+  high:
+    - id: fe-001
+      name: Initialize Vite + React + TypeScript Project
+      component: Project Scaffold
+      file: vite.config.ts, tsconfig.json, package.json
+      testsSuccess:
+        - Project builds successfully
+        - TypeScript compiles
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks:
+        - fe-005
+        - fe-006
+        - fe-007
+        - fe-008
+      acceptanceCriteria:
+        - Vite dev server runs
+        - TypeScript strict mode enabled
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Run `npm create vite@latest calculator-app -- --template react-ts`
+
+    - id: fe-002
+      name: Setup Tailwind CSS 4 with Vite Plugin
+      component: Build Configuration
+      file: vite.config.ts, src/styles/globals.css
+      testsSuccess:
+        - Tailwind classes work
+        - Bundle includes styles
+      dependencies:
+        - fe-001
+      dependencyChain:
+        - Tailwind → fe-001
+      blockedBy:
+        - fe-001
+      blocks:
+        - fe-003
+        - fe-009
+        - fe-010
+      acceptanceCriteria:
+        - "@import \"tailwindcss\"" works
+        - HMR updates styles
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Install tailwindcss @tailwindcss/vite, add plugin to vite config
+
+    - id: fe-003
+      name: Setup shadcn/ui Components
+      component: UI Library Integration
+      file: components.json, src/atoms/ui/
+      testsSuccess:
+        - shadcn components render correctly
+      dependencies:
+        - fe-002
+      dependencyChain:
+        - shadcn → fe-002
+          - → fe-001
+      blockedBy:
+        - fe-002
+      blockedByTransitive:
+        - fe-001
+      blocks:
+        - fe-009
+        - fe-010
+      acceptanceCriteria:
+        - "npx shadcn@latest init" completes
+        - Components can be added
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Configure aliases for @/components, @/utils, @/atoms
+
+    - id: fe-004
+      name: Setup Vitest + React Testing Library + MSW
+      component: Test Infrastructure
+      file: vitest.config.ts, src/test-utils/setup.ts, src/test-utils/render.tsx
+      testsSuccess:
+        - Sample test runs
+        - MSW intercepts requests
+      dependencies:
+        - fe-001
+      dependencyChain:
+        - Vitest → fe-001
+      blockedBy:
+        - fe-001
+      blocks:
+        - fe-020
+        - fe-021
+      acceptanceCriteria:
+        - "npm run test" runs
+        - MSW handlers work
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Install vitest, @testing-library/react, msw, configure setup file
+
+    - id: fe-005
+      name: Setup Awilix IoC Container
+      component: Dependency Injection
+      file: src/di/container.ts, src/di/registrations.ts, src/di/types.ts
+      testsSuccess:
+        - Container resolves services
+        - Singletons work correctly
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks:
+        - fe-014
+        - fe-015
+        - fe-016
+        - fe-017
+        - fe-039
+        - fe-040
+        - fe-057
+      acceptanceCriteria:
+        - "container.resolve() works"
+        - "asClass().singleton() works"
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Create container with PROXY injection mode, define useDI hook
+
+    - id: fe-014
+      name: Create Calculator Store (Zustand)
+      component: State Management
+      file: src/store/calculatorStore.ts
+      testsSuccess:
+        - State updates correctly
+        - Actions work
+        - Persist middleware (optional)
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - CalculatorStore → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-034
+        - fe-037
+      acceptanceCriteria:
+        - inputDigit, performOperation, calculate, clear actions work
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Include display, previousValue, operation, waitingForOperand, angleMode, parenthesisStack
+
+    - id: fe-015
+      name: Create History Store (Zustand)
+      component: State Management
+      file: src/store/historyStore.ts
+      testsSuccess:
+        - History array updates
+        - Memory value persists
+        - Toggle works
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - HistoryStore → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-028
+        - fe-035
+      acceptanceCriteria:
+        - addEntry, clearHistory, memoryClear, memoryRecall, memoryAdd actions work
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Include history array, memoryValue, showHistory flag
+
+    - id: fe-016
+      name: Create Conversion Store (Zustand)
+      component: State Management
+      file: src/store/conversionStore.ts
+      testsSuccess:
+        - Category/unit selection updates
+        - Conversion calculates
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - ConversionStore → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-051
+      acceptanceCriteria:
+        - setCategory, setFromUnit, setToUnit, convert, swapUnits actions work
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Include category, fromUnit, toUnit, inputValue, convertedValue
+
+    - id: fe-017
+      name: Create CalculationEngine Service
+      component: Business Logic Service
+      file: src/services/calculation/CalculationEngine.ts
+      testsSuccess:
+        - Unit tests for +, -, ×, ÷
+        - Floating point
+        - Division by zero
+        - Overflow
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - CalculationEngine → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-022
+        - fe-023
+        - fe-034
+      acceptanceCriteria:
+        - "calculate(a, b, op) returns correct result"
+        - Throws on division by zero
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Handle floating point precision, max digits (12), overflow/underflow
+
+    - id: fe-018
+      name: Create DisplayFormatter Service
+      component: Utility Service
+      file: src/services/format/DisplayFormatter.ts
+      testsSuccess:
+        - Formats numbers correctly
+        - Handles large numbers
+        - Decimals
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - DisplayFormatter → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-025
+      acceptanceCriteria:
+        - "format(number) returns properly formatted string"
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Handle comma separators, decimal precision, scientific notation for large numbers
+
+    - id: fe-019
+      name: Create InputValidator Service
+      component: Validation Service
+      file: src/services/format/InputValidator.ts
+      testsSuccess:
+        - Validates decimal points
+        - Max digits
+        - Special characters
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - InputValidator → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-022
+        - fe-044
+      acceptanceCriteria:
+        - "validate(input) returns valid/invalid with reason"
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Check for multiple decimals, max 12 digits, valid characters
+
+    - id: fe-020
+      name: Register Core Services in Awilix
+      component: DI Registration
+      file: src/di/registrations.ts
+      testsSuccess:
+        - All services resolve correctly
+        - Singletons persist
+      dependencies:
+        - fe-017
+        - fe-018
+        - fe-019
+        - fe-005
+        - fe-004
+      dependencyChain:
+        - Registrations → fe-017
+          - → fe-005
+        - Registrations → fe-018
+          - → fe-005
+        - Registrations → fe-019
+          - → fe-005
+      blockedBy:
+        - fe-017
+        - fe-018
+        - fe-019
+        - fe-005
+        - fe-004
+      blocks:
+        - fe-034
+      acceptanceCriteria:
+        - "container.registrations has all services"
+        - Resolution works
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Register asClass().singleton() for each service
+
+    - id: fe-009
+      name: Create Button Atom (shadcn/ui extension)
+      component: Button
+      file: src/atoms/Button/Button.tsx, Button.test.tsx
+      testsSuccess:
+        - Renders variants (primary, secondary, operation, function)
+        - Handles click
+        - Disabled state
+        - aria-label
+      dependencies:
+        - fe-003
+        - fe-002
+      dependencyChain:
+        - Button → fe-003
+          - → fe-002
+            - → fe-001
+      blockedBy:
+        - fe-003
+      blockedByTransitive:
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-022
+        - fe-023
+        - fe-031
+        - fe-036
+        - fe-045
+      acceptanceCriteria:
+        - All variants render correctly
+        - Keyboard accessible
+        - WCAG 2.1 AA
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Extend shadcn Button with calculator-specific variants, min 44x44px for touch
+
+    - id: fe-010
+      name: Create Display Atom
+      component: Display
+      file: src/atoms/Display/Display.tsx, Display.test.tsx
+      testsSuccess:
+        - Shows value
+        - Shows expression (prev + op + current)
+        - Shows error
+        - aria-live
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks:
+        - fe-025
+      acceptanceCriteria:
+        - Displays value
+        - Error state
+        - Announces changes via aria-live
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Role="textbox" or div with aria-live, large font size, right-aligned
+
+    - id: fe-011
+      name: Create Badge Atom (for shadcn/ui)
+      component: Badge
+      file: src/atoms/Badge/Badge.tsx, Badge.test.tsx
+      testsSuccess:
+        - Renders badge text
+        - Variants
+        - Sizes
+      dependencies:
+        - fe-003
+        - fe-002
+      dependencyChain:
+        - Badge → fe-003
+          - → fe-002
+            - → fe-001
+      blockedBy:
+        - fe-003
+      blockedByTransitive:
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-025
+        - fe-035
+      acceptanceCriteria:
+        - Displays small badge
+        - Used for indicators
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use "npx shadcn@latest add badge"
+
+    - id: fe-042
+      name: Create Input Atom
+      component: Input
+      file: src/atoms/Input/Input.tsx, Input.test.tsx
+      testsSuccess:
+        - Renders input
+        - Handles value changes
+        - Validation
+        - Disabled state
+      dependencies:
+        - fe-003
+        - fe-002
+      dependencyChain:
+        - Input → fe-003
+          - → fe-002
+            - → fe-001
+      blockedBy:
+        - fe-003
+      blockedByTransitive:
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-049
+      acceptanceCriteria:
+        - Typeable input
+        - Accessible
+        - Proper ARIA
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use "npx shadcn@latest add input" for converter panel
+
+    - id: fe-043
+      name: Create Select Atom
+      component: Select
+      file: src/atoms/Select/Select.tsx, Select.test.tsx
+      testsSuccess:
+        - Renders options
+        - Handles selection
+        - Keyboard navigation
+      dependencies:
+        - fe-003
+        - fe-002
+      dependencyChain:
+        - Select → fe-003
+          - → fe-002
+            - → fe-001
+      blockedBy:
+        - fe-003
+      blockedByTransitive:
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-047
+        - fe-048
+      acceptanceCriteria:
+        - Selectable options
+        - Keyboard accessible
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use "npx shadcn@latest add select" for unit/category selection
+
+    - id: fe-022
+      name: Create NumberPad Molecule
+      component: NumberPad
+      file: src/molecules/NumberPad/NumberPad.tsx, NumberPad.test.tsx
+      testsSuccess:
+        - Renders 0-9 buttons
+        - Decimal button
+        - Calls onNumberPress
+        - Keyboard navigation
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - NumberPad → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-029
+      acceptanceCriteria:
+        - 4x3 grid (7-8-9, 4-5-6, 1-2-3, 0)
+        - Decimal point
+        - All buttons fire callbacks
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Grid layout, touch-friendly 44x44px min, keyboard numbers map
+
+    - id: fe-023
+      name: Create OperationPad Molecule
+      component: OperationPad
+      file: src/molecules/OperationPad/OperationPad.tsx, OperationPad.test.tsx
+      testsSuccess:
+        - Renders +, -, ×, ÷, =, C, AC
+        - Highlights active operation
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - OperationPad → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-029
+      acceptanceCriteria:
+        - All operations render
+        - Active op highlighted
+        - Callbacks fire
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Vertical layout or grid, distinct style from numbers, aria-pressed for active
+
+    - id: fe-031
+      name: Create ScientificPad Molecule
+      component: ScientificPad
+      file: src/molecules/ScientificPad/ScientificPad.tsx, ScientificPad.test.tsx
+      testsSuccess:
+        - Renders sin, cos, tan, log, ln, x², √, π, e, (, ), etc.
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - ScientificPad → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-029
+      acceptanceCriteria:
+        - All scientific functions
+        - 2-column grid layout
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Include trig, log, exp, root, constants, factorial, modulo functions
+
+    - id: fe-028
+      name: Create HistoryItem Molecule
+      component: HistoryItem
+      file: src/molecules/HistoryItem/HistoryItem.tsx, HistoryItem.test.tsx
+      testsSuccess:
+        - Renders expression + result
+        - Handles click (use result)
+        - Delete button
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - HistoryItem → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-027
+      acceptanceCriteria:
+        - Shows "5 + 3 = 8"
+        - Clickable to use 8
+        - Deletable
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Timestamp display, clear affordance for click-to-use
+
+    - id: fe-025
+      name: Create CalculatorDisplay Organism
+      component: CalculatorDisplay
+      file: src/organisms/CalculatorDisplay/CalculatorDisplay.tsx, CalculatorDisplay.test.tsx
+      testsSuccess:
+        - Shows current value
+        - Previous value + operation
+        - Memory badge
+        - Angle mode badge
+        - Error state
+      dependencies:
+        - fe-010
+        - fe-011
+      dependencyChain:
+        - CalculatorDisplay → fe-010
+        - CalculatorDisplay → fe-011
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-010
+        - fe-011
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+        - fe-037
+      acceptanceCriteria:
+        - Full expression "10 + 5 = 15"
+        - Badges show
+        - Error displays
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Large font, right-aligned, secondary text for previous value, badges for M/DEG/RAD
+
+    - id: fe-029
+      name: Create Keypad Organism
+      component: Keypad
+      file: src/organisms/Keypad/Keypad.tsx, Keypad.test.tsx
+      testsSuccess:
+        - Renders NumberPad
+        - Renders OperationPad
+        - Conditionally ScientificPad
+        - Focus trap
+      dependencies:
+        - fe-022
+        - fe-023
+        - fe-031
+      dependencyChain:
+        - Keypad → fe-022
+          - → fe-009
+            - → fe-003
+              - → fe-002
+                - → fe-001
+        - Keypad → fe-023
+          - → fe-009
+            - → fe-003
+              - → fe-002
+                - → fe-001
+        - Keypad → fe-031
+          - → fe-009
+            - → fe-003
+              - → fe-002
+                - → fe-001
+      blockedBy:
+        - fe-022
+        - fe-023
+        - fe-031
+      blockedByTransitive:
+        - fe-009
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+      acceptanceCriteria:
+        - Basic mode shows number+ops pads
+        - Scientific adds scientific pad
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Responsive layout, focus trap for keyboard navigation within keypad
+
+    - id: fe-027
+      name: Create HistoryPanel Organism
+      component: HistoryPanel
+      file: src/organisms/HistoryPanel/HistoryPanel.tsx, HistoryPanel.test.tsx
+      testsSuccess:
+        - Renders history list
+        - Empty state
+        - Handles entry click/delete
+        - Clear all button
+        - Toggle
+      dependencies:
+        - fe-028
+      dependencyChain:
+        - HistoryPanel → fe-028
+          - → fe-009
+            - → fe-003
+              - → fe-002
+                - → fe-001
+      blockedBy:
+        - fe-028
+      blockedByTransitive:
+        - fe-009
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+      acceptanceCriteria:
+        - Shows list of calculations
+        - Empty message
+        - Clickable items
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use "npx shadcn@latest add scroll-area", collapsible side panel
+
+    - id: fe-035
+      name: Create MemoryIndicator Organism
+      component: MemoryIndicator
+      file: src/organisms/MemoryIndicator/MemoryIndicator.tsx, MemoryIndicator.test.tsx
+      testsSuccess:
+        - Shows "M: 42" when value exists
+        - Hides when null
+        - Shows MC/MR/M+/M- buttons
+      dependencies:
+        - fe-011
+        - fe-009
+      dependencyChain:
+        - MemoryIndicator → fe-011
+          - → fe-003
+            - → fe-002
+              - → fe-001
+        - MemoryIndicator → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-011
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+      acceptanceCriteria:
+        - Visible when memory set
+        - 4 memory buttons work
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Small badge in corner of display, buttons on keypad or panel
+
+    - id: fe-032
+      name: Create CalculatorLayout Template
+      component: CalculatorLayout
+      file: src/templates/CalculatorLayout/CalculatorLayout.tsx, CalculatorLayout.test.tsx
+      testsSuccess:
+        - Lays out Display (top)
+        - Lays out Keypad (bottom)
+        - Lays out HistoryPanel (side)
+        - Responsive
+      dependencies:
+        - fe-025
+        - fe-029
+        - fe-027
+      dependencyChain:
+        - CalculatorLayout → fe-025
+          - → fe-010, fe-011
+          - → fe-003
+            - → fe-002
+              - → fe-001
+        - CalculatorLayout → fe-029
+          - → fe-022, fe-023, fe-031
+          - → fe-009
+            - → fe-003
+              - → fe-002
+                - → fe-001
+        - CalculatorLayout → fe-027
+          - → fe-028
+            - → fe-009
+              - → fe-003
+                - → fe-002
+                  - → fe-001
+      blockedBy:
+        - fe-025
+        - fe-029
+        - fe-027
+      blockedByTransitive:
+        - fe-010
+        - fe-011
+        - fe-022
+        - fe-023
+        - fe-028
+        - fe-031
+        - fe-009
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-037
+      acceptanceCriteria:
+        - Desktop: side-by-side with history panel
+        - Mobile: stacked layout
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use CSS Grid/Flexbox, responsive breakpoints, Sheet for mobile history
+
+    - id: fe-033
+      name: Create ErrorBoundary Template
+      component: ErrorBoundary
+      file: src/templates/ErrorBoundary/ErrorBoundary.tsx, ErrorBoundary.test.tsx
+      testsSuccess:
+        - Catches errors
+        - Displays fallback
+        - Logs error
+        - Reload button works
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - ErrorBoundary → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-037
+        - fe-038
+      acceptanceCriteria:
+        - Catches render errors
+        - Shows friendly error
+        - Reload button
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Class component with componentDidCatch, ErrorFallback with button
+
+    - id: fe-037
+      name: Create CalculatorPage Component
+      component: CalculatorPage
+      file: src/pages/CalculatorPage/CalculatorPage.tsx, CalculatorPage.test.tsx
+      testsSuccess:
+        - Renders CalculatorLayout
+        - Handles all calculator operations
+        - Mode switching
+        - Keyboard events
+      dependencies:
+        - fe-032
+        - fe-014
+        - fe-034
+        - fe-005
+      dependencyChain:
+        - CalculatorPage → fe-032
+          - → fe-025, fe-029, fe-027
+          - → (transitive deps)
+        - CalculatorPage → fe-014
+          - → fe-005
+        - CalculatorPage → fe-034
+          - → fe-020, fe-017, fe-014, fe-005
+        - CalculatorPage → fe-005
+      blockedBy:
+        - fe-032
+        - fe-014
+        - fe-034
+        - fe-005
+      blockedByTransitive:
+        - fe-025
+        - fe-029
+        - fe-027
+        - fe-020
+        - fe-017
+        - fe-010
+        - fe-011
+        - fe-022
+        - fe-023
+        - fe-028
+        - fe-031
+        - fe-009
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-038
+      acceptanceCriteria:
+        - Full calculator works
+        - All buttons functional
+        - Keyboard support
+      estimatedEffort: L
+      done: false
+      ready: true
+      implementationNotes: Integrate CalculatorStore, useDI for CalculationEngine, handle keyboard mapping
+
+    - id: fe-034
+      name: Create useCalculator Hook
+      component: Custom Hook
+      file: src/hooks/useCalculator.ts
+      testsSuccess:
+        - Returns calculator actions
+        - Integrates with CalculationEngine via DI
+      dependencies:
+        - fe-020
+        - fe-017
+        - fe-014
+        - fe-005
+      dependencyChain:
+        - useCalculator → fe-020
+          - → fe-017, fe-018, fe-019, fe-005, fe-004
+        - useCalculator → fe-017
+          - → fe-005
+        - useCalculator → fe-014
+          - → fe-005
+        - useCalculator → fe-005
+      blockedBy:
+        - fe-020
+        - fe-017
+        - fe-014
+        - fe-005
+        - fe-004
+      blockedByTransitive:
+        - fe-018
+        - fe-019
+      blocks:
+        - fe-037
+      acceptanceCriteria:
+        - Returns { calculate, formatDisplay, validateInput, display, operations }
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use useInjection for CalculationEngine, wrap store actions
+
+    - id: fe-005
+      name: Create useDI Hook
+      component: Dependency Injection Hook
+      file: src/hooks/useDI.ts
+      testsSuccess:
+        - Resolves services from container
+        - Memoized resolution
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - useDI → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-034
+        - fe-041
+        - fe-051
+      acceptanceCriteria:
+        - "useDI<CalculationEngine>('calculationEngine') returns instance"
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Simple wrapper around container.resolve, generic typing
+
+  medium:
+    - id: fe-039
+      name: Create ScientificEngine Service
+      component: Business Logic Service
+      file: src/services/scientific/ScientificEngine.ts
+      testsSuccess:
+        - Unit tests for x², x³, √, ∛, x^y, 10^x, e^x
+        - Factorial, modulo
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - ScientificEngine → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-041
+      acceptanceCriteria:
+        - All scientific functions return correct results
+        - Throws on invalid input
+      estimatedEffort: L
+      done: false
+      ready: true
+      implementationNotes: Handle factorial limit (170!), negative square root, overflow
+
+    - id: fe-040
+      name: Create TrigonometryService Service
+      component: Business Logic Service
+      file: src/services/scientific/TrigonometryService.ts
+      testsSuccess:
+        - sin/cos/tan in DEG and RAD
+        - asin/acos/atan with domain validation
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - TrigonometryService → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-041
+      acceptanceCriteria:
+        - "sin(90°) = 1"
+        - "sin(π/2 RAD) = 1"
+        - "asin(2) throws error"
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Convert DEG↔RAD, validate domain for inverse trig functions
+
+    - id: fe-057
+      name: Create AngleConverter Service
+      component: Utility Service
+      file: src/services/scientific/AngleConverter.ts
+      testsSuccess:
+        - DEG to RAD
+        - RAD to DEG
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - AngleConverter → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-040
+      acceptanceCriteria:
+        - "degToRad(180) = π"
+        - "radToDeg(π) = 180"
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Simple conversion formulas
+
+    - id: fe-044
+      name: Register Scientific Services in Awilix
+      component: DI Registration
+      file: src/di/registrations.ts
+      testsSuccess:
+        - All scientific services resolve correctly
+      dependencies:
+        - fe-039
+        - fe-040
+        - fe-057
+        - fe-005
+      dependencyChain:
+        - SciRegistrations → fe-039
+          - → fe-005
+        - SciRegistrations → fe-040
+          - → fe-005
+        - SciRegistrations → fe-057
+          - → fe-005
+      blockedBy:
+        - fe-039
+        - fe-040
+        - fe-057
+        - fe-005
+      blocks:
+        - fe-041
+      acceptanceCriteria:
+        - All services registered and resolvable
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Add to existing registrations, include trigonometryService, angleConverter
+
+    - id: fe-045
+      name: Create HistoryService Service
+      component: Business Logic Service
+      file: src/services/history/HistoryService.ts
+      testsSuccess:
+        - addEntry, getHistory, deleteEntry, clearHistory
+        - Max limit (50), FIFO
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - HistoryService → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-015
+      acceptanceCriteria:
+        - Adds entries
+        - Enforces max limit with FIFO
+        - Deletes by ID
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: In-memory storage (scoped lifetime), generate unique IDs
+
+    - id: fe-046
+      name: Create MemoryService Service
+      component: Business Logic Service
+      file: src/services/memory/MemoryService.ts
+      testsSuccess:
+        - store, recall, add, subtract, clear
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - MemoryService → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-015
+      acceptanceCriteria:
+        - Stores value
+        - Recall returns it
+        - add/subtract work
+        - clear nulls
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: In-memory storage (scoped lifetime), starts as null
+
+    - id: fe-047
+      name: Register History/Memory Services in Awilix
+      component: DI Registration
+      file: src/di/registrations.ts
+      testsSuccess:
+        - History and memory services resolve correctly
+      dependencies:
+        - fe-045
+        - fe-046
+        - fe-005
+      dependencyChain:
+        - HistRegistrations → fe-045
+          - → fe-005
+        - HistRegistrations → fe-046
+          - → fe-005
+      blockedBy:
+        - fe-045
+        - fe-046
+        - fe-005
+      blocks:
+        - fe-051
+      acceptanceCriteria:
+        - All services registered and resolvable
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use asClass().scoped() for memory isolation
+
+    - id: fe-041
+      name: Create useScientific Hook
+      component: Custom Hook
+      file: src/hooks/useScientific.ts
+      testsSuccess:
+        - Returns scientific actions
+        - Angle mode toggle
+      dependencies:
+        - fe-039
+        - fe-040
+        - fe-057
+      dependencyChain:
+        - useScientific → fe-039
+          - → fe-005
+        - useScientific → fe-040
+          - → fe-005
+        - useScientific → fe-057
+          - → fe-005
+      blockedBy:
+        - fe-039
+        - fe-040
+        - fe-057
+      blocks:
+        - fe-037
+      acceptanceCriteria:
+        - Returns { sin, cos, tan, log, square, sqrt, factorial, angleMode, setAngleMode }
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use useInjection, wrap CalculatorStore angleMode
+
+    - id: fe-036
+      name: Create AngleModeToggle Component
+      component: Mode Toggle
+      file: src/molecules/AngleModeToggle/AngleModeToggle.tsx, AngleModeToggle.test.tsx
+      testsSuccess:
+        - Toggles DEG/RAD
+        - Shows current mode
+        - Updates store
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - AngleModeToggle → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+      acceptanceCriteria:
+        - Toggles between DEG and RAD
+        - Visual indicator of current mode
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Toggle button or segmented control, aria-pressed for current mode
+
+    - id: fe-030
+      name: Create ParenthesisPad Molecule
+      component: ParenthesisPad
+      file: src/molecules/ParenthesisPad/ParenthesisPad.tsx, ParenthesisPad.test.tsx
+      testsSuccess:
+        - Renders ( and ) buttons
+        - Tracks opening count
+        - Validates matching
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - ParenthesisPad → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-031
+      acceptanceCriteria:
+        - ( and ) buttons work
+        - Mismatched parenthesis prevented
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Part of scientific pad or separate, track stack in store
+
+    - id: fe-051
+      name: Create useHistory Hook
+      component: Custom Hook
+      file: src/hooks/useHistory.ts
+      testsSuccess:
+        - Returns history actions
+        - Memory actions
+      dependencies:
+        - fe-045
+        - fe-046
+        - fe-015
+      dependencyChain:
+        - useHistory → fe-045
+          - → fe-005
+        - useHistory → fe-046
+          - → fe-005
+        - useHistory → fe-015
+          - → fe-005
+      blockedBy:
+        - fe-045
+        - fe-046
+        - fe-015
+      blocks:
+        - fe-027
+        - fe-037
+      acceptanceCriteria:
+        - Returns { history, addEntry, deleteEntry, clearHistory, memoryValue, memoryClear, memoryRecall, memoryAdd, memorySubtract }
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use useInjection, wrap HistoryStore actions
+
+    - id: fe-050
+      name: Create HistoryToggle Component
+      component: Toggle Button
+      file: src/molecules/HistoryToggle/HistoryToggle.tsx, HistoryToggle.test.tsx
+      testsSuccess:
+        - Toggles history panel
+        - Shows badge for count
+      dependencies:
+        - fe-011
+        - fe-009
+      dependencyChain:
+        - HistoryToggle → fe-011
+          - → fe-003
+            - → fe-002
+              - → fe-001
+        - HistoryToggle → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-011
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+      acceptanceCriteria:
+        - Opens/closes history panel
+        - Shows count badge
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Icon button, badge with history count
+
+    - id: fe-049
+      name: Create ClearHistoryButton Component
+      component: Action Button
+      file: src/molecules/ClearHistoryButton/ClearHistoryButton.tsx, ClearHistoryButton.test.tsx
+      testsSuccess:
+        - Clears all history
+        - Shows confirmation (optional)
+      dependencies:
+        - fe-009
+      dependencyChain:
+        - ClearHistoryButton → fe-009
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-009
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-027
+      acceptanceCriteria:
+        - Clears history array
+        - Updates UI
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Danger variant, confirmation dialog or instant clear
+
+  low:
+    - id: fe-052
+      name: Create ConversionService Service
+      component: Business Logic Service
+      file: src/services/conversion/ConversionService.ts
+      testsSuccess:
+        - Converts length, weight, temperature (formulas)
+        - Area, volume, speed
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - ConversionService → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-051
+      acceptanceCriteria:
+        - Converts between units
+        - Handles temperature formulas
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Temperature: C↔F↔K formulas, others: multiplication factors
+
+    - id: fe-053
+      name: Create ConversionRegistry Service
+      component: Data Registry
+      file: src/services/conversion/ConversionRegistry.ts
+      testsSuccess:
+        - Returns units per category
+        - Conversion factors
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - ConversionRegistry → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-047
+        - fe-048
+      acceptanceCriteria:
+        - Returns { length: [...], weight: [...], temperature: [...] }
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Static data of units and conversion factors
+
+    - id: fe-054
+      name: Create UnitFormatter Service
+      component: Utility Service
+      file: src/services/conversion/UnitFormatter.ts
+      testsSuccess:
+        - Formats unit symbols
+        - Plural/singular
+      dependencies:
+        - fe-005
+      dependencyChain:
+        - UnitFormatter → fe-005
+      blockedBy:
+        - fe-005
+      blocks:
+        - fe-050
+      acceptanceCriteria:
+        - Formats "m" as "meter" or "m"
+        - "kg" as "kilogram" or "kg"
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Short symbol vs full name, pluralization
+
+    - id: fe-055
+      name: Register Conversion Services in Awilix
+      component: DI Registration
+      file: src/di/registrations.ts
+      testsSuccess:
+        - All conversion services resolve correctly
+      dependencies:
+        - fe-052
+        - fe-053
+        - fe-054
+        - fe-005
+      dependencyChain:
+        - ConvRegistrations → fe-052
+          - → fe-005
+        - ConvRegistrations → fe-053
+          - → fe-005
+        - ConvRegistrations → fe-054
+          - → fe-005
+      blockedBy:
+        - fe-052
+        - fe-053
+        - fe-054
+        - fe-005
+      blocks:
+        - fe-051
+      acceptanceCriteria:
+        - All services registered and resolvable
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Add conversion services to existing registrations
+
+    - id: fe-051
+      name: Create useConversion Hook
+      component: Custom Hook
+      file: src/hooks/useConversion.ts
+      testsSuccess:
+        - Returns conversion actions
+      dependencies:
+        - fe-052
+        - fe-016
+      dependencyChain:
+        - useConversion → fe-052
+          - → fe-005
+        - useConversion → fe-016
+          - → fe-005
+      blockedBy:
+        - fe-052
+        - fe-016
+      blocks:
+        - fe-050
+      acceptanceCriteria:
+        - Returns { category, fromUnit, toUnit, inputValue, convertedValue, convert, swapUnits }
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use useInjection, wrap ConversionStore actions
+
+    - id: fe-047
+      name: Create CategorySelector Component
+      component: Select Dropdown
+      file: src/molecules/CategorySelector/CategorySelector.tsx, CategorySelector.test.tsx
+      testsSuccess:
+        - Shows categories (Length, Weight, Temperature, etc.)
+        - Handles selection
+      dependencies:
+        - fe-043
+      dependencyChain:
+        - CategorySelector → fe-043
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-043
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-050
+      acceptanceCriteria:
+        - Dropdown shows categories
+        - Selection updates store
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use shadcn Select, populate from ConversionRegistry
+
+    - id: fe-048
+      name: Create UnitSelector Component
+      component: Select Dropdown
+      file: src/molecules/UnitSelector/UnitSelector.tsx, UnitSelector.test.tsx
+      testsSuccess:
+        - Shows units for category
+        - Handles selection
+        - Filters by category
+      dependencies:
+        - fe-043
+      dependencyChain:
+        - UnitSelector → fe-043
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-043
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-050 (2 instances)
+      acceptanceCriteria:
+        - Shows units for selected category
+        - Updates store
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Two instances (from/to), filtered by current category
+
+    - id: fe-049
+      name: Create ConversionInput Component
+      component: Input Field
+      file: src/molecules/ConversionInput/ConversionInput.tsx, ConversionInput.test.tsx
+      testsSuccess:
+        - Accepts number input
+        - Validates
+        - Formats
+        - Triggers conversion
+      dependencies:
+        - fe-042
+      dependencyChain:
+        - ConversionInput → fe-042
+          - → fe-003
+            - → fe-002
+              - → fe-001
+      blockedBy:
+        - fe-042
+      blockedByTransitive:
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-050
+      acceptanceCriteria:
+        - Number input
+        - Calls convert on change
+        - Shows formatted value
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Type="number", spinbutton role, debounced conversion
+
+    - id: fe-058
+      name: Create ConversionResult Component
+      component: Result Display
+      file: src/molecules/ConversionResult/ConversionResult.tsx, ConversionResult.test.tsx
+      testsSuccess:
+        - Displays converted value with unit
+        - Handles loading/error
+      dependencies:
+        - fe-010
+      dependencyChain:
+        - ConversionResult → fe-010
+      blockedBy:
+        - fe-010
+      blocks:
+        - fe-050
+      acceptanceCriteria:
+        - Shows "3.28 ft" from input "1 m"
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Large font, includes unit symbol, error state
+
+    - id: fe-050
+      name: Create ConverterPanel Organism
+      component: ConverterPanel
+      file: src/organisms/ConverterPanel/ConverterPanel.tsx, ConverterPanel.test.tsx
+      testsSuccess:
+        - Full conversion flow
+        - Category, from unit, to unit, input → result
+        - Swap button
+      dependencies:
+        - fe-047
+        - fe-048
+        - fe-049
+        - fe-058
+      dependencyChain:
+        - ConverterPanel → fe-047
+          - → fe-043
+            - → fe-003
+              - → fe-002
+                - → fe-001
+        - ConverterPanel → fe-048
+          - → fe-043
+            - → fe-003
+              - → fe-002
+                - → fe-001
+        - ConverterPanel → fe-049
+          - → fe-042
+            - → fe-003
+              - → fe-002
+                - → fe-001
+        - ConverterPanel → fe-058
+          - → fe-010
+      blockedBy:
+        - fe-047
+        - fe-048
+        - fe-049
+        - fe-058
+      blockedByTransitive:
+        - fe-043
+        - fe-042
+        - fe-010
+        - fe-003
+        - fe-002
+        - fe-001
+      blocks:
+        - fe-032
+      acceptanceCriteria:
+        - Complete converter UI
+        - All components work together
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Layout: category top, from/to selects with swap, input/result bottom
+
+    - id: fe-060
+      name: Add Keyboard Navigation to Full Calculator
+      component: Event Handler
+      file: src/utils/keyboard.utils.ts, integrate into CalculatorPage
+      testsSuccess:
+        - All keys work (0-9, operators, Enter, Escape, Backspace)
+      dependencies:
+        - fe-037
+      dependencyChain:
+        - KeyboardNav → fe-037
+          - → (all transitive deps)
+      blockedBy:
+        - fe-037
+      blocks: []
+      acceptanceCriteria:
+        - Full keyboard support
+        - Numpad works
+        - Enter = equals, Escape = AC
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Map keyboard events to button actions, prevent default for calculator keys
+
+    - id: fe-061
+      name: Add Loading States for Future Async Operations
+      component: Skeleton Loader
+      file: src/organisms/CalculatorSkeleton/CalculatorSkeleton.tsx
+      testsSuccess:
+        - Matches layout dimensions
+        - Shimmer animation
+      dependencies:
+        - fe-032
+      dependencyChain:
+        - Skeleton → fe-032
+          - → (all transitive deps)
+      blockedBy:
+        - fe-032
+      blocks: []
+      acceptanceCriteria:
+        - Skeleton matches calculator layout
+        - Animates
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use shadcn Skeleton, match Display and Keypad dimensions
+
+    - id: fe-062
+      name: Add Error Recovery UX
+      component: Error Handling
+      file: integrate into CalculatorPage, CalculatorDisplay
+      testsSuccess:
+        - Error clears on next input
+        - Visual feedback
+      dependencies:
+        - fe-025
+        - fe-037
+      dependencyChain:
+        - ErrorRecovery → fe-025, fe-037
+      blockedBy:
+        - fe-025
+        - fe-037
+      blocks: []
+      acceptanceCriteria:
+        - Error state clears on any input
+        - User can continue
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Auto-clear error on digit/operation press, visual shake animation
+
+    - id: fe-063
+      name: Add Animation/Transitions
+      component: UI Polish
+      file: src/styles/animations.css or Tailwind config
+      testsSuccess:
+        - Smooth mode transitions
+        - Button press feedback
+      dependencies:
+        - fe-002
+      dependencyChain:
+        - Animations → fe-002
+          - → fe-001
+      blockedBy:
+        - fe-002
+      blocks: []
+      acceptanceCriteria:
+        - Mode switch animates
+        - Buttons have press feedback
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use Tailwind animate or CSS transitions, respects prefers-reduced-motion
+
+    - id: fe-064
+      name: Add Visual Regression Tests
+      component: Test Coverage
+      file: Component snapshots in existing test files
+      testsSuccess:
+        - Snapshot tests match
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks: []
+      acceptanceCriteria:
+        - Snapshot tests for key components pass
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Add .toMatchSnapshot() to CalculatorPage, CalculatorDisplay, ConverterPanel
+
+    - id: fe-065
+      name: Add Bundle Size Monitoring
+      component: Build Configuration
+      file: vite.config.ts, package.json scripts
+      testsSuccess:
+        - Bundle under 200KB gzipped
+      dependencies:
+        - fe-001
+      dependencyChain:
+        - BundleMonitor → fe-001
+      blockedBy:
+        - fe-001
+      blocks: []
+      acceptanceCriteria:
+        - Build reports bundle size
+        - Fails if over 200KB
+      estimatedEffort: S
+      done: false
+      ready: true
+      implementationNotes: Use rollup-plugin-visualizer or vite-plugin-inspect, CI check
+
+    - id: fe-066
+      name: Add Accessibility Audits
+      component: Testing
+      file: Vitest a11y tests, axe-core integration
+      testsSuccess:
+        - WCAG 2.1 AA compliance
+        - Keyboard navigation
+        - Screen reader
+      dependencies: []
+      dependencyChain: []
+      blockedBy: []
+      blocks: []
+      acceptanceCriteria:
+        - All a11y tests pass
+        - Manual keyboard/screen reader testing done
+      estimatedEffort: M
+      done: false
+      ready: true
+      implementationNotes: Use @testing-library/dom queries, jest-axe or Vitest equivalent
+
+dependencySummary:
+  foundation: # No dependencies, can start immediately
+    - fe-001  # Vite + React + TypeScript Setup
+    - fe-005  # Awilix Container Setup
+    - fe-009  # Button Atom (wait: depends on shadcn, Tailwind)
+    - fe-010  # Display Atom
+    - fe-011  # Badge Atom (wait: depends on shadcn, Tailwind)
+    - fe-042  # Input Atom (wait: depends on shadcn, Tailwind)
+    - fe-043  # Select Atom (wait: depends on shadcn, Tailwind)
+    # True foundation (after completing foundation dependencies):
+    - fe-002  # Tailwind CSS 4 (after Vite)
+    - fe-003  # shadcn/ui (after Tailwind)
+    - fe-004  # Vitest + MSW (after Vite)
+  # Foundation with completed deps can start in parallel:
+  blocked:
+    - fe-014  # CalculatorStore (needs: Awilix)
+    - fe-015  # HistoryStore (needs: Awilix)
+    - fe-016  # ConversionStore (needs: Awilix)
+    - fe-017  # CalculationEngine (needs: Awilix)
+    - fe-018  # DisplayFormatter (needs: Awilix)
+    - fe-019  # InputValidator (needs: Awilix)
+    - fe-020  # Core Services Registration (needs: Engines, Awilix, Vitest)
+    - fe-022  # NumberPad (needs: Button)
+    - fe-023  # OperationPad (needs: Button)
+    - fe-031  # ScientificPad (needs: Button)
+    - fe-025  # CalculatorDisplay (needs: Display, Badge)
+    - fe-027  # HistoryPanel (needs: HistoryItem → Button)
+    - fe-028  # HistoryItem (needs: Button)
+    - fe-032  # CalculatorLayout (needs: DisplayOrganism, Keypad, HistoryPanel)
+    - fe-033  # ErrorBoundary (needs: Button)
+    - fe-034  # useCalculator Hook (needs: CoreReg, CalculationEngine, CalculatorStore, Awilix)
+    - fe-005  # useDI Hook (needs: Awilix)
+    # Medium priority:
+    - fe-039  # ScientificEngine (needs: Awilix)
+    - fe-040  # TrigonometryService (needs: Awilix)
+    - fe-041  # useScientific Hook (needs: SciEng, TrigServ, AngleConv)
+    - fe-044  # Scientific Services Registration (needs: SciEng, TrigServ, AngleConv, Awilix)
+    - fe-045  # HistoryService (needs: Awilix)
+    - fe-046  # MemoryService (needs: Awilix)
+    - fe-047  # History/Memory Services Reg (needs: HistServ, MemServ, Awilix)
+    - fe-048  # useHistory Hook (needs: HistServ, MemServ, HistoryStore, Awilix)
+    - fe-030  # AngleModeToggle (needs: Button)
+    - fe-036  # ParenthesisPad (needs: Button)
+    - fe-049  # HistoryToggle (needs: Badge, Button)
+    - fe-050  # ClearHistoryButton (needs: Button)
+    # Low priority:
+    - fe-052  # ConversionService (needs: Awilix)
+    - fe-053  # ConversionRegistry (needs: Awilix)
+    - fe-054  # UnitFormatter (needs: Awilix)
+    - fe-055  # Conversion Services Registration (needs: ConvServ, ConvReg, UnitFmt, Awilix)
+    - fe-051  # useConversion Hook (needs: ConvServ, ConversionStore, Awilix)
+    - fe-056  # CategorySelector (needs: Select)
+    - fe-057  # UnitSelector (needs: Select)
+    - fe-058  # ConversionInput (needs: Input)
+    - fe-059  # ConversionResult (needs: Display)
+    - fe-050  # ConverterPanel (needs: CategorySelect, UnitSelectx2, ConvInput, ConvResult)
+    - fe-060  # Keyboard Navigation (needs: CalculatorPage)
+    - fe-061  # Loading States (needs: CalculatorLayout)
+    - fe-062  # Error Recovery (needs: CalculatorDisplay, CalculatorPage)
+    - fe-063  # Animations (needs: Tailwind)
+    - fe-064  # Visual Regression Tests
+    - fe-065  # Bundle Size Monitoring (needs: Vite)
+    - fe-066  # Accessibility Audits
+    - fe-037  # CalculatorPage (needs: CalculatorLayout, CalculatorStore, useCalculator, Awilix)
