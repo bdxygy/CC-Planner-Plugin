@@ -1,7 +1,7 @@
 # Task Manager CLI - Comprehensive Test Suite
 
 **Version:** 0.0.6
-**Total Test Cases:** 1000
+**Total Test Cases:** 980
 **Last Updated:** 2025-01-21
 
 ## Table of Contents
@@ -21,11 +21,10 @@
 13. [Task Status Dashboard (40 tests)](#13-task-status-dashboard)
 14. [Task Validation (50 tests)](#14-task-validation)
 15. [Task Removal (40 tests)](#15-task-removal)
-16. [Template Listing (20 tests)](#16-template-listing)
-17. [Error Handling - Missing Arguments (30 tests)](#17-error-handling---missing-arguments)
-18. [Error Handling - Invalid Values (40 tests)](#18-error-handling---invalid-values)
-19. [Edge Cases - Special Characters (20 tests)](#19-edge-cases---special-characters)
-20. [Edge Cases - Large Data (20 tests)](#20-edge-cases---large-data)
+16. [Error Handling - Missing Arguments (30 tests)](#16-error-handling---missing-arguments)
+17. [Error Handling - Invalid Values (40 tests)](#17-error-handling---invalid-values)
+18. [Edge Cases - Special Characters (20 tests)](#18-edge-cases---special-characters)
+19. [Edge Cases - Large Data (20 tests)](#19-edge-cases---large-data)
 
 ---
 
@@ -33,40 +32,40 @@
 
 ### 1.1 Root Help
 - `TC-001`: Display root help without arguments
-- `TC-002`: Verify root help shows all global options
+- `TC-002`: Verify root help shows all global options (--plan-name, --platform, --help, --version)
 - `TC-003`: Verify root help shows all commands (task, project)
-- `TC-004`: Verify root help shows correct version number format
+- `TC-004`: Verify root help shows correct version number (0.0.6)
 - `TC-005`: Verify root help shows usage syntax
 
 ### 1.2 Version Command
 - `TC-006`: Display version with `-V` flag
 - `TC-007`: Display version with `--version` flag
-- `TC-008`: Verify version format is `X.Y.Z`
-- `TC-009`: Verify version matches package.json
+- `TC-008`: Verify version format is `X.Y.Z` (matches 0.0.6)
+- `TC-009`: Verify version matches package.json version
 
-### 1.3 Command Help
+### 1.3 Task Command Help
 - `TC-010`: Display task command help
-- `TC-011`: Display project command help
-- `TC-012`: Display task create help
-- `TC-013`: Display task update help
-- `TC-014`: Display task list help
-- `TC-015`: Display task detail help
-- `TC-016`: Display task chain help
-- `TC-017`: Display task remove help
-- `TC-018`: Display task status help
-- `TC-019`: Display task validate help
-- `TC-020`: Display task template help
+- `TC-011`: Display task create help
+- `TC-012`: Display task update help
+- `TC-013`: Display task list help
+- `TC-014`: Display task detail help
+- `TC-015`: Display task chain help
+- `TC-016`: Display task remove help
+- `TC-017`: Display task status help
+- `TC-018`: Display task validate help
+- `TC-019`: Display task validate-jsonl help
+- `TC-020`: Display project command help
 
 ---
 
 ## 2. Project Initialization (50 tests)
 
 ### 2.1 Basic Init
-- `TC-021`: Initialize project with default settings
+- `TC-021`: Initialize project with default settings (no framework/deps)
 - `TC-022`: Verify project directory created (.pland/<plan-name>/)
-- `TC-023`: Verify frontend-tasks.jsonl file created
-- `TC-024`: Verify init shows success message
-- `TC-025`: Verify init displays plan name and platform
+- `TC-023`: Verify tasks JSONL file created (frontend-tasks.jsonl or backend-tasks.jsonl)
+- `TC-024`: Verify init shows success message with checkmark symbol
+- `TC-025`: Verify init displays plan name and platform in output
 
 ### 2.2 Init with Framework
 - `TC-026`: Init with `--framework react`
@@ -178,16 +177,16 @@
 ## 4. Task Creation - Basic (100 tests)
 
 ### 4.1 Minimal Task Creation
-- `TC-111`: Create task with only --name and --level and --component
-- `TC-112`: Verify auto-generated task ID format (fe-XXXX)
-- `TC-113`: Verify task ID increments correctly
-- `TC-114`: Create first task gets ID fe-0001
-- `TC-115`: Create second task gets ID fe-0002
+- `TC-111`: Create task with --name, --level, and --component (required fields)
+- `TC-112`: Verify auto-generated task ID format (fe-XXXX or be-XXXX)
+- `TC-113`: Verify task ID increments correctly per platform
+- `TC-114`: Create first frontend task gets ID fe-0001
+- `TC-115`: Create second frontend task gets ID fe-0002
 - `TC-116`: Create 10th task gets ID fe-0010
 - `TC-117`: Create 100th task gets ID fe-0100
-- `TC-118`: Create task after removing one
-- `TC-119`: Verify task created in correct file
-- `TC-120`: Verify task is valid NDJSON line
+- `TC-118`: Create task after removing one reuses next sequential ID
+- `TC-119`: Verify task created in correct JSONL file
+- `TC-120`: Verify task is valid JSON line in JSONL format
 
 ### 4.2 Task Name Variations
 - `TC-121`: Create task with single word name
@@ -338,7 +337,7 @@
 - `TC-257`: Create task with multiple blockers `--blockedBy fe-0001 fe-0002 fe-0003`
 - `TC-258`: Create task with 5 blockers
 - `TC-259`: Create task with 10 blockers
-- `TC-257`: Verify blockedBy field saved correctly
+- `TC-281`: Verify blockedBy field saved correctly
 - `TC-260`: Verify task marked as not ready when blocked
 - `TC-261`: Verify dependency chain updated
 - `TC-262`: Verify blocking task shows in chain
@@ -1386,64 +1385,25 @@
 
 ---
 
-## 16. Template Listing (20 tests)
-
-### 16.1 Template List Display
-- `TC-1040`: List available templates
-- `TC-1041`: Verify template names
-- `TC-1042`: Verify template count
-- `TC-1043`: Verify list format
-
-### 16.2 Template Details
-- `TC-1044`: Show template level
-- `TC-1045`: Show template effort
-- `TC-1046`: Show template name preview
-- `TC-1047`: Verify truncation
-
-### 16.3 Template Colors
-- `TC-1048`: Cyan template names
-- `TC-1049`: Dim details
-- `TC-1050`: Proper formatting
-
-### 16.4 Template Content
-- `TC-1051`: Component template
-- `TC-1052`: Service template
-- `TC-1053`: All templates listed
-- `TC-1054`: Alphabetical order
-
-### 16.5 Template Usage
-- `TC-1055`: Copy template name
-- `TC-1056`: Use template name
-- `TC-1057`: Invalid template
-- `TC-1058`: Template help
-
-### 16.6 Template Display
-- `TC-1059`: Template description
-- `TC-1060`: Template fields
-- `TC-1061`: Template examples
-- `TC-1062`: Template formatting
-
----
-
-## 17. Error Handling - Missing Arguments (30 tests)
+## 16. Error Handling - Missing Arguments (30 tests)
 
 ### 17.1 Missing Plan Name
-- `TC-1063`: Run without -p flag
-- `TC-1064`: Verify error message
-- `TC-1065`: Verify usage shown
+- `TC-1063`: Run subcommand without --plan-name flag
+- `TC-1064`: Verify error message: "plan-name is required"
+- `TC-1065`: Verify usage hint shown
 - `TC-1066`: Verify exit code 1
-- `TC-1067`: Run with empty plan name
+- `TC-1067`: Run with empty plan name value
 
 ### 17.2 Missing Command
 - `TC-1068`: Run with plan only
 - `TC-1069`: Verify help shown
 - `TC-1070`: Graceful no command
 
-### 17.3 Missing Task ID
-- `TC-1071`: Update without ID
-- `TC-1072`: Detail without ID
-- `TC-1073`: Chain without ID
-- `TC-1074`: Remove without ID
+### 17.3 Missing Task ID (for id-required commands)
+- `TC-1071`: Update without ID argument
+- `TC-1072`: Detail without ID argument
+- `TC-1073`: Chain without ID argument
+- `TC-1074`: Remove without ID argument
 
 ### 17.4 Missing Required Options
 - `TC-1075`: Create without name
@@ -1471,19 +1431,19 @@
 
 ---
 
-## 18. Error Handling - Invalid Values (40 tests)
+## 17. Error Handling - Invalid Values (40 tests)
 
 ### 18.1 Invalid Platform
-- `TC-1091`: Invalid platform value
-- `TC-1092`: Platform typo
-- `TC-1093`: Case sensitivity
-- `TC-1094`: Verify error message
+- `TC-1091`: Invalid platform value (not frontend|backend)
+- `TC-1092`: Platform typo (e.g., "fronted")
+- `TC-1093`: Platform case sensitivity (e.g., "FRONTEND")
+- `TC-1094`: Verify error message: "platform must be 'frontend' or 'backend'"
 
 ### 18.2 Invalid Level
-- `TC-1095`: Invalid priority level
-- `TC-1096`: Level typo
-- `TC-1097`: Empty level
-- `TC-1098`: Number as level
+- `TC-1095`: Invalid priority level (not critical|high|medium|low)
+- `TC-1096`: Level typo (e.g., "hight")
+- `TC-1097`: Empty level value
+- `TC-1098`: Number as level value
 
 ### 18.3 Invalid Task ID
 - `TC-1099`: Non-existent ID
@@ -1535,7 +1495,7 @@
 
 ---
 
-## 19. Edge Cases - Special Characters (20 tests)
+## 18. Edge Cases - Special Characters (20 tests)
 
 ### 19.1 Special Characters in Name
 - `TC-1131`: Name with quotes
@@ -1572,7 +1532,7 @@
 
 ---
 
-## 20. Edge Cases - Large Data (20 tests)
+## 19. Edge Cases - Large Data (20 tests)
 
 ### 20.1 Large Task Names
 - `TC-1156`: Name 100 chars

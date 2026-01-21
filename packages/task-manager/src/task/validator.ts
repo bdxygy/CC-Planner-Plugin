@@ -167,17 +167,7 @@ export function validateJsonlFile(content: string): JsonlValidationIssue[] {
       }
     }
 
-    // Check dependencies array references
-    for (const depId of task.dependencies) {
-      if (!taskIds.has(depId)) {
-        issues.push({
-          type: 'dependency',
-          severity: 'error',
-          taskId,
-          message: `dependencies references non-existent task: ${depId}`,
-        });
-      }
-    }
+
   }
 
   // Check for circular dependencies

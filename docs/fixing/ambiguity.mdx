@@ -1,0 +1,68 @@
+1. dependencies vs blockedBy Fields
+
+  Current state: Both fields exist but purpose is unclear.
+
+  Recommendation: Remove dependencies field and use only blockedBy.
+
+  Reasoning:
+  - blockedBy is the source of truth (explicitly set when creating tasks)
+  - dependencies would be the reverse (computed from blockedBy)
+  - Keeping both creates duplication and sync issues
+  - The blocks field already tracks reverse relationships
+  - Current code already computes blocks, blockedByTransitive, dependencyChain dynamically
+
+  Action: Update schema to remove dependencies, keep only blockedBy.
+
+  ---
+  2. Batch Import Feature
+
+  Current state: Tests exist (TC-1040 to TC-1058) but no implementation.
+
+  Recommendation: Defer batch import for now.
+
+  Reasoning:
+  - Core CRUD (create, update, remove, list, validate) already works
+  - Batch import is a nice-to-have, not critical
+  - Users can already create tasks via CLI one at a time
+  - Can be added later without breaking existing functionality
+  - Focus on perfecting existing features first
+
+  Action: Remove Section 16 (Batch Import) from test docs, add to future roadmap.
+
+  ---
+  3. Duplicate Test Number (TC-257)
+
+  Current state: TC-257 appears twice in section 5.4.
+
+  Recommendation: Renumber the second occurrence to TC-281.
+
+  Action:
+  - `TC-257`: Verify blockedBy field saved correctly
+  + `TC-257`: Verify blockedBy field saved correctly
+    `TC-258`: Verify task marked as not ready when blocked
+  - `TC-257`: Create task with non-existent blocker
+  + `TC-281`: Create task with non-existent blocker
+
+  ---
+  4. Test Number Gap (TC-140 → TC-150)
+
+  Current state: Test numbers jump by 10 in section 4.2.
+
+  Recommendation: Keep as-is. This is intentional spacing for future tests.
+
+  Reasoning:
+  - Leaves room to add more name variation tests
+  - Common practice in test documentation
+  - No functional impact
+
+  ---
+  Summary of Actions
+  ┌──────────┬─────────────────────────────────────────────────┬────────┐
+  │ Priority │                     Action                      │ Effort │
+  ├──────────┼─────────────────────────────────────────────────┼────────┤
+  │ P0       │ Remove dependencies from schema, fix validator  │ Medium │
+  ├──────────┼─────────────────────────────────────────────────┼────────┤
+  │ P1       │ Fix duplicate TC-257 in test docs               │ Low    │
+  ├──────────┼─────────────────────────────────────────────────┼────────┤
+  │ P2       │ Remove Section 16 (Batch Import) from test docs │ Low    │
+  └──────────┴─────────────────────────────────────────────────┴────────┘

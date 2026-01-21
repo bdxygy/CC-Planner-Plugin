@@ -98,7 +98,6 @@ export class TaskService {
       component: data.component,
       files: data.files ?? '',
       testsSuccess: data.testsSuccess ?? [],
-      dependencies: data.dependencies ?? [],
       blockedBy: data.blockedBy ?? [],
       blockedByTransitive: [],
       dependencyChain: [],
@@ -401,16 +400,7 @@ export class TaskService {
         }
         task.blockedByTransitive = Array.from(directTransitive);
 
-        // Build readable dependency chains
-        if (task.dependencies && task.dependencies.length > 0) {
-          for (const depName of task.dependencies) {
-            const depTask = Array.from(taskMap.values()).find((t) => t.component === depName);
-            if (depTask) {
-              task.dependencyChain = task.dependencyChain ?? [];
-              task.dependencyChain.push(`${task.component ?? task.id} → ${depTask.id}`);
-            }
-          }
-        }
+
       }
     }
   }
